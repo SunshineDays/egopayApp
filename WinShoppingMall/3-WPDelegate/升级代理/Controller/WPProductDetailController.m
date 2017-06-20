@@ -1,0 +1,131 @@
+//
+//  WPProductDetailController.m
+//  WinShoppingMall
+//
+//  Created by 易购付 on 2017/4/1.
+//  Copyright © 2017年 易购付. All rights reserved.
+//
+
+#import "WPProductDetailController.h"
+
+#import "Header.h"
+
+#import "WPProductSubmitController.h"
+
+@interface WPProductDetailController ()
+
+@property (nonatomic, strong) UIScrollView *scrollView;
+
+@property (nonatomic, strong) UIImageView *imageView;
+
+@property (nonatomic, strong) UILabel *titleLabel;
+
+@property (nonatomic, strong) UILabel *priceLabel;
+
+@property (nonatomic, strong) UILabel *descriptionLabel;
+
+@property (nonatomic, strong) WPButton *submitButton;
+
+@end
+
+@implementation WPProductDetailController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    [self submitButton];
+}
+
+
+#pragma mark - Init
+
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
+        [self.view addSubview:_scrollView];
+    }
+    return _scrollView;
+}
+
+- (UIImageView *)imageView
+{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 50, 20, 100, 100)];
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
+        _imageView.image = self.titleImage;
+        [self.scrollView addSubview:_imageView];
+    }
+    return _imageView;
+}
+
+- (UILabel *)titleLabel
+{
+    if (!_titleLabel) {
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.imageView.frame) + 20, kScreenWidth - 2 * WPLeftMargin, 20)];
+        _titleLabel.text = self.isDelegate ? self.delegateModel.gradeName : self.merModel.lvname;
+        _titleLabel.textColor = [UIColor blackColor];
+        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        [self.scrollView addSubview:_titleLabel];
+    }
+    return _titleLabel;
+}
+
+- (UILabel *)priceLabel
+{
+    if (!_priceLabel) {
+        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, 30)];
+        _priceLabel.text = [NSString stringWithFormat:@"%.2f(元)", self.isDelegate ? self.delegateModel.price : self.merModel.price];
+        _priceLabel.textColor = [UIColor redColor];
+        _priceLabel.font = [UIFont systemFontOfSize:17];
+        [self.scrollView addSubview:_priceLabel];
+    }
+    return _priceLabel;
+}
+
+- (UILabel *)descriptionLabel
+{
+    if (!_descriptionLabel) {
+        float height = [WPPublicTool textHeightFromTextString:self.isDelegate ? self.delegateModel.adesp : self.merModel.mdesp width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15];
+        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.priceLabel.frame), kScreenWidth - 2 * WPLeftMargin, height)];
+        _descriptionLabel.text = self.isDelegate ? self.delegateModel.adesp : self.merModel.mdesp;
+        _descriptionLabel.font = [UIFont systemFontOfSize:15];
+        _descriptionLabel.numberOfLines = 0;
+        [self.scrollView addSubview:_descriptionLabel];
+    }
+    return _descriptionLabel;
+}
+
+- (WPButton *)submitButton
+{
+    if (!_submitButton) {
+        _submitButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.descriptionLabel.frame) + 20, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
+        [_submitButton setTitle:@"提交订单" forState:UIControlStateNormal];
+        [_submitButton addTarget:self action:@selector(submitOrderButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [self.scrollView addSubview:_submitButton];
+        self.scrollView.contentSize = CGSizeMake(kScreenWidth, CGRectGetMaxY(_submitButton.frame) + 10);
+    }
+    return _submitButton;
+}
+
+#pragma mark - Action 
+
+- (void)submitOrderButtonClick:(UIButton *)button {
+    
+    WPProductSubmitController *vc = [[WPProductSubmitController alloc] init];
+    
+    vc.navigationItem.title = self.isDelegate ? @"代理升级" : @"商户升级";
+    vc.isDelegate = self.isDelegate;
+    vc.userLv = self.isDelegate ? [NSString stringWithFormat:@"%ld", (long)self.delegateModel.id] : [NSString stringWithFormat:@"%ld", self.merModel.id];
+    vc.gradeMoney = self.isDelegate ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price] : [NSString stringWithFormat:@"%.2f", self.merModel.price];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+@end
