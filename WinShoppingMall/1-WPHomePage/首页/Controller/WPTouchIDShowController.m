@@ -75,10 +75,11 @@
 {
     if (!_buttonLabel) {
         _buttonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.touchButton.frame), kScreenWidth, 50)];
-        _buttonLabel.text = @"点击登录";
+        _buttonLabel.text = @"点击登录\n\n通过验证手机指纹登录";
         _buttonLabel.textColor = [UIColor themeColor];
         _buttonLabel.textAlignment = NSTextAlignmentCenter;
         _buttonLabel.font = [UIFont systemFontOfSize:17];
+        _buttonLabel.numberOfLines = 0;
         [self.view addSubview:_buttonLabel];
     }
     return _buttonLabel;

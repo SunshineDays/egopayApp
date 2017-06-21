@@ -28,14 +28,6 @@
     self.bankNameLabel.text = [NSString stringWithFormat:@"%@%@(%@)", model.bankName, cardType, cardNumber];
 }
 
-- (void)setInvitingModel:(WPInvitingPeopleModel *)invitingModel {
-    self.bankNameLabel.text = [WPPublicTool stringHiddenWithString:[NSString stringWithFormat:@"%@", invitingModel.phone] headerIndex:3 footerIndex:4];
-}
-
-- (void)setSubAccountListModel:(WPSubAccountListModel *)subAccountListModel
-{
-    self.bankNameLabel.text = subAccountListModel.clerkName;
-}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

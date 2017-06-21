@@ -103,10 +103,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
         cell.lvImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
         cell.lvImageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.delegateLvModel = self.dataArray[indexPath.row];
-        WPUpGradeProductModel *model = self.dataArray[indexPath.row];
-        if (model.id > self.userInforModel.agentGradeId) {
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else {
         
@@ -114,10 +111,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
         cell.lvImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
         cell.lvImageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.merchantLvModel = self.dataArray[indexPath.row];
-        WPMerchantGradeProuctModel *model = self.dataArray[indexPath.row];
-        if (model.id > self.userInforModel.merchantlvid) {
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
 }
@@ -137,25 +131,23 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.isDelegateView) {
         WPUpGradeProductModel *model = self.dataArray[indexPath.row];
-        if (model.id > self.userInforModel.agentGradeId) {
-            WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-            vc.navigationItem.title = @"代理升级";
-            vc.titleImage = [UIImage imageNamed:self.imageArray[indexPath.row]];
-            vc.delegateModel = model;
-            vc.isDelegate = self.isDelegateView;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
+        WPProductDetailController *vc = [[WPProductDetailController alloc] init];
+        vc.navigationItem.title = @"代理升级";
+        vc.titleImage = [UIImage imageNamed:self.imageArray[indexPath.row]];
+        vc.delegateModel = model;
+        vc.isDelegate = self.isDelegateView;
+        vc.isVip = model.id > self.userInforModel.agentGradeId ? YES : NO;
+        [self.navigationController pushViewController:vc animated:YES];
     }
     else {
         WPMerchantGradeProuctModel *model = self.dataArray[indexPath.row];
-        if (model.id > self.userInforModel.merchantlvid) {
-            WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-            vc.navigationItem.title = @"商户升级";
-            vc.titleImage = [UIImage imageNamed:self.imageArray[indexPath.row]];
-            vc.merModel = model;
-            vc.isDelegate = self.isDelegateView;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
+        WPProductDetailController *vc = [[WPProductDetailController alloc] init];
+        vc.navigationItem.title = @"商户升级";
+        vc.titleImage = [UIImage imageNamed:self.imageArray[indexPath.row]];
+        vc.merModel = model;
+        vc.isDelegate = self.isDelegateView;
+        vc.isVip = model.id > self.userInforModel.merchantlvid ? YES : NO;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

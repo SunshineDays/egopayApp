@@ -8,6 +8,7 @@
 
 #import "WPSubAccountSettingController.h"
 #import "Header.h"
+#import "WPSubAccountListController.h"
 
 @interface WPSubAccountSettingController ()
 
@@ -143,8 +144,13 @@
                                  @"bankCards" : self.switchArray[8]
                                  };
     [WPHelpTool postWithURL:WPUserInforURL parameters:parameters success:^(id success) {
-        [WPProgressHUD showSuccessWithStatus:@"添加成功"];
-        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        [WPProgressHUD showSuccessWithStatus:@"提交成功"];
+        for (UIViewController *controller in self.navigationController.viewControllers) {
+            if ([controller isKindOfClass:[WPSubAccountListController class]]) {
+                WPSubAccountListController *vc = (WPSubAccountListController *)controller;
+                [self.navigationController popToViewController:vc animated:YES];
+            }
+        }
     } failure:^(NSError *error) {
     }];
 }

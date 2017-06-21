@@ -116,7 +116,7 @@
 
 #pragma mark - 获取验证码
 - (void)getVerificationCodeButtonClick:(UIButton *)button {
-    [self timer];
+    
     [self getVerificationData];
 }
 
@@ -157,6 +157,7 @@
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
+            [weakSelf timer];
             [WPProgressHUD showSuccessWithStatus:@"验证码发送成功"];
         }
         else {

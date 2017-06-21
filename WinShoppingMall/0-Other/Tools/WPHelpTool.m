@@ -96,7 +96,9 @@
 
 + (void)wp_endRefreshWith:(UIScrollView *)scrollView array:(NSArray *)array noResultLabel:(WPNoResultLabel *)noResultLabel title:(NSString *)title
 {
-    [scrollView.mj_header endRefreshing];
+    if (scrollView.mj_header) {
+        [scrollView.mj_header endRefreshing];
+    }
     
     if ([scrollView isKindOfClass:[UITableView class]]) {
         [(UITableView *)scrollView reloadData];
@@ -105,10 +107,14 @@
         [(UICollectionView *)scrollView reloadData];
     }
     if (array.count < 20) {
-        [scrollView.mj_footer endRefreshingWithNoMoreData];
+        if (scrollView.mj_footer) {
+            [scrollView.mj_footer endRefreshingWithNoMoreData];
+        }
     }
     else {
-        [scrollView.mj_footer endRefreshing];
+        if (scrollView.mj_footer) {
+            [scrollView.mj_footer endRefreshing];
+        }
     }
     
     if (array.count == 0) {
@@ -141,6 +147,15 @@
     }
     else {
         [noResultLabel hidden];
+    }
+}
+
++ (void)popToViewController:(UIViewController *)popController viewControllers:(NSArray<__kindof UIViewController *> *)viewControllers
+{
+    for (UIViewController *controller in viewControllers) {
+        if ([controller isKindOfClass:[popController class]]) {
+//            popController *vc = (popController *)controller;
+        }
     }
 }
 

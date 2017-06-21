@@ -19,6 +19,11 @@
 
 @property (nonatomic, strong) UIImage *titleImage;
 
+/**
+ *  判断VIP等级判断是否可以点击
+ */
+@property (nonatomic, assign) BOOL isVip;
+
 
 /**
  *  YES：代理升级 NO：商户升级

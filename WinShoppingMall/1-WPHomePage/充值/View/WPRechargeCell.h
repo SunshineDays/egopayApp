@@ -10,7 +10,6 @@
 
 #import "WPBankCardModel.h"
 #import "WPInvitingPeopleModel.h"
-#import "WPSubAccountListModel.h"
 
 @interface WPRechargeCell : UITableViewCell
 
@@ -19,9 +18,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *bankNameLabel;
 
 @property (nonatomic, strong) WPBankCardModel *model;
-
-@property (nonatomic, strong) WPInvitingPeopleModel *invitingModel;
-
-@property (nonatomic, strong) WPSubAccountListModel *subAccountListModel;
 
 @end

@@ -7,13 +7,14 @@
 //
 
 #import "WPSubAccountListController.h"
-#import "WPRechargeCell.h"
+//#import "WPRechargeCell.h"
+#import "WPMessagesCell.h"
 #import "WPSubAccountListModel.h"
 #import "Header.h"
 #import "WPAddSubAccountController.h"
 #import "WPSubAccountSettingController.h"
 
-static NSString * const WPRechargeCellID = @"WPRechargeCellID";
+static NSString * const WPMessageCellID = @"WPMessageCellID";
 @interface WPSubAccountListController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -46,7 +47,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
-        [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPRechargeCell class]) bundle:nil] forCellReuseIdentifier:WPRechargeCellID];
+        [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPMessagesCell class]) bundle:nil] forCellReuseIdentifier:WPMessageCellID];
         [self.view addSubview:_tableView];
     }
     return _tableView;
@@ -58,27 +59,15 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    WPRechargeCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPRechargeCellID];
-    cell.subAccountListModel = self.dataArray[indexPath.row];
+    WPMessagesCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPMessageCellID];
+    WPSubAccountListModel *model = self.dataArray[indexPath.row];
+    cell.titleLabel.text = model.clerkName;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return WPRowHeight;
 }
-
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (editingStyle == UITableViewCellEditingStyleDelete) {
-//        [self.dataArray removeObjectAtIndex:indexPath.row];
-//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//    }
-//}
-//
-//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return @"删除";
-//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

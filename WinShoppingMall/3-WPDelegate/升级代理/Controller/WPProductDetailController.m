@@ -33,7 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self submitButton];
+    self.isVip ? [self submitButton] : [self descriptionLabel];
 }
 
 
@@ -75,7 +75,7 @@
 {
     if (!_priceLabel) {
         _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, 30)];
-        _priceLabel.text = [NSString stringWithFormat:@"%.2f(元)", self.isDelegate ? self.delegateModel.price : self.merModel.price];
+        _priceLabel.text = [NSString stringWithFormat:@"¥ %.2f", self.isDelegate ? self.delegateModel.price : self.merModel.price];
         _priceLabel.textColor = [UIColor redColor];
         _priceLabel.font = [UIFont systemFontOfSize:17];
         [self.scrollView addSubview:_priceLabel];
@@ -100,7 +100,7 @@
 {
     if (!_submitButton) {
         _submitButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.descriptionLabel.frame) + 20, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
-        [_submitButton setTitle:@"提交订单" forState:UIControlStateNormal];
+        [_submitButton setTitle:@"升级" forState:UIControlStateNormal];
         [_submitButton addTarget:self action:@selector(submitOrderButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.scrollView addSubview:_submitButton];
         self.scrollView.contentSize = CGSizeMake(kScreenWidth, CGRectGetMaxY(_submitButton.frame) + 10);

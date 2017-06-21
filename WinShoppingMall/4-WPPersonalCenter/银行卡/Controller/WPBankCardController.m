@@ -30,8 +30,6 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 
 @property (nonatomic, strong) WPBankCardModel *deleteModel;
 
-@property (nonatomic, assign) NSInteger page;
-
 @end
 
 @implementation WPBankCardController
@@ -42,29 +40,19 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 {
     [super viewDidLoad];
     self.navigationItem.title = @"银行卡";
-    self.page = 1;
     if (![[WPUserInfor sharedWPUserInfor].isSubAccount isEqualToString:@"YES"]) {
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem  WP_itemWithTarget:self action:@selector(getUserInforTypeData) image:[UIImage imageNamed:@"icon_jia_content_n"] highImage:nil];
     }
     [self getUserCardData];
-    
-    __weakSelf
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        weakSelf.page = 1;
-        [weakSelf getUserCardData];
-    }];
-    self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        weakSelf.page ++;
-        [weakSelf getUserCardData];
-    }];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCardSucess:) name:WPNotificationAddCardSuccess object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getUserCardData) name:WPNotificationAddCardSuccess object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+#pragma mark - Init
 
 - (NSMutableArray *)cardArray
 {
@@ -88,26 +76,72 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
     return _tableView;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return self.cardArray.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     WPBankCardCell *cell = [tableView dequeueReusableCellWithIdentifier:WPBankCardCellID];
-    cell.model = self.cardArray[indexPath.row];
-    
-    UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGesture:)];
-    longPressGesture.minimumPressDuration = 1.0f;
-    [cell addGestureRecognizer:longPressGesture];
-    
+    cell.model = self.cardArray[indexPath.section];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 110;
+    return 120;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 20;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc] init];
+    headerView.backgroundColor = [UIColor clearColor];
+    return headerView;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        self.indexNumber = indexPath.section;
+        __weakSelf
+        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+                                       {
+                                           weakSelf.deleteModel = weakSelf.cardArray[weakSelf.indexNumber];
+                                           if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
+                                               [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
+                                                   [weakSelf postDeleteCardDataWithPassword:touchIDSuccess];
+                                                   
+                                               } failure:^(NSError *error) {
+                                                   [weakSelf createPayPopupView];
+                                               }];
+                                           }
+                                           else {
+                                               [weakSelf createPayPopupView];
+                                           }
+                                       }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        }];
+        [alertControl addAction:deleteAction];
+        [alertControl addAction:cancelAction];
+        [self presentViewController:alertControl animated:YES completion:nil];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
 }
 
 #pragma mark - UITableViewDelegate
@@ -115,7 +149,7 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     WPBankCardModel *model = [[WPBankCardModel alloc]init];
-    model = self.cardArray[indexPath.row];
+    model = self.cardArray[indexPath.section];
     if ([self.showCardType isEqualToString:@"1"]) {
         //  未认证，认证失败
         if (model.auditStatus == 0 || model.auditStatus == 2) {
@@ -124,10 +158,7 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
             vc.cardId = [NSString stringWithFormat:@"%ld", (long)model.id];
             __weakSelf
             vc.loadApproveBlock = ^(float approveState) {
-//                model.auditStatus = approveState;
-//                [weakSelf.cardArray replaceObjectAtIndex:indexPath.row withObject:model];
-//                [weakSelf.tableView reloadData];
-                [weakSelf.tableView.mj_header beginRefreshing];
+                [weakSelf getUserCardData];
             };
             
             [self.navigationController pushViewController:vc animated:YES];
@@ -176,48 +207,6 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
     [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 
-#pragma mark - Action
-
-- (void)longPressGesture:(UILongPressGestureRecognizer *)longPressGesture
-{
-    NSIndexPath *indexPath;
-    if (longPressGesture.state == UIGestureRecognizerStateBegan) {
-        CGPoint point = [longPressGesture locationInView:self.tableView];
-        indexPath = [self.tableView indexPathForRowAtPoint:point];
-        self.indexNumber = indexPath.row;
-    }
-    if (longPressGesture.state == UIGestureRecognizerStateEnded) {
-        __weakSelf
-        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-                                       {
-                                           weakSelf.deleteModel = weakSelf.cardArray[self.indexNumber];
-                                           if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
-                                               [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-                                                   [weakSelf postDeleteCardDataWithPassword:touchIDSuccess];
-                                                   
-                                               } failure:^(NSError *error) {
-                                                   [weakSelf createPayPopupView];
-                                               }];
-                                           }
-                                           else {
-                                               [weakSelf createPayPopupView];
-                                           }
-                                       }];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alertControl addAction:deleteAction];
-        [alertControl addAction:cancelAction];
-        [self presentViewController:alertControl animated:YES completion:nil];
-    }
-}
-
-- (void)addCardSucess:(NSNotification *)notification
-{
-    [self.tableView.mj_header beginRefreshing];
-}
-
-
 #pragma mark - Data
 
 - (void)getUserCardData
@@ -228,9 +217,7 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
     __weakSelf
 
     [WPHelpTool getWithURL:WPUserBanCardURL parameters:parameters success:^(id success) {
-        if (weakSelf.page == 1) {
-            [weakSelf.cardArray removeAllObjects];
-        }
+        [weakSelf.cardArray removeAllObjects];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
@@ -239,11 +226,10 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
         else {
             [WPProgressHUD showInfoWithStatus:result[@"err_msg"]];
         }
+        
         [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"cardList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的卡"];
         
     } failure:^(NSError *error) {
-        [weakSelf.tableView.mj_header endRefreshing];
-        [weakSelf.tableView.mj_footer endRefreshing];
     }];
 }
 
@@ -277,7 +263,6 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 {
     if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
         if ([[WPUserInfor sharedWPUserInfor].payPasswordType isEqualToString:@"YES"]) {
-//            WPAddCardController *vc = [[WPAddCardController alloc] init];
             WPSelectController *vc = [[WPSelectController alloc] init];
             vc.selectType = 2;
             [self.navigationController pushViewController:vc animated:YES];

@@ -6,12 +6,12 @@
 //  Copyright © 2017年 易购付. All rights reserved.
 //
 
-#import "WPRechargeCell.h"
 #import "WPInvitingPeopleController.h"
 #import "WPInvitingPeopleModel.h"
 #import "Header.h"
+#import "WPMessagesCell.h"
 
-static NSString * const WPRechargeCellID = @"WPRechargeCellID";
+static NSString * const WPMessageCellID = @"WPMessageCellID";
 
 @interface WPInvitingPeopleController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -45,7 +45,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
-        [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPRechargeCell class]) bundle:nil] forCellReuseIdentifier:WPRechargeCellID];
+        [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPMessagesCell class]) bundle:nil] forCellReuseIdentifier:WPMessageCellID];
         [self.view addSubview:_tableView];
     }
     return _tableView;
@@ -57,8 +57,9 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    WPRechargeCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPRechargeCellID];
-    cell.invitingModel = self.dataArray[indexPath.row];
+    WPMessagesCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPMessageCellID];
+    WPInvitingPeopleModel *model = self.dataArray[indexPath.row];
+    cell.titleLabel.text = [WPPublicTool stringHiddenWithString:[NSString stringWithFormat:@"%@", model.phone] headerIndex:3 footerIndex:4];
     return cell;
 }
 
