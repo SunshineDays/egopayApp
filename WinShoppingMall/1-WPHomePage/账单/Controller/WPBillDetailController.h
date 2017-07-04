@@ -10,7 +10,6 @@
 
 #import "WPBillModel.h"
 
-
 @interface WPBillDetailController : WPBaseViewController
 
 @property (nonatomic, strong) WPBillModel *model;

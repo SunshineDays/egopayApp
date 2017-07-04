@@ -229,13 +229,11 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
             NSString *balance = [NSString stringWithFormat:@"%.2f", weakSelf.model.avl_balance];
             NSString *todayQrIncome = [NSString stringWithFormat:@"%.2f", weakSelf.model.todayQrIncome];
             
-            NSDictionary *subAccountDict = [[NSUserDefaults standardUserDefaults] objectForKey:WPSubAccountDict];;
-            
             NSArray *dictKeyArray = @[@"balance", @"today_income", @"qr_pic", @"qr_bill", @"bankcards", @"mer_shops", @"sys_msgs", @"refer_pps"];
             NSArray *titleArray = @[[NSString stringWithFormat:@"余额：%@", balance], [NSString stringWithFormat:@"今日收入：%@", todayQrIncome], @"收款码", @"收款账单", @"银行卡", @"商家", @"系统消息", @"推荐"];
             NSArray *imageArray = @[@"icon_yue_n", @"icon_duizhang_content_n", @"icon_shoukuanma_content_n",@"icon_zhangdan_content_n", @"icon_yinhang_n", @"icon_shangjiai_content_n", @"icon_xiaoxi_content_n", @"icon_tuijian_content_n"];
             for (int i = 0; i < dictKeyArray.count; i++) {
-                if ([[NSString stringWithFormat:@"%@", subAccountDict[dictKeyArray[i]]] isEqualToString:@"1"]) {
+                if ([[NSString stringWithFormat:@"%@", weakSelf.model.resources[dictKeyArray[i]]] isEqualToString:@"1"]) {
                     [weakSelf.dataArray addObject:titleArray[i]];
                     [weakSelf.imageArray addObject:imageArray[i]];
                 }

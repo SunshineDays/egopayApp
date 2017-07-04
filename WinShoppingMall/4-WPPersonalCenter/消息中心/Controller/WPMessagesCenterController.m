@@ -90,7 +90,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
 - (void)getmessgaesData {
     NSDictionary *parameters = @{
-                                 @"curPage" : @"1"
+                                 @"curPage" : [NSString stringWithFormat:@"%ld", self.page]
                                  };
     __weakSelf
     [WPHelpTool getWithURL:WPMessageURL parameters:parameters success:^(id success) {

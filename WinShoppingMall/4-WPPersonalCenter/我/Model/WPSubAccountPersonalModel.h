@@ -22,7 +22,7 @@
 
 @property (nonatomic, copy) NSString *headUrl;
 
-
+@property (nonatomic, strong) NSDictionary *resources;
 
 
 @end

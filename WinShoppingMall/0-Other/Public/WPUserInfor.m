@@ -24,8 +24,6 @@ Single_Implementation(WPUserInfor)
     
     [WPUserInfor sharedWPUserInfor].userPhone = self.userPhone;
     
-    [WPUserInfor sharedWPUserInfor].codeUrl = self.codeUrl;
-        
     [WPUserInfor sharedWPUserInfor].threeTouch = self.threeTouch;
     
     [WPUserInfor sharedWPUserInfor].userInfoDict = self.userInfoDict;
@@ -33,9 +31,7 @@ Single_Implementation(WPUserInfor)
     [WPUserInfor sharedWPUserInfor].needTouchID = self.needTouchID;
         
     [WPUserInfor sharedWPUserInfor].isSubAccount = self.isSubAccount;
-    
-    [WPUserInfor sharedWPUserInfor].subAccountDict = self.subAccountDict;
-            
+                
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     
     [userDefault setObject:self.clientId forKey:WPUserDefaultClientId];
@@ -47,9 +43,7 @@ Single_Implementation(WPUserInfor)
     [userDefault setObject:self.shopPassType forKey:WPUserShopPass];
     
     [userDefault setObject:self.userPhone forKey:WPUserPhone];
-    
-    [userDefault setObject:self.codeUrl forKey:WPCodeUrl];
-    
+        
     [userDefault setObject:self.threeTouch forKey:@"threeTouch"];
     
     [userDefault setObject:self.userInfoDict forKey:@"userInfoDict"];
@@ -57,9 +51,7 @@ Single_Implementation(WPUserInfor)
     [userDefault setObject:self.needTouchID forKey:WPNeedTouchID];
             
     [userDefault setObject:self.isSubAccount forKey:WPIsSubAccount];
-    
-    [userDefault setObject:self.subAccountDict forKey:WPSubAccountDict];
-    
+        
     [userDefault synchronize];
 }
 

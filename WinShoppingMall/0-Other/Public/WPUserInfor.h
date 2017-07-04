@@ -41,11 +41,6 @@ Single_Interface(WPUserInfor)
 @property (nonatomic, copy) NSString *userPhone;
 
 /**
- *  收款码url
- */
-@property (nonatomic, copy) NSString *codeUrl;
-
-/**
  *  3D Touch
  */
 @property (nonatomic, copy) NSString *threeTouch;
@@ -64,12 +59,6 @@ Single_Interface(WPUserInfor)
  *  是否是子账户 YES NO
  */
 @property (nonatomic, copy) NSString *isSubAccount;
-
-
-/**
- *  子账户模块信息
- */
-@property (nonatomic, strong) NSDictionary *subAccountDict;
 
 
 - (void)updateUserInfor;

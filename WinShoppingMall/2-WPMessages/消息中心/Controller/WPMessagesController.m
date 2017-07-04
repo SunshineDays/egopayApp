@@ -25,6 +25,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
 @property (nonatomic, assign) NSInteger page;
 
+
 @end
 
 @implementation WPMessagesController
@@ -47,24 +48,27 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
         weakSelf.page ++;
         [weakSelf getBillData];
     }];
-    [self.indicatorView startAnimating];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
+#pragma mark - Init
 
-- (NSMutableArray *)dataArray {
+- (NSMutableArray *)dataArray
+{
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(6, WPNavigationHeight, kScreenWidth - 12, kScreenHeight - WPNavigationHeight - 49) style:UITableViewStylePlain];
         _tableView.dataSource = self;
@@ -84,11 +88,13 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     return self.dataArray.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPBillNotificationCell *cell = [tableView dequeueReusableCellWithIdentifier:WPBillNotificationCellID];
     cell.model = self.dataArray[indexPath.section];
     
@@ -96,7 +102,8 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 }
 
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 230;
 }
 
@@ -121,7 +128,8 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     WPBillDetailController *vc = [[WPBillDetailController alloc] init];
     WPBillModel *model = self.dataArray[indexPath.section];
@@ -131,11 +139,13 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
 #pragma mark - Data
 
-- (void)getBillData {
-    
+- (void)getBillData
+{
+    NSDictionary *parameters = @{
+                                 @"curPage" : [NSString stringWithFormat:@"%ld", (long)self.page],
+                                 };
     __weakSelf
-    [WPHelpTool getWithURL:WPBillNotificationURL parameters:nil success:^(id success) {
-        [weakSelf.indicatorView stopAnimating];
+    [WPHelpTool getWithURL:WPBillNotificationURL parameters:parameters success:^(id success) {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         
@@ -147,7 +157,6 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
         }
         [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"infoList"] noResultLabel:weakSelf.noResultLabel title:@"暂无账单记录"];
     } failure:^(NSError *error) {
-        [weakSelf.indicatorView stopAnimating];
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
     }];

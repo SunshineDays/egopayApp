@@ -176,10 +176,10 @@
     return _alertCameraSheet;
 }
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    viewController.navigationController.navigationBar.tintColor = [UIColor blackColor];
-}
+//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+//{
+//    viewController.navigationController.navigationBar.tintColor = [UIColor blackColor];
+//}
 
 #pragma mark - 判断用户是否设置过支付密码
 - (void)getBaseUserInforTypeData
@@ -233,7 +233,7 @@
         WPRegisterController *vc = [[WPRegisterController alloc] init];
         WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
         [UIApplication sharedApplication].keyWindow.rootViewController = navi;
-        [WPUserInfor sharedWPUserInfor].clientId = @"";
+        [WPUserInfor sharedWPUserInfor].clientId = nil;
         [[WPUserInfor sharedWPUserInfor] updateUserInfor];
     }]];
     [self presentViewController:alert animated:YES completion:nil];

@@ -194,25 +194,21 @@
             //  如果不是当前账户，还原初始设置
             if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:weakSelf.accountCell.textField.text]) {
                 [WPUserInfor sharedWPUserInfor].userPhone = weakSelf.accountCell.textField.text;
-                [WPUserInfor sharedWPUserInfor].approvePassType = @"";
-                [WPUserInfor sharedWPUserInfor].payPasswordType = @"";
-                [WPUserInfor sharedWPUserInfor].shopPassType = @"";
-                [WPUserInfor sharedWPUserInfor].codeUrl = @"";
+                [WPUserInfor sharedWPUserInfor].approvePassType = nil;
+                [WPUserInfor sharedWPUserInfor].payPasswordType = nil;
+                [WPUserInfor sharedWPUserInfor].shopPassType = nil;
                 [WPUserInfor sharedWPUserInfor].needTouchID = @"2";
-                [WPUserInfor sharedWPUserInfor].isSubAccount = @"";
-                [WPUserInfor sharedWPUserInfor].subAccountDict = nil;
+                [WPUserInfor sharedWPUserInfor].isSubAccount = nil;
                 
                 [WPKeyChainTool keyChainDelete];
             }
-            if (result[@"resources"]) {
-                [WPUserInfor sharedWPUserInfor].needTouchID = @"";
+            if ([result[@"isClerk"] isEqualToString:@"yes"]) {
+                [WPUserInfor sharedWPUserInfor].needTouchID = nil;
                 [WPUserInfor sharedWPUserInfor].isSubAccount = @"YES";
-                NSDictionary *resources = result[@"resources"];
-                [WPUserInfor sharedWPUserInfor].subAccountDict = resources;
             }
             else {
                 [WPUserInfor sharedWPUserInfor].needTouchID = @"2";
-                [WPUserInfor sharedWPUserInfor].isSubAccount = @"";
+                [WPUserInfor sharedWPUserInfor].isSubAccount = nil;
             }
             
             [[WPUserInfor sharedWPUserInfor] updateUserInfor];

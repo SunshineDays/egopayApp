@@ -299,7 +299,7 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
         WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
         [UIApplication sharedApplication].keyWindow.rootViewController = navi;
         
-        [WPUserInfor sharedWPUserInfor].clientId = @"";
+        [WPUserInfor sharedWPUserInfor].clientId = nil;
         
         [[WPUserInfor sharedWPUserInfor] updateUserInfor];
         

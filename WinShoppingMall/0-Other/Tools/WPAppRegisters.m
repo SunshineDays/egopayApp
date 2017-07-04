@@ -49,7 +49,6 @@ static BOOL const isProduction = FALSE;
     [WPUserInfor sharedWPUserInfor].shopPassType = [[NSUserDefaults standardUserDefaults] objectForKey:WPUserShopPass];
     [WPUserInfor sharedWPUserInfor].userPhone = [[NSUserDefaults standardUserDefaults] objectForKey:WPUserPhone];
     [WPUserInfor sharedWPUserInfor].needTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPNeedTouchID];
-    [WPUserInfor sharedWPUserInfor].codeUrl = [[NSUserDefaults standardUserDefaults] objectForKey:WPCodeUrl];
     [WPUserInfor sharedWPUserInfor].isSubAccount = [[NSUserDefaults standardUserDefaults] objectForKey:WPIsSubAccount];
 }
 

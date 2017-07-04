@@ -78,8 +78,6 @@ UIKIT_EXTERN NSString * const WPNeedTouchID;
 
 UIKIT_EXTERN NSString * const WPIsSubAccount;
 
-UIKIT_EXTERN NSString * const WPSubAccountDict;
-
 UIKIT_EXTERN NSString * const kUserPayPassword;
 
 UIKIT_EXTERN NSString * const kUserPhone;

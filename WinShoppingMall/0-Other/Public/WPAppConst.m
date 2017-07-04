@@ -67,8 +67,6 @@ NSString * const WPNeedTouchID = @"WPNeedTouchID";
 
 NSString * const WPIsSubAccount = @"WPIsSubAccount";
 
-NSString * const WPSubAccountDict = @"WPSubAccountDict";
-
 NSString * const kUserPayPassword = @"com.wintopay.ios.userpaypassword";
 
 NSString * const kUserPhone = @"com.wintopay.ios.userphone";

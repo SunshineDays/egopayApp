@@ -585,13 +585,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4845A5EB1EF37AA800DA03E7 /* 消息中心 */ = {
+		4845A5EB1EF37AA800DA03E7 /* 系统消息 */ = {
 			isa = PBXGroup;
 			children = (
 				4845A5EC1EF37ACD00DA03E7 /* Controller */,
 				4845A5ED1EF37ACD00DA03E7 /* Model */,
 				4845A5EE1EF37ACD00DA03E7 /* View */,
 			);
+			name = "系统消息";
 			path = "消息中心";
 			sourceTree = "<group>";
 		};
@@ -1397,7 +1398,7 @@
 				4854E57B1EB8608900E8A955 /* 商家认证 */,
 				485073E31EA8613900422016 /* 商户/代理升级 */,
 				486C71721EF7765D00EA526F /* 子账户 */,
-				4845A5EB1EF37AA800DA03E7 /* 消息中心 */,
+				4845A5EB1EF37AA800DA03E7 /* 系统消息 */,
 				485073FB1EA8613900422016 /* 登录/注册 */,
 			);
 			path = "4-WPPersonalCenter";

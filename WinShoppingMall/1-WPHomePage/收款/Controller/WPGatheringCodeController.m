@@ -72,14 +72,7 @@
             break;
             
         case 2: {  //我的收款码
-            if ([WPUserInfor sharedWPUserInfor].codeUrl.length > 0) {
-                self.codeString= [WPUserInfor sharedWPUserInfor].codeUrl;
-                [self codeImageView];
-                [self titleLabel];
-            }
-            else {
-                [self getGatheringCodeData];
-            }
+            [self getGatheringCodeData];
         }
             break;
             
@@ -188,8 +181,6 @@
         
         if ([type isEqualToString:@"1"]) {
             weakSelf.codeString = result[@"qr_url"];
-            [WPUserInfor sharedWPUserInfor].codeUrl = weakSelf.codeString;
-            [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             [weakSelf codeImageView];
             [weakSelf titleLabel];
 }
