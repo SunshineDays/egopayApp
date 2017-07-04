@@ -311,9 +311,10 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
     }]];
     __weakSelf
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
         WPRegisterController *vc = [[WPRegisterController alloc] init];
-        WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
-        [UIApplication sharedApplication].keyWindow.rootViewController = navi;
+        WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];        
+        [WPHelpTool rootViewController:navi];
         
         [WPUserInfor sharedWPUserInfor].clientId = nil;
         

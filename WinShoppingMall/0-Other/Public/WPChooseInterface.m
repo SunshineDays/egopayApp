@@ -9,6 +9,7 @@
 #import "WPChooseInterface.h"
 #import "WPTouchIDShowController.h"
 #import "WPNavigationController.h"
+#import "WPHelpTool.h"
 
 @implementation WPChooseInterface
 

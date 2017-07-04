@@ -234,11 +234,6 @@
 
 #pragma mark - Action
 
-- (void)leftItemClick:(UIButton *)button
-{
-    [UIApplication sharedApplication].keyWindow.rootViewController = [[WPTabBarController alloc] init];
-
-}
 
 #pragma mark - Methods
 

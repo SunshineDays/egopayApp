@@ -172,7 +172,7 @@
 
 - (void)start
 {
-    [UIApplication sharedApplication].keyWindow.rootViewController = [[WPTabBarController alloc] init];
+    [WPHelpTool rootViewController:[[WPTabBarController alloc] init]];
 }
 
 #pragma mark - Data

@@ -232,7 +232,7 @@
         }
         WPRegisterController *vc = [[WPRegisterController alloc] init];
         WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
-        [UIApplication sharedApplication].keyWindow.rootViewController = navi;
+        [WPHelpTool rootViewController:navi];
         [WPUserInfor sharedWPUserInfor].clientId = nil;
         [[WPUserInfor sharedWPUserInfor] updateUserInfor];
     }]];

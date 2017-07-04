@@ -48,6 +48,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
         weakSelf.page ++;
         [weakSelf getBillData];
     }];
+    [self.indicatorView startAnimating];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -146,6 +147,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
                                  };
     __weakSelf
     [WPHelpTool getWithURL:WPBillNotificationURL parameters:parameters success:^(id success) {
+        [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         
@@ -157,6 +159,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
         }
         [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"infoList"] noResultLabel:weakSelf.noResultLabel title:@"暂无账单记录"];
     } failure:^(NSError *error) {
+        [weakSelf.indicatorView stopAnimating];
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
     }];

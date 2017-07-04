@@ -19,27 +19,40 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
+@property (nonatomic, assign) NSInteger page;
+
 @end
 
 @implementation WPInvitingPeopleController
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"邀请的人";
-    
+    self.page = 1;
     [self getInvitingPeopleData];
+    
+    __weakSelf
+    self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        weakSelf.page ++;
+        [weakSelf getInvitingPeopleData];
+    }];
 }
 
-- (NSMutableArray *)dataArray {
+#pragma mark - Init
+
+- (NSMutableArray *)dataArray
+{
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
         _tableView.delegate = self;
@@ -52,43 +65,49 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPMessagesCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPMessageCellID];
     WPInvitingPeopleModel *model = self.dataArray[indexPath.row];
     cell.titleLabel.text = [WPPublicTool stringWithStarString:[NSString stringWithFormat:@"%@", model.phone] headerIndex:3 footerIndex:4];
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 60;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-
 }
 
 #pragma mark - Data
 
-- (void)getInvitingPeopleData {
-
+- (void)getInvitingPeopleData
+{
+    NSDictionary *parameters = @{
+                                 @"curPage" : [NSString stringWithFormat:@"%ld", (long)self.page],
+                                 };
     __weakSelf
-    [WPHelpTool getWithURL:WPMyRefersURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPMyRefersURL parameters:parameters success:^(id success) {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
-            
+            if (weakSelf.page == 1) {
+                [weakSelf.dataArray removeAllObjects];
+            }
             [weakSelf.dataArray addObjectsFromArray:[WPInvitingPeopleModel mj_objectArrayWithKeyValuesArray:result[@"myRefers"]]];
-            [weakSelf.tableView reloadData];
         }
         [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"myRefers"] noResultLabel:weakSelf.noResultLabel title:@"您还没有邀请的人哦"];
     } failure:^(NSError *error) {
-        
+        [weakSelf.tableView.mj_footer endRefreshing];
     }];
 }
 

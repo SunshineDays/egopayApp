@@ -57,7 +57,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"我";
     
-    self.imageArray = @[@"icon_yue_n", @"icon_yinhang_n", @"icon_shiming_n", @"icon_shangjiarenzheng_n", @"icon_shanghushengji_n", @"icon_shanghushengji_n", @"icon_xiaoxi_content_n"];
+    self.imageArray = @[@"icon_yue_n", @"icon_yinhang_n", @"icon_shiming_n", @"icon_shangjiarenzheng_n", @"icon_shanghushengji_n", @"icon_shanghu_n", @"icon_xiaoxi_content_n"];
     [self getUserInforData];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUserAvater:) name:WPNotificationChangeUserInfor object:nil];
     __weakSelf

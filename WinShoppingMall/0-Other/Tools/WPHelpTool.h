@@ -55,4 +55,6 @@
  */
 + (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController;
 
++ (void)rootViewController:(UIViewController *)controller;
+
 @end

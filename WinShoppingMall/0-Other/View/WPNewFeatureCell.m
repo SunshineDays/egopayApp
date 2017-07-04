@@ -11,6 +11,7 @@
 #import "WPTabBarController.h"
 #import "UIColor+WPColor.h"
 #import "WPChooseInterface.h"
+#import "WPHelpTool.h"
 
 @implementation WPNewFeatureCell
 
@@ -48,7 +49,7 @@
 }
 
 - (void)startButtonClick:(UIButton *)button {
-    [UIApplication sharedApplication].keyWindow.rootViewController = [WPChooseInterface chooseRootViewController];
+    [WPHelpTool rootViewController:[WPChooseInterface chooseRootViewController]];
 }
 
 

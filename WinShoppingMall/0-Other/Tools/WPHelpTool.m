@@ -268,4 +268,15 @@
     }
 }
 
++ (void)rootViewController:(UIViewController *)controller
+{
+    [UIView transitionWithView:[UIApplication sharedApplication].keyWindow duration:0.5f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        BOOL oldState = [UIView areAnimationsEnabled];
+        [UIView setAnimationsEnabled:NO];
+        [UIApplication sharedApplication].keyWindow.rootViewController = controller;
+        [UIView setAnimationsEnabled:oldState];
+    } completion:^(BOOL finished) {
+    }];
+}
+
 @end

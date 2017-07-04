@@ -108,12 +108,12 @@
 - (void)showTouchIDView
 {
     [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-        [UIApplication sharedApplication].keyWindow.rootViewController = [[WPTabBarController alloc] init];
+        [WPHelpTool rootViewController:[[WPTabBarController alloc] init]];
         
     } failure:^(NSError *error) {
         WPRegisterController *vc = [[WPRegisterController alloc] init];
         WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
-        [UIApplication sharedApplication].keyWindow.rootViewController = navi;
+        [WPHelpTool rootViewController:navi];
     }];
 }
 
