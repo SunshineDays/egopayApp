@@ -78,7 +78,7 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 - (void)getInvitingPeopleData {
 
     __weakSelf
-    [WPHelpTool getWithURL:WPMyRefers parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPMyRefersURL parameters:nil success:^(id success) {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {

@@ -22,12 +22,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 
 @property (nonatomic, strong) UIView *tableHeaderView;
 
-@property (nonatomic, strong) UIButton *backButton;
-
-//  搜索框
 @property (nonatomic, strong) UISearchBar *searchBar;
 
-//  轮播图
 @property (nonatomic, strong) SDCycleScrollView *cycleScrollView;
 
 @property (nonatomic, strong) UIButton *defaultButton;
@@ -36,16 +32,17 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 
 @property (nonatomic, strong) UIButton *classifyButton;
 
-// 轮播图图片数组
+
 @property (nonatomic, strong) NSMutableArray *pictureArray;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
+// 类别
 @property (nonatomic, copy) NSString *categoryID;
+// 城市名
 @property (nonatomic, copy) NSString *cityName;
 
 @property (nonatomic, assign) NSInteger page;
-
 
 @end
 
@@ -328,9 +325,6 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
             [weakSelf.dataArray addObjectsFromArray:[WPMerchantModel mj_objectArrayWithKeyValuesArray:result[@"shopList"]]];
-            [weakSelf defaultButton];
-            [weakSelf cityButton];
-            [weakSelf classifyButton];
         }
         [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商铺"];
     } failure:^(NSError *error) {

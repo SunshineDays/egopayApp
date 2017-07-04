@@ -10,11 +10,6 @@
 
 @interface WPTouchIDShowController : WPBaseViewController
 
-//@property (nonatomic, assign) BOOL isPay;
-
-@property (nonatomic, copy) void(^touchIDBlock)(NSString *touchID);
-
-@property (nonatomic, copy) void(^inputPassword)(NSString *inputPassword);
 
 
 @end

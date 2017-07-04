@@ -4,13 +4,11 @@
 /********************************  UI相关常量  ************************************/
 #pragma mark - UI相关常量
 
-/** TabBar的高度 */
+CGFloat const WPNavigationHeight = 64;  //导航栏高低
 
-CGFloat const WPNavigationHeight = 64;
+CGFloat const WPLeftMargin = 17.5;  //控件距屏幕左边的距离
 
-CGFloat const WPLeftMargin = 17.5;
-
-CGFloat const WPLeftMarginField = WPLeftMargin + 90;
+CGFloat const WPLeftMarginField = WPLeftMargin + 90;  
 
 CGFloat const WPTopMargin = WPNavigationHeight + 10;
 
@@ -22,18 +20,16 @@ CGFloat const WPLineHeight = 0.5f;  //分割线高度
 
 CGFloat const WPButtonHeight = 40;  //按钮高度
 
-CGFloat const WPFontDefaultSize = 15;
+CGFloat const WPFontDefaultSize = 15;  //默认文字大小
+
+/********************************  App常量 ************************************/
+#pragma mark - App常量
 
 /** 获取验证码时间 */
 NSTimeInterval const getVerificationCodeTime = 120;
 
-
-
-/********************************  电话号码 ************************************/
-#pragma mark - 电话号码
-
+/** 电话号码 */
 NSString * const WPAppTelNumber = @"400-8536696";
-
 
 /********************************  通知 ************************************/
 #pragma mark - 通知
@@ -84,7 +80,7 @@ NSString * const kUserPayPassword_Phone = @"com.wintopay.ios.userpaypasswordphon
 /********************************  统一的URL ************************************/
 #pragma mark - 统一的URL
 
-NSString * const WPBaseURL = @"http://app.wintopay.com";
+NSString * const WPBaseURL = @"http://www.egoopay.com";
 
 //NSString * const WPBaseURL = @"http://192.168.1.21:8080";
 
@@ -170,7 +166,7 @@ NSString * const WPGetCategoryURL = @"client_getCategory";
 
 NSString * const WPSubmitShopCertURL = @"client_submitShopCert";
 
-NSString * const WPQueryShopStatus = @"client_queryShopStatus";
+NSString * const WPQueryShopStatusURL = @"client_queryShopStatus";
 
 NSString * const WPShowMerShopsURL = @"client_showMerShops";
 
@@ -180,13 +176,13 @@ NSString * const WPMessageURL = @"client_pullSysMsg";
 
 NSString * const WPCityListURL = @"client_getCities";
 
-NSString * const WPShowAgUpgrade = @"client_showAgUpgrade";
+NSString * const WPShowAgUpgradeURL = @"client_showAgUpgrade";
 
-NSString * const WPShowMerUpgrade = @"client_showMerUpgrade";
+NSString * const WPShowMerUpgradeURL = @"client_showMerUpgrade";
 
-NSString * const WPTodayQrIncome = @"client_todayQrIncome";
+NSString * const WPTodayQrIncomeURL = @"client_todayQrIncome";
 
-NSString * const WPMyRefers = @"client_myRefers";
+NSString * const WPMyRefersURL = @"client_myRefers";
 
 NSString * const WPUserFeedBackURL = @"client_feedback";
 

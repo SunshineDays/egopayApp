@@ -258,4 +258,14 @@
 }
 
 
+#pragma mark - 返回指定界面
++ (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController
+{
+    for (UIViewController *ctr in navigationController.viewControllers) {
+        if ([ctr isKindOfClass:[controller class]]) {
+            [navigationController popToViewController:ctr animated:YES];
+        }
+    }
+}
+
 @end

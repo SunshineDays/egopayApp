@@ -181,11 +181,6 @@
     viewController.navigationController.navigationBar.tintColor = [UIColor blackColor];
 }
 
-- (void)popViewController
-{
-    NSLog(@"haha");
-}
-
 #pragma mark - 判断用户是否设置过支付密码
 - (void)getBaseUserInforTypeData
 {

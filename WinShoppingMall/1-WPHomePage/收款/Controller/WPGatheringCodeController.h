@@ -24,8 +24,7 @@
 /**
  *  1:支付二维码 2:我的收款码 3:分享二维码
  */
-@property (nonatomic, assign) int codeType;
-
+@property (nonatomic, assign) NSInteger codeType;
 
 
 @end

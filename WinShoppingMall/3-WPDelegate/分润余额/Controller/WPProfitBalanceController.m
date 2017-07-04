@@ -27,9 +27,10 @@
 
 @implementation WPProfitBalanceController
 
+#pragma mark - Life Cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     self.navigationItem.title = @"分润余额";
     
     [self titleLabel];
@@ -38,7 +39,7 @@
     [self confirmButton];
 }
 
-
+#pragma mark - Init
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
@@ -88,6 +89,29 @@
     return _confirmButton;
 }
 
+- (void)initPayPopupView {
+    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
+    vc.titleString = [NSString stringWithFormat:@"提现金额:%@元", self.moneyCell.textField.text];
+    vc.modalPresentationStyle = UIModalPresentationCustom;
+    __weakSelf
+    vc.payPasswordBlock = ^(NSString *payPassword) {
+        [weakSelf pushWithdrawDataWithPassword:payPassword];
+    };
+    vc.forgetPasswordBlock = ^{
+        WPPasswordController *vc = [[WPPasswordController alloc] init];
+        vc.passwordType = @"2";
+        [weakSelf.navigationController pushViewController:vc animated:YES];
+    };
+    [self.navigationController presentViewController:vc animated:YES completion:nil];
+}
+
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateMoneyNumber:textField.text range:range replacementString:string];
+}
+
 #pragma mark - Action
 
 - (void)changeButtonSurface
@@ -120,30 +144,7 @@
     }
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    return [WPRegex validateMoneyNumber:textField.text range:range replacementString:string];
-}
-
-#pragma mark - Methods
-
-
-- (void)initPayPopupView {
-    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
-    vc.titleString = [NSString stringWithFormat:@"提现金额:%@元", self.moneyCell.textField.text];
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    __weakSelf
-    vc.payPasswordBlock = ^(NSString *payPassword) {
-        [weakSelf pushWithdrawDataWithPassword:payPassword];
-    };
-    vc.forgetPasswordBlock = ^{
-        WPPasswordController *vc = [[WPPasswordController alloc] init];
-        vc.passwordType = @"2";
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    };
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
-    
-}
+#pragma mark - Data
 
 - (void)pushWithdrawDataWithPassword:(NSString *)passwordString{
     

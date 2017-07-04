@@ -120,7 +120,7 @@
 - (void)wayButtonClick:(UIButton *)button
 {
     WPPayTypeController *vc = [[WPPayTypeController alloc] init];
-    vc.isUseMoney = YES;
+    vc.isBalance = YES;
     vc.amount = [self.gradeMoney floatValue];
     vc.modalPresentationStyle = UIModalPresentationCustom;
     __weakSelf

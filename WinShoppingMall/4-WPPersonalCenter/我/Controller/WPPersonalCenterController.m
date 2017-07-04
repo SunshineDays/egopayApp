@@ -281,7 +281,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 - (void)getStateData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPQueryShopStatus parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPQueryShopStatusURL parameters:nil success:^(id success) {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {

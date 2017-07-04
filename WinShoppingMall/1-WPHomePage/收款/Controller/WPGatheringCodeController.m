@@ -31,6 +31,8 @@
 
 @implementation WPGatheringCodeController
 
+
+#pragma mark - Life Cycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -140,13 +142,10 @@
     if (longPressGesture.state == UIGestureRecognizerStateEnded) {
         __weakSelf
         UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"保存到相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-           [weakSelf downloadButtonAction];
-       }];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alertControl addAction:deleteAction];
-        [alertControl addAction:cancelAction];
+        [alertControl addAction:[UIAlertAction actionWithTitle:@"保存到相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf downloadButtonAction];
+        }]];
+        [alertControl addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
         [self presentViewController:alertControl animated:YES completion:nil];
     }
 }

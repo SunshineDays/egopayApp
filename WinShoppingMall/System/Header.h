@@ -63,7 +63,5 @@
 // 屏幕高度
 #define kScreenHeight kScreenSize.height
 
-#define wpRowHeight kScreenHeight / 10
-
 
 #endif /* Header_h */

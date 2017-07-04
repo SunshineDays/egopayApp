@@ -11,7 +11,6 @@
 
 @interface WPPayTypeController : WPBaseViewController
 
-
 /**
  *  交易金额
  */
@@ -20,7 +19,7 @@
 /**
  *  是否支持余额支付
  */
-@property (nonatomic, assign) BOOL isUseMoney;
+@property (nonatomic, assign) BOOL isBalance;
 
 /**
  *  微信/支付宝/QQ钱包/余额

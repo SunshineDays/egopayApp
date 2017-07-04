@@ -188,17 +188,10 @@
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
             [WPProgressHUD showSuccessWithStatus:@"添加成功"];
-            
             [weakSelf.cardInfoDict setObject:result[@"cardId"] forKey:@"cardId"];
             NSDictionary *statusDict = [[NSDictionary alloc] initWithDictionary:weakSelf.cardInfoDict];
             [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationAddCardSuccess object:nil userInfo:statusDict];
-            
-            for (UIViewController *controller in weakSelf.navigationController.viewControllers) {
-                if ([controller isKindOfClass:[WPBankCardController class]]) {
-                    WPBankCardController *vc = (WPBankCardController *)controller;
-                    [self.navigationController popToViewController:vc animated:YES];
-                }
-            }
+            [WPHelpTool popToViewController:[[WPBankCardController alloc] init] navigationController:weakSelf.navigationController];
         }
     } failure:^(NSError *error) {
         

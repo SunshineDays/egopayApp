@@ -178,7 +178,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 {
     
     __weakSelf
-    [WPHelpTool getWithURL:self.isDelegateView ? WPShowAgUpgrade : WPShowMerUpgrade parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:self.isDelegateView ? WPShowAgUpgradeURL : WPShowMerUpgradeURL parameters:nil success:^(id success) {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {

@@ -1,23 +1,7 @@
 #import <UIKit/UIKit.h>
 
-
-/********************************  屏幕尺寸  ************************************/
-#pragma mark - 屏幕尺寸
-
-/** 屏幕尺寸 */
-UIKIT_EXTERN CGFloat const kScreenSize;
-
-// 屏幕宽度
-UIKIT_EXTERN CGFloat const kScreenWidth;
-
-// 屏幕高度
-UIKIT_EXTERN CGFloat const kScreenHeight;
-
-
-
 /********************************  UI相关常量  ************************************/
 #pragma mark - UI相关常量
-
 
 /** 导航控制器的高度 */
 UIKIT_EXTERN CGFloat const WPNavigationHeight;
@@ -46,16 +30,15 @@ UIKIT_EXTERN CGFloat const WPButtonHeight;
 /** 默认文字大小 */
 UIKIT_EXTERN CGFloat const WPFontDefaultSize;
 
+
+/********************************  App常量 ************************************/
+#pragma mark - App常量
+
 /** 获取验证码时间周期 */
 UIKIT_EXTERN NSTimeInterval const getVerificationCodeTime;
 
-
-
-/********************************  电话号码 ************************************/
-#pragma mark - 电话号码
-
+/** 电话号码 */
 UIKIT_EXTERN NSString * const WPAppTelNumber;
-
 
 
 /********************************  通知  ************************************/
@@ -72,7 +55,6 @@ UIKIT_EXTERN NSString * const WPNotificationReceiveSuccess;
 UIKIT_EXTERN NSString * const WPNotificationSubAccountAddSuccess;
 
 UIKIT_EXTERN NSString * const WPNotificationUserLogout;
-
 
 
 /******************************  静态参数  ***********************************/
@@ -109,6 +91,7 @@ UIKIT_EXTERN NSString * const kUserPayPassword_Phone;
 /******************************* 统一的URL **********************************/
 #pragma mark - 统一的URL
 
+/*** baseURL ***/
 UIKIT_EXTERN NSString * const WPBaseURL;
 
 /*** H5 ***/
@@ -193,7 +176,7 @@ UIKIT_EXTERN NSString * const WPGetCategoryURL;
 
 UIKIT_EXTERN NSString * const WPSubmitShopCertURL;
 
-UIKIT_EXTERN NSString * const WPQueryShopStatus;
+UIKIT_EXTERN NSString * const WPQueryShopStatusURL;
 
 UIKIT_EXTERN NSString * const WPShowMerShopsURL;
 
@@ -203,13 +186,13 @@ UIKIT_EXTERN NSString * const WPMessageURL;
 
 UIKIT_EXTERN NSString * const WPCityListURL;
 
-UIKIT_EXTERN NSString * const WPShowAgUpgrade;
+UIKIT_EXTERN NSString * const WPShowAgUpgradeURL;
 
-UIKIT_EXTERN NSString * const WPShowMerUpgrade;
+UIKIT_EXTERN NSString * const WPShowMerUpgradeURL;
 
-UIKIT_EXTERN NSString * const WPTodayQrIncome;
+UIKIT_EXTERN NSString * const WPTodayQrIncomeURL;
 
-UIKIT_EXTERN NSString * const WPMyRefers;
+UIKIT_EXTERN NSString * const WPMyRefersURL;
 
 UIKIT_EXTERN NSString * const WPUserFeedBackURL;
 

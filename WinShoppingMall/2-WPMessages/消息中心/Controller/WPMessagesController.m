@@ -29,13 +29,20 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
 @implementation WPMessagesController
 
-- (void)viewDidLoad {
+#pragma mark - Life Cycle
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"消息";
     self.page = 1;
     [self getBillData];
     __weakSelf
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        weakSelf.page = 1;
+        [weakSelf getBillData];
+    }];
     self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
         weakSelf.page ++;
         [weakSelf getBillData];
@@ -47,8 +54,6 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    self.page = 1;
-    [self getBillData];
 }
 
 
@@ -124,7 +129,8 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-#pragma mark - 获取消息数据
+#pragma mark - Data
+
 - (void)getBillData {
     
     __weakSelf

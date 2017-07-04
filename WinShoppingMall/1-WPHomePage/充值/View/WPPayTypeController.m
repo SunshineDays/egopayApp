@@ -44,7 +44,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     
 //    [self getUserBalance];
     
-    if (self.isUseMoney) {
+    if (self.isBalance) {
         [self getUserInforData];
         self.imageArray = @[@"icon_weixin_content_n", @"icon_zhifubao_content_n", @"qqIcon", @"icon_yue_content_n"];
     }
@@ -169,7 +169,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     
     switch (indexPath.section) {
         case 0: {
-            if (((self.model.avl_balance < self.amount || self.model.avl_balance == 0) && indexPath.row == self.wayArray.count - 1) && self.isUseMoney) {
+            if (((self.model.avl_balance < self.amount || self.model.avl_balance == 0) && indexPath.row == self.wayArray.count - 1) && self.isBalance) {
             }
             else {
                 if (self.userPayTypeBlock) {

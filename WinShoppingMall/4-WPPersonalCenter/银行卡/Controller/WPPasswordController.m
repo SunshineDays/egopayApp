@@ -8,7 +8,7 @@
 
 #import "WPPasswordController.h"
 #import "Header.h"
-
+#import "WPUserInforController.h"
 
 @interface WPPasswordController ()
 
@@ -202,7 +202,8 @@
     }
 }
 
-- (void)confirmButtonAction:(UIButton *)button {
+- (void)confirmButtonAction:(UIButton *)button
+{
     [[UIApplication sharedApplication].keyWindow endEditing:YES];
     if (![WPRegex validateMobile:self.phoneCell.textField.text] && [WPUserInfor sharedWPUserInfor].clientId.length == 0) {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号"];
@@ -266,7 +267,9 @@
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         if ([type isEqualToString:@"1"]) {
             [WPProgressHUD showSuccessWithStatus:[NSString stringWithFormat:[self.passwordType isEqualToString:@"1"] ? @"修改登陆密码成功" : @"修改支付密码成功"]];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
+            
+            [WPHelpTool popToViewController:[[WPUserInforController alloc] init] navigationController:weakSelf.navigationController];
+            
             if ([weakSelf.passwordType isEqualToString:@"2"]) {
                 [WPKeyChainTool keyChainSave:weakSelf.passwordCell.textField.text forKey:kUserPayPassword];
             }

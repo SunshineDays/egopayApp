@@ -49,4 +49,10 @@
  */
 + (NSMutableArray *)dateArrayWithMonthNumber:(NSInteger)monthNumber;
 
+
+/**
+ *  返回指定界面
+ */
++ (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController;
+
 @end

@@ -182,7 +182,7 @@
 - (void)wayButtonAction
 {
     WPPayTypeController *vc = [[WPPayTypeController alloc] init];
-    vc.isUseMoney = YES;
+    vc.isBalance = YES;
     vc.amount = [self.transferView.moneyTextField.text floatValue];
     vc.modalPresentationStyle = UIModalPresentationCustom;
     __weakSelf
@@ -210,7 +210,6 @@
 
 - (void)pushTransferAccountsDataWithPassword:(NSString *)passwordString
 {
-    
     NSDictionary *parameters = @{
                                  @"phone" : self.phoneCell.textField.text,
                                  @"transferAmount" : self.transferView.moneyTextField.text,
