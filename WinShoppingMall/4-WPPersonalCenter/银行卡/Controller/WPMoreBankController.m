@@ -31,7 +31,7 @@
     if (!_textField) {
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(WPLeftMargin, WPNavigationHeight + 50, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _textField.placeholder = @"请输入开户银行名称";
-        _textField.font = [UIFont systemFontOfSize:15];
+        _textField.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:_textField];
     }
     return _textField;

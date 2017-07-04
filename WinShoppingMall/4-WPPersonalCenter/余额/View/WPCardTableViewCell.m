@@ -55,7 +55,7 @@
     _textField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, rect.size.width - 75 - WPLeftMargin, rect.size.height - WPLineHeight)];
     
     _textField.textColor = [UIColor blackColor];
-    _textField.font = [UIFont systemFontOfSize:15];
+    _textField.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     _textField.placeholder = placeholder;
 //    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 //    dict[NSForegroundColorAttributeName] = [UIColor grayColor];

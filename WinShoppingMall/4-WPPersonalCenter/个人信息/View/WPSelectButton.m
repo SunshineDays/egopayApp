@@ -16,7 +16,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
-        self.titleLabel.font = [UIFont systemFontOfSize:15];
+        self.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     return self;

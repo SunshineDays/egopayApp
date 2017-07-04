@@ -53,7 +53,7 @@
         _titleLabel.text = @"充值失败";
         }
         _titleLabel.textColor = [UIColor blackColor];
-        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:_titleLabel];
     }
@@ -66,7 +66,7 @@
         _confirmButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 60, CGRectGetMaxY(self.titleLabel.frame) + 40, 120, 40)];
         [_confirmButton setTitle:@"完成" forState:UIControlStateNormal];
         [_confirmButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _confirmButton.layer.borderColor = [UIColor themeColor].CGColor;
         _confirmButton.layer.borderWidth = WPLineHeight;
         _confirmButton.layer.cornerRadius = WPCornerRadius;

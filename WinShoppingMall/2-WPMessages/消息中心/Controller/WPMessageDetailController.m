@@ -49,7 +49,7 @@
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, kScreenWidth, WPRowHeight)];
         _titleLabel.text = self.model.title;
         _titleLabel.textColor = [UIColor blackColor];
-        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.scrollView addSubview:_titleLabel];
     }
@@ -63,7 +63,7 @@
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:self.model.content width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
         _contentLabel.text = self.model.content;
         _contentLabel.textColor = [UIColor blackColor];
-        _contentLabel.font = [UIFont systemFontOfSize:15];
+        _contentLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _contentLabel.numberOfLines = 0;
         [self.scrollView addSubview:_contentLabel];
     }
@@ -75,7 +75,7 @@
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.contentLabel.frame), kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _dateLabel.text = [WPPublicTool dateToLocalDate:self.model.create_time];
         _dateLabel.textColor = [UIColor blackColor];
-        _dateLabel.font = [UIFont systemFontOfSize:15];
+        _dateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _dateLabel.textAlignment = NSTextAlignmentRight;
         [self.scrollView addSubview:_dateLabel];
         

@@ -54,7 +54,7 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
     UILabel *titleLable = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, 20, kScreenWidth / 2 - WPLeftMargin, 40)];
     titleLable.text = @"可提现金额(元)";
     titleLable.textColor = [UIColor whiteColor];
-    titleLable.font = [UIFont systemFontOfSize:15];
+    titleLable.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     [self.headerView addSubview:titleLable];
     
     UILabel *moneyLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(titleLable.frame), kScreenWidth - 2 * WPLeftMargin, 100)];

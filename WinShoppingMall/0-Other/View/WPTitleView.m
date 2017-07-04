@@ -8,6 +8,7 @@
 
 #import "WPTitleView.h"
 #import "UIColor+WPColor.h"
+#import "WPAppConst.h"
 
 #define wp_ScreenWidth [[UIScreen mainScreen] bounds].size.width
 #define wp_ScreenHeight [[UIScreen mainScreen] bounds].size.height
@@ -43,7 +44,7 @@
         _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(wp_ScreenWidth - 60 - 17.5, 20, 60, 44)];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _cancelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [self addSubview:_cancelButton];
     }

@@ -57,7 +57,7 @@
     _allButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - WPLeftMargin - 100, CGRectGetMaxY(lineLabel.frame), 100, 40)];
     [_allButton setTitle:@"全部提现" forState:UIControlStateNormal];
     [_allButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-    _allButton.titleLabel.font = [UIFont systemFontOfSize:15];
+    _allButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     _allButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [self addSubview:_allButton];
 }

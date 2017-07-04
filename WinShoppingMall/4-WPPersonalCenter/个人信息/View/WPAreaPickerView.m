@@ -9,6 +9,7 @@
 #import "WPAreaPickerView.h"
 #import "UIColor+WPColor.h"
 #import "UIColor+WPExtension.h"
+#import "WPAppConst.h"
 
 @interface WPAreaPickerView () <UIPickerViewDelegate, UIPickerViewDataSource>
 
@@ -90,7 +91,7 @@
         _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [_cancelButton addTarget:self action:@selector(cancelPickerView) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
@@ -102,7 +103,7 @@
         _confirmButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.pickerView.frame) - 100, 0, 100, 40)];
         [_confirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_confirmButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [_confirmButton addTarget:self action:@selector(confirmButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmButton;

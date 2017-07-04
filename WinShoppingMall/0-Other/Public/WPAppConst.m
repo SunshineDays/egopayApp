@@ -5,7 +5,6 @@
 #pragma mark - UI相关常量
 
 /** TabBar的高度 */
-CGFloat const WPTabBarHeight = 55;
 
 CGFloat const WPNavigationHeight = 64;
 
@@ -13,19 +12,17 @@ CGFloat const WPLeftMargin = 17.5;
 
 CGFloat const WPLeftMarginField = WPLeftMargin + 90;
 
-CGFloat const WPTopY = 0;
-
 CGFloat const WPTopMargin = WPNavigationHeight + 10;
 
-CGFloat const WPRowHeight = 50;
+CGFloat const WPRowHeight = 50;  //行高
 
-CGFloat const WPCornerRadius = 6;
+CGFloat const WPCornerRadius = 6;  //圆角
 
-CGFloat const WPLineHeight = 0.5f;
+CGFloat const WPLineHeight = 0.5f;  //分割线高度
 
-CGFloat const WPButtonHeight = 40;
+CGFloat const WPButtonHeight = 40;  //按钮高度
 
-CGFloat const WPNavigationTextFont = 19;
+CGFloat const WPFontDefaultSize = 15;
 
 /** 获取验证码时间 */
 NSTimeInterval const getVerificationCodeTime = 120;

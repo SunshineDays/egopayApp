@@ -25,7 +25,7 @@
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, 0, 80, self.frame.size.height - WPLineHeight)];
     _titleLabel.text = title;
     _titleLabel.textColor = [UIColor blackColor];
-    _titleLabel.font = [UIFont systemFontOfSize:15];
+    _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     [self addSubview:_titleLabel];
 }
 
@@ -47,7 +47,7 @@
     _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.titleLabel.frame) + 10, 0, rect.size.width - (CGRectGetMaxX(self.titleLabel.frame) + 10) - WPLeftMargin, rect.size.height - WPLineHeight)];
     _contentLabel.text = contentTitle;
     _contentLabel.textColor = [UIColor grayColor];
-    _contentLabel.font = [UIFont systemFontOfSize:15];
+    _contentLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     [self addSubview:_contentLabel];
     
     [self lineView];
@@ -65,7 +65,7 @@
     }
     
     _textField.textColor = [UIColor blackColor];
-    _textField.font = [UIFont systemFontOfSize:15];
+    _textField.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     _textField.placeholder = placeholder;
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     dict[NSForegroundColorAttributeName] = [UIColor grayColor];
@@ -87,7 +87,7 @@
     _button = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.titleLabel.frame) + 10, 0, rect.size.width - (CGRectGetMaxX(self.titleLabel.frame) + 10) - WPLeftMargin, rect.size.height - WPLineHeight)];
     [_button setTitle:buttonTitle forState:UIControlStateNormal];
     [_button setTitleColor:[UIColor placeholderColor] forState:UIControlStateNormal];
-    _button.titleLabel.font = [UIFont systemFontOfSize:15];
+    _button.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     _button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self addSubview:_button];
     

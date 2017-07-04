@@ -84,7 +84,7 @@
         _moneyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
         _moneyLabel.text = self.titleString;
         _moneyLabel.textColor = [UIColor blackColor];
-        _moneyLabel.font = [UIFont systemFontOfSize:15];
+        _moneyLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _moneyLabel.textAlignment = NSTextAlignmentCenter;
         [self.bottomView addSubview:_moneyLabel];
     }
@@ -117,7 +117,7 @@
         _forgetButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - 100, CGRectGetMaxY(self.textField.frame) + 10, 100 - WPLeftMargin, WPButtonHeight)];
         [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
         [_forgetButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [_forgetButton addTarget:self action:@selector(forgetButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.bottomView addSubview:_forgetButton];
     }

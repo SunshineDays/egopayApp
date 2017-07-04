@@ -18,8 +18,6 @@ UIKIT_EXTERN CGFloat const kScreenHeight;
 /********************************  UI相关常量  ************************************/
 #pragma mark - UI相关常量
 
-/** TabBar的高度 */
-UIKIT_EXTERN CGFloat const WPTabBarHeight;
 
 /** 导航控制器的高度 */
 UIKIT_EXTERN CGFloat const WPNavigationHeight;
@@ -33,9 +31,6 @@ UIKIT_EXTERN CGFloat const WPLeftMarginField;
 /** 控件的上边间距 */
 UIKIT_EXTERN CGFloat const WPTopMargin;
 
-/** 控制器View的顶部坐标y */
-UIKIT_EXTERN CGFloat const WPTopY;
-
 /** 行高 */
 UIKIT_EXTERN CGFloat const WPRowHeight;
 
@@ -48,8 +43,8 @@ UIKIT_EXTERN CGFloat const WPLineHeight;
 /** 底部按钮的高度 */
 UIKIT_EXTERN CGFloat const WPButtonHeight;
 
-/** 导航栏标题字体大小 */
-UIKIT_EXTERN CGFloat const WPNavigationTextFont;
+/** 默认文字大小 */
+UIKIT_EXTERN CGFloat const WPFontDefaultSize;
 
 /** 获取验证码时间周期 */
 UIKIT_EXTERN NSTimeInterval const getVerificationCodeTime;

@@ -71,7 +71,7 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
         _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.searchBar.frame) + 5, 30, 40, 30)];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [_cancelButton addTarget:self action:@selector(cancelButton:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_cancelButton];
     }

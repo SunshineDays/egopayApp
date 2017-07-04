@@ -11,7 +11,6 @@
 #import "WPProgressHUD.h"
 #import "WPNoResultLabel.h"
 
-
 @interface WPHelpTool : NSObject
 
 /**

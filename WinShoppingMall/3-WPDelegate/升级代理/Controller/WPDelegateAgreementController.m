@@ -61,7 +61,7 @@
         _agreementLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, 10, kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:self.agreementString width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
         _agreementLabel.text = self.agreementString;
         _agreementLabel.numberOfLines = 0;
-        _agreementLabel.font = [UIFont systemFontOfSize:15];
+        _agreementLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.scrollView addSubview:_agreementLabel];
         
         self.scrollView.contentSize = CGSizeMake(kScreenWidth, CGRectGetMaxY(_agreementLabel.frame));

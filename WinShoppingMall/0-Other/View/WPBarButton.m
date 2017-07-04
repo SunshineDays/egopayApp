@@ -8,14 +8,15 @@
 
 #import "WPBarButton.h"
 #import "UIView+WPExtension.h"
- 
+#import "WPAppConst.h"
+
 
 @implementation  WPBarButton
 
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.titleLabel.font = [UIFont systemFontOfSize:15];
+        self.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     return self;

@@ -153,7 +153,7 @@
         _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.confirmButton.frame) + 10, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _stateLabel.text = @"注：子账户密码只能在主账户上修改";
         _stateLabel.textColor = [UIColor themeColor];
-        _stateLabel.font = [UIFont systemFontOfSize:15];
+        _stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:_stateLabel];
     }
     return _stateLabel;

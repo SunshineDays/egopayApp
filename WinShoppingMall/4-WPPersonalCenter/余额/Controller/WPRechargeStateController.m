@@ -34,7 +34,7 @@
         _stateLabel.numberOfLines = 0;
         _stateLabel.text = rechargeStateStr;
         _stateLabel.textColor = [UIColor grayColor];
-        _stateLabel.font = [UIFont systemFontOfSize:15];
+        _stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:_stateLabel];
     }
     return _stateLabel;

@@ -70,7 +70,7 @@
             titleLabel.text = array[i];
             titleLabel.textColor = [UIColor darkGrayColor];
             titleLabel.numberOfLines = 0;
-            titleLabel.font = [UIFont systemFontOfSize:15];
+            titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
             [self.scrollView addSubview:titleLabel];
         }
     }
@@ -83,7 +83,7 @@
         _shopNameLabel.text = [NSString stringWithFormat:@"联系人:    %@", self.model.linkMan];
         _shopNameLabel.numberOfLines = 0;
         _shopNameLabel.textColor = [UIColor darkGrayColor];
-        _shopNameLabel.font = [UIFont systemFontOfSize:15];
+        _shopNameLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.scrollView addSubview:_shopNameLabel];
     }
     return _shopNameLabel;
@@ -94,7 +94,7 @@
         _telButton = [[UIButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.shopNameLabel.frame), kScreenWidth - 2 * WPLeftMargin, 30)];
         [_telButton setTitle:[NSString stringWithFormat:@"联系电话:%@", self.model.telephone] forState:UIControlStateNormal];
         [_telButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        _telButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        _telButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _telButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_telButton addTarget:self action:@selector(telButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.scrollView addSubview:_telButton];
@@ -110,7 +110,7 @@
         _descripLabel.text = labelText;
         _descripLabel.numberOfLines = 0;
         _descripLabel.textColor = [UIColor darkGrayColor];
-        _descripLabel.font = [UIFont systemFontOfSize:15];
+        _descripLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.scrollView addSubview:_descripLabel];
     }
     return _descripLabel;

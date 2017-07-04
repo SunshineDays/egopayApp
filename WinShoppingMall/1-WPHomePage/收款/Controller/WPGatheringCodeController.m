@@ -99,7 +99,7 @@
         _stateLabel.text = [NSString stringWithFormat:@"请先保存二维码图片，在%@中扫描支付", self.payTypeString];
         _stateLabel.numberOfLines = 0;
         _stateLabel.textColor = [UIColor blackColor];
-        _stateLabel.font = [UIFont systemFontOfSize:15];
+        _stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:_stateLabel];
     }
     return _stateLabel;

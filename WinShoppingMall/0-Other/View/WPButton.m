@@ -17,7 +17,7 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor buttonBackgroundDefaultColor];
         [self setTitleColor:[UIColor buttonTitleDefaultColor] forState:UIControlStateNormal];
-        self.titleLabel.font = [UIFont systemFontOfSize:15];
+        self.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         self.layer.borderColor = [UIColor lineColor].CGColor;
         self.layer.borderWidth = WPLineHeight;
         self.layer.cornerRadius = WPCornerRadius;

@@ -44,7 +44,7 @@
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _titleLabel.text = @"分润余额(元)";
         _titleLabel.textColor = [UIColor blackColor];
-        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:_titleLabel];
     }
     return _titleLabel;

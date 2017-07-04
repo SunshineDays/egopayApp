@@ -77,7 +77,7 @@
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin + 40 * i, 100, 40)];
         headerLabel.text = headerArray[i];
         headerLabel.textColor = [UIColor darkGrayColor];
-        headerLabel.font = [UIFont systemFontOfSize:15];
+        headerLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:headerLabel];
     }
 }
@@ -115,7 +115,7 @@
         UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, WPTopMargin + 40 * i, kScreenWidth - WPLeftMargin - 120, i == contentArray.count - 1 ? height : 40)];
         contentLabel.text = contentArray[i];
         contentLabel.textColor = [UIColor grayColor];
-        contentLabel.font = [UIFont systemFontOfSize:15];
+        contentLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         contentLabel.textAlignment = NSTextAlignmentRight;
         [self.view addSubview:contentLabel];
     }
@@ -128,7 +128,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, WPTopMargin, kScreenWidth, WPRowHeight)];
     titleLabel.text = self.messageModel.title;
     titleLabel.textColor = [UIColor blackColor];
-    titleLabel.font = [UIFont systemFontOfSize:15];
+    titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:titleLabel];
 }
@@ -140,7 +140,7 @@
         _messageContenLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin + WPRowHeight, kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:self.messageModel.content width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
         _messageContenLabel.text = self.messageModel.content;
         _messageContenLabel.textColor = [UIColor blackColor];
-        _messageContenLabel.font = [UIFont systemFontOfSize:15];
+        _messageContenLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _messageContenLabel.numberOfLines = 0;
         [self.view addSubview:_messageContenLabel];
     }
@@ -152,7 +152,7 @@
     UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.messageContenLabel.frame) + 10, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
     dateLabel.text = self.messageModel.create_time;
     dateLabel.textColor = [UIColor blackColor];
-    dateLabel.font = [UIFont systemFontOfSize:15];
+    dateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     dateLabel.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:dateLabel];
 }
@@ -164,7 +164,7 @@
     UILabel *stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin, kScreenWidth, WPRowHeight)];
     stateLabel.text = self.approveModel.auditStatus == 1 ? @"认证成功" : @"认证失败，请重新提交审核吧";
     stateLabel.textColor = [UIColor themeColor];
-    stateLabel.font = [UIFont systemFontOfSize:15];
+    stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     [self.view addSubview:stateLabel];
     for (int i = 0; i < 3; i++) {
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(stateLabel.frame) + WPRowHeight * i, kScreenWidth, WPLineHeight)];
@@ -180,7 +180,7 @@
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin + WPRowHeight + WPRowHeight * i, 80, WPRowHeight)];
         headerLabel.text = headerArray[i];
         headerLabel.textColor = [UIColor blackColor];
-        headerLabel.font = [UIFont systemFontOfSize:15];
+        headerLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:headerLabel];
     }
 }
@@ -196,7 +196,7 @@
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMarginField, WPTopMargin + WPRowHeight * i, kScreenWidth- WPLeftMarginField - WPLeftMargin, WPRowHeight)];
         headerLabel.text = contentArray[i];
         headerLabel.textColor = [UIColor blackColor];
-        headerLabel.font = [UIFont systemFontOfSize:15];
+        headerLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:headerLabel];
     }
 }

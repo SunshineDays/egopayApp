@@ -59,7 +59,7 @@
         _textField.placeholder = @"请输入被举报的商户号或手机号";
         _textField.hidden = self.isFeedback;
         _textField.textColor = [UIColor blackColor];
-        _textField.font = [UIFont systemFontOfSize:15];
+        _textField.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _textField.layer.borderColor = [UIColor lineColor].CGColor;
         _textField.layer.borderWidth = WPLineHeight;
         _textField.layer.cornerRadius = WPCornerRadius;
@@ -85,7 +85,7 @@
         [typeButton setTitle:self.typeArray[i] forState:UIControlStateNormal];
         [typeButton setImage:[UIImage imageNamed:i == 0 ? self.imageArray[0] : self.imageArray[1]] forState:UIControlStateNormal];
         [typeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        typeButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        typeButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         typeButton.tag = i;
         [typeButton addTarget:self action:@selector(typeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.typeView addSubview:typeButton];
@@ -102,7 +102,7 @@
         _textView.layer.borderColor = [UIColor lineColor].CGColor;
         _textView.layer.borderWidth = 1.0f;
         _textView.layer.cornerRadius = WPCornerRadius;
-        _textView.font = [UIFont systemFontOfSize:15];
+        _textView.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字儿)" : @"请输入您的举报内容(不少于20字儿)";
         _textView.textColor = [UIColor placeholderColor];
         
@@ -118,7 +118,7 @@
         _numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(kScreenWidth - 68, 130, 60, 20)];
         _numberLabel.text = @"0/500";
         _numberLabel.textColor = [UIColor grayColor];
-        _numberLabel.font = [UIFont systemFontOfSize:15];
+        _numberLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _numberLabel.textAlignment = NSTextAlignmentRight;
         [self.textView addSubview:_numberLabel];
     }

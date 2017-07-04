@@ -117,7 +117,7 @@
 {
     NSMutableAttributedString *colorString = [[NSMutableAttributedString alloc] initWithString:string];
     NSRange range = [[colorString string] rangeOfString:[string substringFromIndex:index]];
-    [colorString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:range];
+    [colorString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:WPFontDefaultSize] range:range];
     [colorString addAttribute:NSForegroundColorAttributeName value:[UIColor placeholderColor] range:range];
     return colorString;
 }

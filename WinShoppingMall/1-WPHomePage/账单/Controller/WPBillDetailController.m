@@ -40,7 +40,7 @@
         for (int i = 0; i < titleArray.count; i++) {
             _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin + 40 * i, 80, 40)];
             _titleLabel.text = titleArray[i];
-            _titleLabel.font = [UIFont systemFontOfSize:15];
+            _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
             _titleLabel.textColor = [UIColor darkGrayColor];
             [self.view addSubview:_titleLabel];
         }
@@ -77,7 +77,7 @@
         for (int i = 0; i < contentArray.count; i++) {
             _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMarginField, WPTopMargin + 40 * i, kScreenWidth - WPLeftMarginField - WPLeftMargin, i == contentArray.count - 1 ? height : 40)];
             _contentLabel.text = contentArray[i];
-            _contentLabel.font = [UIFont systemFontOfSize:15];
+            _contentLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
             _contentLabel.textColor = [UIColor grayColor];
             _contentLabel.textAlignment = NSTextAlignmentRight;
             _contentLabel.numberOfLines = 0;

@@ -119,7 +119,7 @@
         _shopDescripTextView.layer.borderColor = [UIColor lineColor].CGColor;
         _shopDescripTextView.layer.borderWidth = 1.0f;
         _shopDescripTextView.layer.cornerRadius = WPCornerRadius;
-        _shopDescripTextView.font = [UIFont systemFontOfSize:15];
+        _shopDescripTextView.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _shopDescripTextView.text = @"请输入店铺描述(不少于100字儿)";
         _shopDescripTextView.textColor = [UIColor placeholderColor];
         
@@ -129,7 +129,7 @@
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.classifyCell.frame), 80, WPRowHeight)];
         titleLabel.text = @"店铺描述";
         titleLabel.textColor = [UIColor blackColor];
-        titleLabel.font = [UIFont systemFontOfSize:15];
+        titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.scrollView addSubview:titleLabel];
         [self numberLabel];
     }
@@ -142,7 +142,7 @@
         _numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.shopDescripTextView.frame.size.width - 60, 130, 60, 20)];
         _numberLabel.text = @"0/500";
         _numberLabel.textColor = [UIColor grayColor];
-        _numberLabel.font = [UIFont systemFontOfSize:15];
+        _numberLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _numberLabel.textAlignment = NSTextAlignmentRight;
         [self.shopDescripTextView addSubview:_numberLabel];
     }

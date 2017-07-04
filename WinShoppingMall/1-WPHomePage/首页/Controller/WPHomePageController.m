@@ -155,7 +155,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
         button.frame = CGRectMake(WPLeftMargin + width * (i % 4), kScreenWidth / 2 + 90 * (i / 4), width, 90);
         [button setTitle:array[i] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont systemFontOfSize:15];
+        button.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         button.tag = i;
         [button addTarget:self action:@selector(topClassButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.headerView addSubview:button];

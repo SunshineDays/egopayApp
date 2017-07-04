@@ -7,9 +7,7 @@
 //
 
 #import "WPProductDetailController.h"
-
 #import "Header.h"
-
 #import "WPProductSubmitController.h"
 
 @interface WPProductDetailController ()
@@ -64,7 +62,7 @@
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.imageView.frame) + 20, kScreenWidth - 2 * WPLeftMargin, 20)];
         _titleLabel.text = self.isDelegate ? self.delegateModel.gradeName : self.merModel.lvname;
         _titleLabel.textColor = [UIColor blackColor];
-        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.scrollView addSubview:_titleLabel];
     }
@@ -89,7 +87,7 @@
         float height = [WPPublicTool textHeightFromTextString:self.isDelegate ? self.delegateModel.adesp : self.merModel.mdesp width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15];
         _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.priceLabel.frame), kScreenWidth - 2 * WPLeftMargin, height)];
         _descriptionLabel.text = self.isDelegate ? self.delegateModel.adesp : self.merModel.mdesp;
-        _descriptionLabel.font = [UIFont systemFontOfSize:15];
+        _descriptionLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _descriptionLabel.numberOfLines = 0;
         [self.scrollView addSubview:_descriptionLabel];
     }

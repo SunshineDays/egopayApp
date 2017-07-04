@@ -64,7 +64,7 @@
         _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPNavigationHeight, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _stateLabel.text = self.failureString.length > 0 ? self.failureString : @"请填写您的真实信息";
         _stateLabel.textColor = [UIColor themeColor];
-        _stateLabel.font = [UIFont systemFontOfSize:15];
+        _stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         [self.view addSubview:_stateLabel];
 
     }
