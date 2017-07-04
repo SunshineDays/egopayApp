@@ -87,7 +87,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 - (void)agreeButtonClick:(UIButton *)button
 {
     [self postUserAgreeData];
