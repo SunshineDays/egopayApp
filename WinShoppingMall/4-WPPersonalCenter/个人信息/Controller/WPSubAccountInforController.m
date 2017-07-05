@@ -285,35 +285,28 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 
 - (void)changeAvater
 {
-    [self presentViewController:self.alertSheet animated:YES completion:nil];
+    [self alertControllerWithPhoto:YES];
 }
 
 - (void)userLogoutButtonAction:(UIButton *)button
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您确定要退出登陆嘛" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-    }]];
     __weakSelf
-    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [WPHelpTool alertControllerTitle:@"您确定要退出登陆嘛" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction) {
         WPRegisterController *vc = [[WPRegisterController alloc] init];
         WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
         [WPHelpTool rootViewController:navi];
         
         [WPUserInfor sharedWPUserInfor].clientId = nil;
-        
         [[WPUserInfor sharedWPUserInfor] updateUserInfor];
         
         [JPUSHService setTags:nil alias:@"" fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
             
-            //        NSLog(@"绑定和解绑rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, iTags , iAlias);
             if (iResCode == 0) {//对应的状态码返回为0，代表成功
-                
                 [[NSNotificationCenter defaultCenter] removeObserver:self name:kJPFNetworkDidLoginNotification object:nil];
             }
         }];
         [weakSelf userLogout];
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
+    } cancel:nil];
 }
 
 

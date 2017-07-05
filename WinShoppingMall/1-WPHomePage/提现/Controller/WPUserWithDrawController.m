@@ -142,7 +142,7 @@
         [WPProgressHUD showInfoWithStatus:@"请输入金额"];
     }
     else {
-        if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
+        if ([WPAppTool isPayTouchID]) {
             __weakSelf
             [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
                 [weakSelf pushWithdrawDataWithPassword:touchIDSuccess];

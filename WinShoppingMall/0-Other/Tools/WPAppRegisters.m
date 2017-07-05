@@ -48,8 +48,26 @@ static BOOL const isProduction = FALSE;
     [WPUserInfor sharedWPUserInfor].payPasswordType = [[NSUserDefaults standardUserDefaults] objectForKey:WPUserHasPayPassword];
     [WPUserInfor sharedWPUserInfor].shopPassType = [[NSUserDefaults standardUserDefaults] objectForKey:WPUserShopPass];
     [WPUserInfor sharedWPUserInfor].userPhone = [[NSUserDefaults standardUserDefaults] objectForKey:WPUserPhone];
-    [WPUserInfor sharedWPUserInfor].needTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPNeedTouchID];
+    [WPUserInfor sharedWPUserInfor].payTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPPayTouchID];
+    [WPUserInfor sharedWPUserInfor].registerTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPRegisterTouchID];
     [WPUserInfor sharedWPUserInfor].isSubAccount = [[NSUserDefaults standardUserDefaults] objectForKey:WPIsSubAccount];
+    
+    // 更改老版本缓存
+    [WPUserInfor sharedWPUserInfor].needTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPNeedTouchID];
+    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"]) {
+        [WPUserInfor sharedWPUserInfor].registerTouchID = @"YES";
+        [WPUserInfor sharedWPUserInfor].payTouchID = @"YES";
+        [WPUserInfor sharedWPUserInfor].needTouchID = nil;
+    }
+    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"]) {
+        [WPUserInfor sharedWPUserInfor].registerTouchID = @"YES";
+        [WPUserInfor sharedWPUserInfor].needTouchID = nil;
+    }
+    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
+        [WPUserInfor sharedWPUserInfor].payTouchID = @"YES";
+        [WPUserInfor sharedWPUserInfor].needTouchID = nil;
+    }
+    [[WPUserInfor sharedWPUserInfor] updateUserInfor];
 }
 
 + (void)registWechat

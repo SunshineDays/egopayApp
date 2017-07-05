@@ -12,7 +12,8 @@
 #import "WPBillDetailController.h"
 #import "WPBillDetailController.h"
 #import "WPBillModel.h"
-
+#import "WPGatheringCodeController.h"
+#import "WPJpushServiceController.h"
 
 static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
@@ -37,6 +38,32 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"消息";
+    
+    if ([WPAppTool isSubAccount]) {
+        if ([[WPUserInfor sharedWPUserInfor].threeTouch isEqualToString:@"gatheringCode"]) {
+            __weakSelf
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
+                vc.codeType = 2;
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+                [WPUserInfor sharedWPUserInfor].userInfoDict = nil;
+            });
+        }
+        
+        else if ([WPUserInfor sharedWPUserInfor].userInfoDict) {
+            __weakSelf
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                WPJpushServiceController *vc = [[WPJpushServiceController alloc] init];
+                vc.resultDict = [WPUserInfor sharedWPUserInfor].userInfoDict;
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+                [WPUserInfor sharedWPUserInfor].threeTouch = nil;
+            });
+        }
+    }
+    
+    
     self.page = 1;
     [self getBillData];
     __weakSelf
@@ -75,6 +102,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor cellColor];
+        _tableView.tableFooterView = [UIView new];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPBillNotificationCell class]) bundle:nil] forCellReuseIdentifier:WPBillNotificationCellID];
         [self.view addSubview:_tableView];
@@ -96,6 +124,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     WPBillNotificationCell *cell = [tableView dequeueReusableCellWithIdentifier:WPBillNotificationCellID];
     cell.model = self.dataArray[indexPath.section];
     

@@ -129,26 +129,16 @@
 
 - (void)settingSubAccount
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
     __weakSelf
-    [alert addAction:[UIAlertAction actionWithTitle:@"删除子账户" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        
-        UIAlertController *alertCtr = [UIAlertController alertControllerWithTitle:@"您确定删除该子账户嘛" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [alertCtr addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil]];
-        [alertCtr addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [WPHelpTool alertControllerTitle:@"请选择" rowOneTitle:@"删除子账户" rowTwoTitle:@"重置密码" rowOne:^(UIAlertAction *alertAction) {
+        [WPHelpTool alertControllerTitle:@"您确定要删除该子账户嘛" confirmTitle:@"删除" confirm:^(UIAlertAction *alertAction) {
             [weakSelf postSubAccountDeleteData];
-        }]];
-        [weakSelf presentViewController:alertCtr animated:YES completion:nil];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"重置密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        } cancel:nil];
+    } rowTwo:^(UIAlertAction *alertAction) {
         WPSubAccountChangePasswordController *vc = [[WPSubAccountChangePasswordController alloc] init];
         vc.clerkID = weakSelf.clerkID;
         [weakSelf.navigationController pushViewController:vc animated:YES];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
-    
+    }];
 }
 
 #pragma mark - Data

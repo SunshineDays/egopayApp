@@ -143,7 +143,7 @@
             
             //  升级代理
         case 4: {
-            if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+            if ([WPAppTool isPassIDCardApprove]) {
                 if (self.isAgree) {
                     WPProductController *vc = [[WPProductController alloc] init];
                     vc.navigationItem.title = @"代理升级";

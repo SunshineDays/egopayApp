@@ -207,9 +207,10 @@
                                  };
     __weakSelf
     [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success) {
-        
-        [weakSelf tradsmitData];
-        
+        NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
+        if ([type isEqualToString:@"1"]) {
+            [weakSelf tradsmitData];
+        }
     } failure:^(NSError *error) {
         
         

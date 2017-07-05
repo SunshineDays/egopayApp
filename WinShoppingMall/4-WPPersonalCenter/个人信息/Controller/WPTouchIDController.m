@@ -48,7 +48,7 @@
     [self protocolLabel];
     [self protocolButton];
     [self registerCell];
-    if (![[WPUserInfor sharedWPUserInfor].isSubAccount isEqualToString:@"YES"]) {
+    if (![WPAppTool isSubAccount]) {
         [self payCell];
     }
 
@@ -109,12 +109,7 @@
         _registerCell = [[WPRowTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.protocolLabel.frame) + 5, kScreenWidth, WPRowHeight);
         [_registerCell tableViewCellTitle:@"指纹登录" rectMake:rect];
-        if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"]) {
-            _registerCell.switchs.on = YES;
-        }
-        else {
-            _registerCell.switchs.on = NO;
-        }
+        _registerCell.switchs.on = [WPAppTool isRegisterTouchID];
         [_registerCell.switchs addTarget:self action:@selector(registerSwitchClick:) forControlEvents:UIControlEventValueChanged];
         [self.view addSubview:_registerCell];
     }
@@ -126,14 +121,9 @@
         _payCell = [[WPRowTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.registerCell.frame), kScreenWidth, WPRowHeight);
         [_payCell tableViewCellTitle:@"指纹支付" rectMake:rect];
-        if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
-            _payCell.switchs.on = YES;
-        }
-        else {
-            _payCell.switchs.on = NO;
-        }
+        _payCell.switchs.on = [WPAppTool isPayTouchID];
         [_payCell.switchs addTarget:self action:@selector(paySwitchClick:) forControlEvents:UIControlEventTouchUpInside];
-        _payCell.hidden = [[WPUserInfor sharedWPUserInfor].isSubAccount isEqualToString:@"YES"] ? YES : NO;
+        _payCell.hidden = [WPAppTool isSubAccount] ? YES : NO;
         [self.view addSubview:_payCell];
     }
     return _payCell;
@@ -141,7 +131,7 @@
 
 - (UILabel *)stateLabel {
     if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [[WPUserInfor sharedWPUserInfor].isSubAccount isEqualToString:@"YES"] ? CGRectGetMaxY(self.registerCell.frame) + 20 : CGRectGetMaxY(self.payCell.frame) + 20, kScreenWidth, 30)];
+        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [WPAppTool isSubAccount] ? CGRectGetMaxY(self.registerCell.frame) + 20 : CGRectGetMaxY(self.payCell.frame) + 20, kScreenWidth, 30)];
         _stateLabel.text = @"开通后，可使用Touch ID验证指纹快速完成登录或支付";
         _stateLabel.textColor = [UIColor grayColor];
         _stateLabel.font = [UIFont systemFontOfSize:13];
@@ -183,19 +173,15 @@
 
 - (void)paySwitchClick:(UISwitch *)click {
     
-    if ([[WPUserInfor sharedWPUserInfor].payPasswordType isEqualToString:@"YES"]) {
+    if ([WPAppTool isHavePayPassword]) {
         [self createPayPopupView];
     }
     else {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您还没有设置支付密码" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        }]];
         __weakSelf
-        [alert addAction:[UIAlertAction actionWithTitle:@"设置支付密码" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [WPHelpTool alertControllerTitle:@"您还没有设置支付密码" confirmTitle:@"设置支付密码" confirm:^(UIAlertAction *alertAction) {
             WPPasswordController *vc = [[WPPasswordController alloc] init];
             [weakSelf.navigationController pushViewController:vc animated:YES];
-        }]];
-        [self presentViewController:alert animated:YES completion:nil];
+        } cancel:nil];
     }
 }
 
@@ -233,51 +219,15 @@
         [WPProgressHUD showSuccessWithStatus:@"设置成功"];
         switch (type) {
             case 1: {
-                if (switchIsOn) {
-                    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"1";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                    else {
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"2";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                }
-                else {
-                    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"]) {
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"3";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"]){
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                }
+                [WPUserInfor sharedWPUserInfor].registerTouchID = switchIsOn ? @"YES" : @"NO";
+                [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             }
                 break;
+                
             case 2: {
-                if (!switchIsOn) {
-                    [self.payCell.switchs setOn:YES];
-                    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"]) {
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"1";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                    else {
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"3";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                }
-                else {
-                    [self.payCell.switchs setOn:NO];
-                    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"]) {
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"2";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
-                        [WPUserInfor sharedWPUserInfor].needTouchID = @"";
-                        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-                    }
-                }
+                [self.payCell.switchs setOn:!switchIsOn];
+                [WPUserInfor sharedWPUserInfor].payTouchID = !switchIsOn ? @"YES" : @"NO";
+                [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             }
                 break;
                 

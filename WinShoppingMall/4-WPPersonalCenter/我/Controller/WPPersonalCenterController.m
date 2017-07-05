@@ -161,7 +161,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.row) {
         case 0: {  //余额
-            if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+            if ([WPAppTool isPassIDCardApprove]) {
                 WPUserMoneyController *vc = [[WPUserMoneyController alloc] init];
                 vc.model = self.model;
                 [self.navigationController pushViewController:vc animated:YES];
@@ -188,8 +188,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         case 3: {  //商家认证
 //            WPMerchantUploadController *vc = [[WPMerchantUploadController alloc] init];
 //            [self.navigationController pushViewController:vc animated:YES];
-            if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
-                if ([[WPUserInfor sharedWPUserInfor].shopPassType isEqualToString:@"YES"]) {
+            if ([WPAppTool isPassIDCardApprove]) {
+                if ([WPAppTool isPassShopApprove]) {
                     WPStateController *vc = [[WPStateController alloc] init];
                     vc.status = @"1";
                     [self.navigationController pushViewController:vc animated:YES];
@@ -205,7 +205,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
             break;
             
         case 4: {  //商户升级
-            if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+            if ([WPAppTool isPassIDCardApprove]) {
                 WPProductController *vc = [[WPProductController alloc] init];
                 vc.navigationItem.title = @"商户升级";
                 [self.navigationController pushViewController:vc animated:YES];
@@ -217,8 +217,13 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
             break;
             
         case 5: {  //子账户
-            WPSubAccountListController *vc = [[WPSubAccountListController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
+            if ([WPAppTool isPassIDCardApprove]) {
+                WPSubAccountListController *vc = [[WPSubAccountListController alloc] init];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            else {
+                [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
+            }
         }
             break;
             

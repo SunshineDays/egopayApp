@@ -186,21 +186,16 @@
 
 - (void)avatarImageViewClick:(UITapGestureRecognizer *)gesture {
     self.isAvatar = YES;
-    [self presentViewController:self.alertSheet animated:YES completion:nil];
+    [self alertControllerWithPhoto:YES];
 }
 
 - (void)sexButtonClick:(UIButton *)button {
-    UIAlertController *sexAlertCtr = [[UIAlertController alloc] init];
-    sexAlertCtr = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     __weakSelf
-    [sexAlertCtr addAction:[UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf sexButtonTitleWithSex:action.title];
-    }]];
-    [sexAlertCtr addAction:[UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf sexButtonTitleWithSex:action.title];
-    }]];
-    [sexAlertCtr addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:sexAlertCtr animated:YES completion:nil];
+    [WPHelpTool alertControllerTitle:nil rowOneTitle:@"男" rowTwoTitle:@"女" rowOne:^(UIAlertAction *alertAction) {
+        [weakSelf sexButtonTitleWithSex:alertAction.title];
+    } rowTwo:^(UIAlertAction *alertAction) {
+        [weakSelf sexButtonTitleWithSex:alertAction.title];
+    }];
 }
 
 - (void)sexButtonTitleWithSex:(NSString *)sex

@@ -130,7 +130,7 @@
         [WPProgressHUD showInfoWithStatus:@"请输入转出金额"];
     }
     else {
-        if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
+        if ([WPAppTool isPayTouchID]) {
             [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
                 [self pushWithdrawDataWithPassword:touchIDSuccess];
                 

@@ -56,6 +56,17 @@ Single_Interface(WPUserInfor)
 @property (nonatomic, copy) NSString *needTouchID;
 
 /**
+ *  登录是否需要Touch ID   YES NO
+ */
+@property (nonatomic, copy) NSString *registerTouchID;
+
+/**
+ *  支付是否需要Touch ID   YES NO
+ */
+@property (nonatomic, copy) NSString *payTouchID;
+
+
+/**
  *  是否是子账户 YES NO
  */
 @property (nonatomic, copy) NSString *isSubAccount;

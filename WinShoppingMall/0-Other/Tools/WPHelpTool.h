@@ -55,6 +55,21 @@
  */
 + (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController;
 
+/**
+ * 跳转到根控制器动画
+ */
 + (void)rootViewController:(UIViewController *)controller;
+
+/**
+ * 弹出UIAlertController
+ * UIAlertControllerStyleAlert
+ */
++ (void)alertControllerTitle:(NSString *)title confirmTitle:(NSString *)confirmTitle confirm:(void (^)(UIAlertAction *alertAction))confirm cancel:(void (^)(UIAlertAction *alertAction))cancel;
+
+/**
+ * 弹出UIAlertController
+ * UIAlertControllerStyleActionSheet
+ */
++ (void)alertControllerTitle:(NSString *)title rowOneTitle:(NSString *)rowOneTitle rowTwoTitle:(NSString *)rowTwoTitle rowOne:(void (^)(UIAlertAction *alertAction))rowOne rowTwo:(void (^)(UIAlertAction *alertAction))rowTwo;
 
 @end

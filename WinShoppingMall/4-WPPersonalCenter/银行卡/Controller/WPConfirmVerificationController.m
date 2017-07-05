@@ -41,6 +41,7 @@
     self.navigationItem.title = @"验证手机号";
 
     self.currentTime = getVerificationCodeTime;
+    [self timer];
     [self hintLabel];
     [self verifiactionCell];
     [self getVerificationCodeButton];
@@ -62,7 +63,7 @@
     if (!_hintLabel) {
         _hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _hintLabel.numberOfLines = 0;
-        _hintLabel.text = [NSString stringWithFormat:@"验证码已经发送到：%@", self.cardInfoDict[@"phone"]];
+        _hintLabel.text = [NSString stringWithFormat:@"验证码已经发送到：%@", [WPPublicTool stringWithStarString:self.cardInfoDict[@"phone"] headerIndex:3 footerIndex:4]];
         _hintLabel.font = [UIFont systemFontOfSize:13];
         _hintLabel.textColor = [UIColor blackColor];
         [self.view addSubview:_hintLabel];
@@ -86,7 +87,7 @@
 {
     if (!_getVerificationCodeButton) {
         _getVerificationCodeButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - WPLeftMargin - 100, CGRectGetMaxY(self.verifiactionCell.frame) + WPLineHeight, 100, WPRowHeight)];
-        [_getVerificationCodeButton setTitle:@"收不到验证码" forState:UIControlStateNormal];
+        [_getVerificationCodeButton setTitle:@"发送验证码" forState:UIControlStateNormal];
         [_getVerificationCodeButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
         _getVerificationCodeButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_getVerificationCodeButton addTarget:self action:@selector(getVerificationCodeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -130,15 +131,15 @@
 }
 
 - (void)timerClick {
+    self.currentTime--;
     if (self.currentTime == 0) {
-        [self.getVerificationCodeButton setTitle:@"收不到验证码" forState:UIControlStateNormal];
+        [self.getVerificationCodeButton setTitle:@"重新发送验证码" forState:UIControlStateNormal];
         self.getVerificationCodeButton.userInteractionEnabled = YES;
         [self.timer invalidate];
         self.timer = nil;
         self.currentTime = getVerificationCodeTime;
     }
     else {
-        self.currentTime--;
         [self.getVerificationCodeButton setTitle:[NSString stringWithFormat:@"%ld秒后重发",(long)self.currentTime] forState:UIControlStateNormal];
         self.getVerificationCodeButton.userInteractionEnabled = NO;
     }

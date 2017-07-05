@@ -44,6 +44,7 @@
 		484CCE1B1EB0916100080C44 /* WPMerchantCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 484CCE191EB0916100080C44 /* WPMerchantCell.m */; };
 		484CCE1C1EB0916100080C44 /* WPMerchantCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 484CCE1A1EB0916100080C44 /* WPMerchantCell.xib */; };
 		484D337D1F035194004F95C5 /* WPUserWithDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = 484D337C1F035194004F95C5 /* WPUserWithDrawView.m */; };
+		484EB6F91F0CB7B700306520 /* WPAppTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 484EB6F81F0CB7B700306520 /* WPAppTool.m */; };
 		484FC3721EDFF8060074DEA8 /* WPRowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 484FC3711EDFF8060074DEA8 /* WPRowTableViewCell.xib */; };
 		4850742B1EA8613900422016 /* NSURL+WPExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 485072FC1EA8613900422016 /* NSURL+WPExtension.m */; };
 		4850742C1EA8613900422016 /* UIBarButtonItem+WPExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 485072FF1EA8613900422016 /* UIBarButtonItem+WPExtention.m */; };
@@ -270,6 +271,8 @@
 		484CCE1A1EB0916100080C44 /* WPMerchantCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WPMerchantCell.xib; sourceTree = "<group>"; };
 		484D337B1F035194004F95C5 /* WPUserWithDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPUserWithDrawView.h; sourceTree = "<group>"; };
 		484D337C1F035194004F95C5 /* WPUserWithDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPUserWithDrawView.m; sourceTree = "<group>"; };
+		484EB6F71F0CB7B700306520 /* WPAppTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPAppTool.h; sourceTree = "<group>"; };
+		484EB6F81F0CB7B700306520 /* WPAppTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPAppTool.m; sourceTree = "<group>"; };
 		484FC3711EDFF8060074DEA8 /* WPRowTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WPRowTableViewCell.xib; sourceTree = "<group>"; };
 		485072FB1EA8613900422016 /* NSURL+WPExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+WPExtension.h"; sourceTree = "<group>"; };
 		485072FC1EA8613900422016 /* NSURL+WPExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+WPExtension.m"; sourceTree = "<group>"; };
@@ -756,6 +759,8 @@
 			children = (
 				4851C65D1EF0CECF00AD48E1 /* WPRegex.h */,
 				4851C65E1EF0CECF00AD48E1 /* WPRegex.m */,
+				484EB6F71F0CB7B700306520 /* WPAppTool.h */,
+				484EB6F81F0CB7B700306520 /* WPAppTool.m */,
 				4850731E1EA8613900422016 /* WPHelpTool.h */,
 				4850731F1EA8613900422016 /* WPHelpTool.m */,
 				4839EAF31EC46A6A0078D655 /* WPPublicTool.h */,
@@ -2238,6 +2243,7 @@
 				489184011EA8974D00EE445B /* main.m in Sources */,
 				486F3A131EE53ACE0007D591 /* WPDelegateAgreementController.m in Sources */,
 				4850744D1EA8613900422016 /* WPQRCodeController.m in Sources */,
+				484EB6F91F0CB7B700306520 /* WPAppTool.m in Sources */,
 				48437D6E1EF224DA00A517BF /* WPDatePickerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2414,7 +2420,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Debug;
@@ -2436,7 +2442,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Release;

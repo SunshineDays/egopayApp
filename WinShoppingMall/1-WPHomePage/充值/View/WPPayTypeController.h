@@ -43,9 +43,9 @@
 ////添加银行卡
 //vc.userAddCardBlock = ^{
 //    //  判断是否通过实名认证
-//    if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+//    if ([WPAppTool isPassIDCardApprove]) {
 //        //  有密码
-//        if ([[WPUserInfor sharedWPUserInfor].payPasswordType isEqualToString:@"YES"]) {
+//        if ([WPAppTool isHavePayPassword]) {
 //            WPAddCardController *vc = [[WPAddCardController alloc] init];
 //            [weakSelf.navigationController pushViewController:vc animated:YES];
 //        }

@@ -13,6 +13,7 @@
 #import "WPUserInfor.h"
 #import "WPNavigationController.h"
 #import "WPSubAccountPersonalController.h"
+#import "WPAppTool.h"
 
 @interface WPTabBarController () <UITabBarDelegate>
 
@@ -47,7 +48,7 @@
 
 - (void)createViewControllers
 {
-    if ([[WPUserInfor sharedWPUserInfor].isSubAccount isEqualToString:@"YES"]) {
+    if ([WPAppTool isSubAccount]) {
         _titleArray = @[@"消息", @"我"];
         _imageArray = @[@"icon_xiaoxi_tab", @"icon_daili_tab"];
         _ctrlsArray = @[[[WPMessagesController alloc] init], [[WPSubAccountPersonalController alloc] init]];

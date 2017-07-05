@@ -197,17 +197,17 @@
                 [WPUserInfor sharedWPUserInfor].approvePassType = nil;
                 [WPUserInfor sharedWPUserInfor].payPasswordType = nil;
                 [WPUserInfor sharedWPUserInfor].shopPassType = nil;
-                [WPUserInfor sharedWPUserInfor].needTouchID = @"2";
                 [WPUserInfor sharedWPUserInfor].isSubAccount = nil;
+                [WPUserInfor sharedWPUserInfor].payTouchID = nil;
+                [WPUserInfor sharedWPUserInfor].registerTouchID = nil;
                 
                 [WPKeyChainTool keyChainDelete];
             }
-            if ([result[@"isClerk"] isEqualToString:@"yes"]) {
-                [WPUserInfor sharedWPUserInfor].needTouchID = nil;
+            if ([result[@"isClerk"] isEqualToString:@"yes"]) { //子账户
                 [WPUserInfor sharedWPUserInfor].isSubAccount = @"YES";
+                [WPUserInfor sharedWPUserInfor].registerTouchID = nil;
             }
             else {
-                [WPUserInfor sharedWPUserInfor].needTouchID = @"2";
                 [WPUserInfor sharedWPUserInfor].isSubAccount = nil;
             }
             

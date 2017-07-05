@@ -117,7 +117,7 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
         case 1: // 提现
         {
             if (self.model.avl_balance > 0) {
-                if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+                if ([WPAppTool isPassIDCardApprove]) {
                     WPUserWithDrawController *vc = [[WPUserWithDrawController alloc] init];
                     [self.navigationController pushViewController:vc animated:YES];
                 }

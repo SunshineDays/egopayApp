@@ -28,6 +28,7 @@
 #import "WPRowTableViewCell.h"
 #import "WPButton.h"
 #import "WPPasswordController.h"
+#import "WPAppTool.h"
 //#import "UIBarButtonItem+WPExtention.h"
 
 

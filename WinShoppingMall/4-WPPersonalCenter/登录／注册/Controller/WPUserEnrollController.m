@@ -174,6 +174,7 @@
 }
 
 - (void)timerClick {
+    self.currentTime--;
     if (self.currentTime == 0) {
         [self.verificationCodeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = YES;
@@ -182,7 +183,6 @@
         self.currentTime = getVerificationCodeTime;
     }
     else {
-        self.currentTime--;
         [self.verificationCodeButton setTitle:[NSString stringWithFormat:@"%ld秒后重发",(long)self.currentTime] forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = NO;
     }

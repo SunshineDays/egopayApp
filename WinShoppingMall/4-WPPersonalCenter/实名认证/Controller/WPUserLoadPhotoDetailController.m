@@ -124,7 +124,7 @@
 - (void)imageButtonClick:(WPImageButton *)sender
 {
     self.selectedLine = sender.tag;
-    [self presentViewController:self.alertCameraSheet animated:YES completion:nil];
+    [self alertControllerWithPhoto:NO];
 }
 
 - (void)confirmLoadButtonClick {

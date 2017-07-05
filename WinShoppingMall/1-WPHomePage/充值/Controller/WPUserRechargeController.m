@@ -200,15 +200,15 @@
     else if (self.cvvCell.hidden == NO && self.cvvCell.textField.text.length != 3) {
         [WPProgressHUD showInfoWithStatus:@"请输入CVV码"];
     }
-    else if ([self.moneyCell.textField.text floatValue] > 500 && [self.payType isEqualToString:@"2"] && ![[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+    else if ([self.moneyCell.textField.text floatValue] > 500 && [self.payType isEqualToString:@"2"] && ![WPAppTool isPassIDCardApprove]) {
         [WPProgressHUD showInfoWithStatus:@"微信每次最多充值500元"];
     }
-    else if ([self.moneyCell.textField.text floatValue] > 1000 && [self.payType isEqualToString:@"3"] && ![[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+    else if ([self.moneyCell.textField.text floatValue] > 1000 && [self.payType isEqualToString:@"3"] && ![WPAppTool isPassIDCardApprove]) {
         [WPProgressHUD showInfoWithStatus:@"支付宝每次最多充值1000元"];
     }
     else {
         if ([self.payType isEqualToString:@"1"]) {
-            if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
+            if ([WPAppTool isPayTouchID]) {
                 [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
                     [self pushWithChargeDataWithPassword:touchIDSuccess];
                 } failure:^(NSError *error) {

@@ -150,7 +150,7 @@
     }
     else {
         if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"]) {
-            if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
+            if ([WPAppTool isPayTouchID]) {
                 [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
                     [self pushMerchantGradeDataWithPayPassword:touchIDSuccess];
                     

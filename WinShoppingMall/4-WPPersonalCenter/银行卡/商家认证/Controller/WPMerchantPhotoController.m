@@ -239,7 +239,7 @@
 - (void)busilicenceButtonClick:(UIButton *)button
 {
     self.selectedLine = 1;
-    [self presentViewController:self.alertSheet animated:YES completion:nil];
+    [self alertControllerWithPhoto:YES];
 }
 
 - (void)shopTypeButtonClick:(UIButton *)button
@@ -259,7 +259,7 @@
 - (void)shopCoverButtonClick:(UIButton *)button
 {
     self.selectedLine = 2;
-    [self presentViewController:self.alertSheet animated:YES completion:nil];
+    [self alertControllerWithPhoto:YES];
 }
 
 - (void)postButtonClick:(UIButton *)button

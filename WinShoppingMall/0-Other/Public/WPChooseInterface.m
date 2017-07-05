@@ -30,9 +30,9 @@ NSString * const kAppDefaultsVersionKey = @"CFBundleShortVersionString";
             return navi;
         }
         else {
-            if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"] || [[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"]) {
-//                return [[WPTouchIDShowController alloc] init];
-                return [[WPTabBarController alloc] init];
+            if ([WPAppTool isRegisterTouchID]) {
+                return [[WPTouchIDShowController alloc] init];
+//                return [[WPTabBarController alloc] init];
             } else {
                 return [[WPTabBarController alloc] init];
             }

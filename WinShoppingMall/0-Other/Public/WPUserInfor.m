@@ -30,6 +30,10 @@ Single_Implementation(WPUserInfor)
     
     [WPUserInfor sharedWPUserInfor].needTouchID = self.needTouchID;
         
+    [WPUserInfor sharedWPUserInfor].registerTouchID = self.registerTouchID;
+    
+    [WPUserInfor sharedWPUserInfor].payTouchID = self.payTouchID;
+        
     [WPUserInfor sharedWPUserInfor].isSubAccount = self.isSubAccount;
                 
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
@@ -49,6 +53,10 @@ Single_Implementation(WPUserInfor)
     [userDefault setObject:self.userInfoDict forKey:@"userInfoDict"];
     
     [userDefault setObject:self.needTouchID forKey:WPNeedTouchID];
+    
+    [userDefault setObject:self.registerTouchID forKey:WPRegisterTouchID];
+    
+    [userDefault setObject:self.payTouchID forKey:WPPayTouchID];
             
     [userDefault setObject:self.isSubAccount forKey:WPIsSubAccount];
         

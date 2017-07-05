@@ -15,12 +15,14 @@
 
 @property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
 
-@property ( nonatomic, strong) UIAlertController *alertCtr;
-
-@property (nonatomic, strong) UIAlertController *alertSheet;
-
-@property (nonatomic, strong) UIAlertController *alertCameraSheet;
-
+/**
+ *  用户重新登录
+ */
 - (void)userRegisterAgain;
+
+/**
+ *  选择照片
+ */
+- (void)alertControllerWithPhoto:(BOOL)isPhoto;
 
 @end

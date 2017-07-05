@@ -67,6 +67,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
             vc.codeType = 2;
             [weakSelf.navigationController pushViewController:vc animated:YES];
             [WPUserInfor sharedWPUserInfor].userInfoDict = nil;
+            [WPUserInfor sharedWPUserInfor].threeTouch = nil;
         });
     }
     
@@ -77,7 +78,8 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
             WPJpushServiceController *vc = [[WPJpushServiceController alloc] init];
             vc.resultDict = [WPUserInfor sharedWPUserInfor].userInfoDict;
             [weakSelf.navigationController pushViewController:vc animated:YES];
-            [WPUserInfor sharedWPUserInfor].threeTouch = @"";
+            [WPUserInfor sharedWPUserInfor].threeTouch = nil;
+            [WPUserInfor sharedWPUserInfor].userInfoDict = nil;
         });
     }
 
@@ -240,7 +242,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
             break;
         case 1: {
             // 提现
-            if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+            if ([WPAppTool isPassIDCardApprove]) {
                 WPUserWithDrawController *vc = [[WPUserWithDrawController alloc] init];
                 [self.navigationController pushViewController:vc animated:YES];
             }
@@ -257,9 +259,9 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
             break;
         case 3: {
             // 扫码
-//            [WPProgressHUD showInfoWithStatus:@"敬请期待"];
-            WPQRCodeController *vc = [[WPQRCodeController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
+            [WPProgressHUD showInfoWithStatus:@"敬请期待"];
+//            WPQRCodeController *vc = [[WPQRCodeController alloc] init];
+//            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 4: {
@@ -276,7 +278,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
             break;
         case 6: {
             // 转账
-            if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+            if ([WPAppTool isPassIDCardApprove]) {
                 WPUserTransferController *vc = [[WPUserTransferController alloc] init];
                 [self.navigationController pushViewController:vc animated:YES];
             }
@@ -318,7 +320,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 }
 
 - (void)creditCardButtonClick {
-    if ([[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"]) {
+    if ([WPAppTool isPassIDCardApprove]) {
         WPUserCreditCardPayController *vc = [[WPUserCreditCardPayController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }

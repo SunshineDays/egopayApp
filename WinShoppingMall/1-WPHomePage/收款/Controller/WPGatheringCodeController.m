@@ -134,12 +134,9 @@
 {
     if (longPressGesture.state == UIGestureRecognizerStateEnded) {
         __weakSelf
-        UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:@"" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        [alertControl addAction:[UIAlertAction actionWithTitle:@"保存到相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [WPHelpTool alertControllerTitle:@"" rowOneTitle:@"保存到相册" rowTwoTitle:nil rowOne:^(UIAlertAction *alertAction) {
             [weakSelf downloadButtonAction];
-        }]];
-        [alertControl addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-        [self presentViewController:alertControl animated:YES completion:nil];
+        } rowTwo:nil];
     }
 }
 

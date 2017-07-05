@@ -48,7 +48,14 @@
     NSError *error;
     AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:captureDevice error:&error];
     if (!deviceInput) {
-        [self presentViewController:self.alertCtr animated:YES completion:nil];
+//        [self presentViewController:self.alertCtr animated:YES completion:nil];
+
+        __weakSelf
+        [WPHelpTool alertControllerTitle:@"请在系统设置中开启权限（设置>隐私>相机/相册>开启）" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction) {
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } cancel:^(UIAlertAction *alertAction) {
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        }];
     }
     else {
         VPScanQrCodeView *scanView = [[VPScanQrCodeView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) andMaskViewWidth:222 andBorderColor:[UIColor redColor]];

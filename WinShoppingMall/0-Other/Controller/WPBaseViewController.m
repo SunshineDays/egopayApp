@@ -23,6 +23,8 @@
 
 @implementation WPBaseViewController
 
+#pragma mark - Life Cycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -76,21 +78,7 @@
     }
 }
 
-- (void)leftItemClick
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    [self.view endEditing:YES];
-//}
-
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    [[UIApplication sharedApplication].keyWindow endEditing:YES];
-//}
+#pragma mark - Init
 
 - (UIActivityIndicatorView *)indicatorView
 {
@@ -103,84 +91,6 @@
     return _indicatorView;
 }
 
-- (UIAlertController *)alertCtr {
-    if (!_alertCtr) {
-        _alertCtr = [UIAlertController alertControllerWithTitle:@"请在系统设置中开启权限（设置>隐私>相机/相册>开启）" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [_alertCtr addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil]];
-    }
-    return _alertCtr;
-}
-
-- (UIAlertController *)alertSheet {
-    if (!_alertSheet) {
-        UIImagePickerController *imagePicControl = [[UIImagePickerController alloc] init];
-        imagePicControl.delegate = self;
-        imagePicControl.allowsEditing = YES;
-        
-        __weakSelf
-         _alertSheet = [UIAlertController alertControllerWithTitle:@"请选择" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            [_alertSheet addAction:[UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-                NSError *error;
-                AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:captureDevice error:&error];
-                if (!deviceInput) {
-                    [weakSelf presentViewController:weakSelf.alertCtr animated:YES completion:nil];
-                }
-                else {
-                    imagePicControl.sourceType = UIImagePickerControllerSourceTypeCamera;
-                    imagePicControl.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-                    [weakSelf presentViewController:imagePicControl animated:YES completion:^
-                     {
-                     }];
-                }
-            }]];
-        }
-        [_alertSheet addAction:[UIAlertAction actionWithTitle:@"从相册中选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            imagePicControl.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            [weakSelf presentViewController:imagePicControl animated:YES completion:^{
-                
-            }];
-        }]];
-        [_alertSheet addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-    }
-    return _alertSheet;
-}
-
-- (UIAlertController *)alertCameraSheet
-{
-    if (!_alertCameraSheet) {
-        UIImagePickerController *imagePicControl = [[UIImagePickerController alloc] init];
-        imagePicControl.delegate = self;
-        imagePicControl.allowsEditing = YES;
-        
-        __weakSelf
-        _alertCameraSheet = [UIAlertController alertControllerWithTitle:@"请选择" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        [_alertCameraSheet addAction:[UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-            NSError *error;
-            AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:captureDevice error:&error];
-            if (!deviceInput) {
-                [weakSelf presentViewController:weakSelf.alertCtr animated:YES completion:nil];
-            }
-            else {
-                imagePicControl.sourceType = UIImagePickerControllerSourceTypeCamera;
-                imagePicControl.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-                [weakSelf presentViewController:imagePicControl animated:YES completion:^
-                 {
-                 }];
-            }
-        }]];
-        [_alertCameraSheet addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-    }
-    return _alertCameraSheet;
-}
-
-//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-//{
-//    viewController.navigationController.navigationBar.tintColor = [UIColor blackColor];
-//}
-
 #pragma mark - 判断用户是否设置过支付密码
 - (void)getBaseUserInforTypeData
 {
@@ -188,7 +98,7 @@
     if ([WPUserInfor sharedWPUserInfor].clientId.length != 0) {
         
         //  如果没有实名认证或者没有支付密码
-        if (!([[WPUserInfor sharedWPUserInfor].payPasswordType isEqualToString:@"YES"] && [[WPUserInfor sharedWPUserInfor].approvePassType isEqualToString:@"YES"])) {
+        if (!([WPAppTool isHavePayPassword] && [WPAppTool isPassIDCardApprove])) {
             
             [WPHelpTool getWithURL:WPUserHasCardURL parameters:nil success:^(id success) {
                 NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
@@ -221,12 +131,8 @@
 
 - (void)userRegisterAgain
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"登陆超时，请重新登陆" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }]];
     __weakSelf
-    [alert addAction:[UIAlertAction actionWithTitle:@"重新登陆" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [WPHelpTool alertControllerTitle:@"登陆超时，请重新登陆" confirmTitle:@"重新登陆" confirm:^(UIAlertAction *alertAction) {
         if (!weakSelf.navigationController) {
             [weakSelf dismissViewControllerAnimated:YES completion:nil];
         }
@@ -235,10 +141,34 @@
         [WPHelpTool rootViewController:navi];
         [WPUserInfor sharedWPUserInfor].clientId = nil;
         [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
+    } cancel:nil];
 }
 
+- (void)alertControllerWithPhoto:(BOOL)isPhoto
+{
+    __weakSelf
+    UIImagePickerController *imagePicControl = [[UIImagePickerController alloc] init];
+    imagePicControl.delegate = self;
+    imagePicControl.allowsEditing = YES;
+    [WPHelpTool alertControllerTitle:@"请选择" rowOneTitle:@"拍照" rowTwoTitle:isPhoto ? @"从相册中选择" : nil rowOne:^(UIAlertAction *alertAction) {
+        AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        NSError *error;
+        AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:captureDevice error:&error];
+        if (!deviceInput) {
+            [WPHelpTool alertControllerTitle:@"请在系统设置中开启权限（设置>隐私>相机/相册>开启）" confirmTitle:@"确定" confirm:nil cancel:nil];
+        }
+        else {
+            imagePicControl.sourceType = UIImagePickerControllerSourceTypeCamera;
+            imagePicControl.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+            [weakSelf presentViewController:imagePicControl animated:YES completion:nil];
+        }
+    } rowTwo:^(UIAlertAction *alertAction) {
+        if (alertAction.title) {
+            imagePicControl.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [weakSelf presentViewController:imagePicControl animated:YES completion:nil];
+        }
+    }];
+}
 
 
 - (void)didReceiveMemoryWarning {
