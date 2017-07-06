@@ -53,7 +53,7 @@
 
 + (NSString *)userAgencyVipWith:(NSInteger)vipID
 {
-    NSArray *agencyVipArray = @[@"您还不是代理哦", @"银牌代理", @"金牌代理", @"钻石代理", @"黑钻代理"];
+    NSArray *agencyVipArray = @[@"您还不是代理", @"银牌代理", @"金牌代理", @"钻石代理", @"黑钻代理"];
     return agencyVipArray[vipID];
 }
 

@@ -18,8 +18,6 @@
 #import "WPGatheringCodeController.h"
 #import "WPJpushServiceController.h"
 #import "WPShareView.h"
-#import <TencentOpenAPI/QQApiInterface.h>
-#import "UMSocialQQHandler.h"
 #import "WPShareTool.h"
 #import "WPMessagesCell.h"
 #import "WPMessageDetailController.h"

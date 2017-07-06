@@ -24,9 +24,36 @@
 
 @property (nonatomic, strong) WPButton *submitButton;
 
+@property (nonatomic, strong) WPUpGradeProductModel *delegateModel;
+
+@property (nonatomic, strong) WPMerchantGradeProuctModel *merModel;
+
+@property (nonatomic, strong) UIImage *titleImage;
+
+//  判断VIP等级判断是否可以点击
+@property (nonatomic, assign) BOOL isVip;
+
+// YES：代理升级 NO：商户升级
+@property (nonatomic, assign) BOOL isDelegate;
+
+
 @end
 
 @implementation WPProductDetailController
+
+- (void)initWithTitle:(NSString *)title titleImage:(UIImage *)image model:(id)model isAgency:(BOOL)isAgency isUpgrade:(BOOL)isUpgrade
+{
+    self.navigationItem.title = title;
+    self.titleImage = image;
+    self.isDelegate = isAgency;
+    if (isAgency) {
+        self.delegateModel = model;
+    }
+    else {
+        self.merModel = model;
+    }
+    self.isVip = isUpgrade;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
