@@ -32,6 +32,8 @@
                  NSString *type = [NSString stringWithFormat:@"%@", dict[@"type"]];
                  if ([type isEqualToString:@"-1"]) { //重新登录
                      [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationUserLogout object:nil];
+                     [WPUserInfor sharedWPUserInfor].payTouchID = nil;
+                     [[WPUserInfor sharedWPUserInfor] updateUserInfor];
                  }
              }
      } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
@@ -57,6 +59,8 @@
             NSString *type = [NSString stringWithFormat:@"%@", dict[@"type"]];
             if ([type isEqualToString:@"-1"]) { //重新登录
                 [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationUserLogout object:nil];
+                [WPUserInfor sharedWPUserInfor].payTouchID = nil;
+                [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             }
             else if (dict[@"result"][@"err_msg"]) {
                 [WPProgressHUD showInfoWithStatus:dict[@"result"][@"err_msg"]];

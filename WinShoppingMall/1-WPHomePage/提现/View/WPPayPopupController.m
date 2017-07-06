@@ -9,6 +9,7 @@
 #import "WPPayPopupController.h"
 #import "Header.h"
 #import "WPPopupTitleView.h"
+#import <IQKeyboardManager/IQKeyboardManager.h>
 
 #define kDotSize CGSizeMake (10, 10)  //密码黑点的大小
 #define kDotCount 6  //密码个数
@@ -44,6 +45,7 @@
     self.rowHeight = (kScreenWidth - 2 * WPLeftMargin) / kDotCount;
     
     [self.textField becomeFirstResponder];
+    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = NO;
     
     [self titleView];
     [self moneyLabel];
@@ -53,6 +55,12 @@
     [self initPwdTextField];
     [self forgetButton];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;  //点击背景隐藏键盘
 }
 
 #pragma mark - Init
@@ -185,6 +193,8 @@
     if (textField.text.length == kDotCount) {
         if (self.payPasswordBlock) {
             self.payPasswordBlock(textField.text);
+            if ([WPAppTool isPayTouchID]) {
+            }
             [self dismissViewControllerAnimated:YES completion:nil];
         }
     }

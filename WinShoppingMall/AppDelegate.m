@@ -50,8 +50,8 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     //  IQKeyboardManager键盘
-    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
-    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
+    [IQKeyboardManager sharedManager].enableAutoToolbar = NO; //键盘不需要标题
+    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;  //点击背景隐藏键盘
     
     return YES;
 }
