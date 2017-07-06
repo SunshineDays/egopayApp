@@ -320,7 +320,7 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
     NSArray *arrayB = @[@"用户帮助", @"意见反馈", @"用户举报",
                         [NSString stringWithFormat:@"客服电话:  %@", WPAppTelNumber]];
     NSArray *arrayC = @[@"关于我们", @"分享易购付App", @"App评分",
-                        [NSString stringWithFormat:@"当前版本:v%@", [WPAPPInfo APPVersion]]];
+                        [NSString stringWithFormat:@"当前版本:  v%@", [WPAPPInfo APPVersion]]];
     self.titleArray = @[arrayA, arrayB, arrayC];
     
 }
