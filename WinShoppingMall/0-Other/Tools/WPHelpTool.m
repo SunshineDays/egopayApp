@@ -225,7 +225,11 @@
     }
     //不支持指纹识别
     else {
-        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            if (touchIDFailure) {
+                touchIDFailure(error);
+            }
+        }];
     }
 }
 

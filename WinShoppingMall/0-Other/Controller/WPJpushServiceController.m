@@ -14,7 +14,6 @@
 #import "WPNoticifationApproveModel.h"
 #import "WPNotificationMerchantModel.h"
 #import "WPNotificationCardModel.h"
-#import "WPTouchIDShowController.h"
 
 @interface WPJpushServiceController ()
 
@@ -91,14 +90,11 @@
     
     NSString *trueMoneyString = [NSString stringWithFormat:@"%.2f", self.billModel.avl_amount];
     
-    NSArray *stateArray = @[@"失败", @"成功", @"取消", @"待处理", @"待确认", @"待返回", @"异常单", @" ", @" "];
-    NSString *stateString = stateArray[self.billModel.payState];
+    NSString *stateString = [WPUserTool typeStateWith:self.billModel.payState];
     
-    NSArray *typeArray = @[@" ", @"充值", @"转账", @"还款", @"提现到卡", @"付款", @"二维码收款", @"退款", @"提现到余额", @"商户升级", @"代理升级", @"", @""];
-    NSString *typeString = typeArray[self.billModel.tradeType];
+    NSString *typeString = [WPUserTool typePurposeWith:self.billModel.tradeType];
     
-    NSArray *wayArray = @[@" ", @"银行卡", @"微信", @"支付宝", @"余额", @"国际信用卡", @"QQ钱包", @" ", @" "];
-    NSString *wayString = wayArray[self.billModel.paychannelid];
+    NSString *wayString = [WPUserTool typeWayWith:self.billModel.paychannelid];
     
     NSString *dateString = self.billModel.createDate;
     

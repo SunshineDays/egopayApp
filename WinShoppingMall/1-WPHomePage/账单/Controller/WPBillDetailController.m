@@ -55,15 +55,12 @@
         NSString *poundageString = [NSString stringWithFormat:@"%.2f", self.model.counterFee];
         
         NSString *trueMoneyString = [NSString stringWithFormat:@"%.2f", self.model.avl_amount];
-        
-        NSArray *stateArray = @[@"失败", @"成功", @"取消", @"待处理", @"待确认", @"待返回", @"异常单", @" ", @" "];
-        NSString *stateString = stateArray[self.model.payState];
 
-        NSArray *typeArray = @[@" ", @"充值", @"转账", @"还款", @"提现到卡", @"付款", @"二维码收款", @"退款", @"提现到余额", @"商户升级", @"代理升级", @" ", @" "];
-        NSString *typeString = typeArray[self.model.tradeType];
+        NSString *stateString = [WPUserTool typeStateWith:self.model.payState];
         
-        NSArray *wayArray = @[@" ", @"银行卡", @"微信", @"支付宝", @"余额", @"国际信用卡", @"QQ钱包", @" ", @" "];
-        NSString *wayString = wayArray[self.model.paychannelid];
+        NSString *typeString = [WPUserTool typePurposeWith:self.model.tradeType];
+        
+        NSString *wayString = [WPUserTool typeWayWith:self.model.paychannelid];
 
         NSString *dateString = [WPPublicTool dateToLocalDate:[NSString stringWithFormat:@"%@", self.model.createDate ? self.model.createDate : self.model.finishDate]];
         NSString *numberString = [NSString stringWithFormat:@"%@", self.model.orderno];

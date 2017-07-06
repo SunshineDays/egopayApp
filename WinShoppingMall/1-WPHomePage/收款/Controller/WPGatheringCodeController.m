@@ -11,7 +11,6 @@
 #import "Header.h"
 #import "SGQRCodeTool.h"
 #import "WPTabBarController.h"
-#import "WPTouchIDShowController.h"
 
 @interface WPGatheringCodeController ()
 

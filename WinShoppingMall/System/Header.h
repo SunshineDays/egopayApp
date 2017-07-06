@@ -29,6 +29,8 @@
 #import "WPButton.h"
 #import "WPPasswordController.h"
 #import "WPAppTool.h"
+#import "WPUserTool.h"
+
 //#import "UIBarButtonItem+WPExtention.h"
 
 

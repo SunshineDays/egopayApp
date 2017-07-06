@@ -24,6 +24,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // 获取用户的基本信息
     [WPAppRegisters registUserInfor];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -31,18 +32,24 @@
     self.window.rootViewController = [WPChooseInterface chooseRootViewController];
     [self.window makeKeyWindow];
     
+    // 注册第三方
     [WPAppRegisters registQQ];
     [WPAppRegisters registWechat];
     [WPAppRegisters registJPushWithLaunchOption:launchOptions];
     [WPAppRegisters regist3DTouch:application];
+    
+    // app退出时推送信息字典
     [WPUserInfor sharedWPUserInfor].userInfoDict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     
+    //  应用内推送
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     center.delegate = self;
     
+    //  极光推送
     [JPUSHService setBadge:0];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
+    //  IQKeyboardManager键盘
     [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
     
@@ -71,7 +78,6 @@
 }
 
 #pragma mark - 推送 ios 7.0 - 10.0
-
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [JPUSHService handleRemoteNotification:userInfo];

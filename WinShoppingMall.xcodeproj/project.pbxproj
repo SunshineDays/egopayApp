@@ -126,6 +126,7 @@
 		4856954F1EC5A3FF004CEDDA /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4856954E1EC5A3FF004CEDDA /* CoreTelephony.framework */; };
 		485695511EC5A530004CEDDA /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 485695501EC5A530004CEDDA /* libstdc++.tbd */; };
 		485900B41EBC3288007E1F83 /* WPNoResultLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 485900B31EBC3288007E1F83 /* WPNoResultLabel.m */; };
+		485927B41F0DDF4C007BB973 /* WPUserTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 485927B31F0DDF4C007BB973 /* WPUserTool.m */; };
 		4859E0A11ED8293E001B152B /* WPRowTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4859E09F1ED8293E001B152B /* WPRowTableViewCell.m */; };
 		485DDD5A1F0B9A46006CED12 /* WPMessageDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485DDD591F0B9A46006CED12 /* WPMessageDetailController.m */; };
 		485DDD5D1F0B9ACA006CED12 /* WPUserWithDrawController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485DDD5C1F0B9ACA006CED12 /* WPUserWithDrawController.m */; };
@@ -427,6 +428,8 @@
 		485695501EC5A530004CEDDA /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		485900B21EBC3288007E1F83 /* WPNoResultLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPNoResultLabel.h; sourceTree = "<group>"; };
 		485900B31EBC3288007E1F83 /* WPNoResultLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPNoResultLabel.m; sourceTree = "<group>"; };
+		485927B21F0DDF4C007BB973 /* WPUserTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPUserTool.h; sourceTree = "<group>"; };
+		485927B31F0DDF4C007BB973 /* WPUserTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPUserTool.m; sourceTree = "<group>"; };
 		4859E09E1ED8293E001B152B /* WPRowTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPRowTableViewCell.h; sourceTree = "<group>"; };
 		4859E09F1ED8293E001B152B /* WPRowTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPRowTableViewCell.m; sourceTree = "<group>"; };
 		485DDD581F0B9A46006CED12 /* WPMessageDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPMessageDetailController.h; sourceTree = "<group>"; };
@@ -765,6 +768,8 @@
 				4850731F1EA8613900422016 /* WPHelpTool.m */,
 				4839EAF31EC46A6A0078D655 /* WPPublicTool.h */,
 				4839EAF41EC46A6A0078D655 /* WPPublicTool.m */,
+				485927B21F0DDF4C007BB973 /* WPUserTool.h */,
+				485927B31F0DDF4C007BB973 /* WPUserTool.m */,
 				483CB2111ECC278C00A5A65C /* WPKeyChainTool.h */,
 				483CB2121ECC278C00A5A65C /* WPKeyChainTool.m */,
 				485082CB1EB193C9000F60CD /* SGQRCodeTool.h */,
@@ -2151,6 +2156,7 @@
 				4893FA591EBB124A001BA016 /* WPMerchantGradeProductCell.m in Sources */,
 				4850744F1EA8613900422016 /* VPScanMaskView.m in Sources */,
 				485F86F11EB9B0BD00BEB062 /* WPMerchantDetailController.m in Sources */,
+				485927B41F0DDF4C007BB973 /* WPUserTool.m in Sources */,
 				485074651EA8613900422016 /* WPProfitDetailController.m in Sources */,
 				485074801EA8613900422016 /* WPBankCardModel.m in Sources */,
 				485074791EA8613900422016 /* WPUserEnrollController.m in Sources */,

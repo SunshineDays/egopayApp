@@ -24,8 +24,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSArray *imageArray;
-@property (nonatomic, strong) NSArray *wayArray;
+@property (nonatomic, strong) NSMutableArray *imageArray;
+@property (nonatomic, strong) NSMutableArray *wayArray;
 @property (nonatomic, strong) NSMutableArray *cardArray;
 @property (nonatomic, strong) NSMutableArray *bankArray;
 
@@ -42,31 +42,40 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRGBString:@"#000000" alpha:0.3f];
     
-//    [self getUserBalance];
-    
     if (self.isBalance) {
-        [self getUserInforData];
-        self.imageArray = @[@"icon_weixin_content_n", @"icon_zhifubao_content_n", @"qqIcon", @"icon_yue_content_n"];
+        [self getUserBalance];
     }
     else {
-        self.wayArray = @[@"微信支付", @"支付宝支付", @"QQ钱包支付"];
-        self.imageArray = @[@"icon_weixin_content_n", @"icon_zhifubao_content_n", @"qqIcon"];
+        [self.wayArray removeLastObject];
+        [self.imageArray removeLastObject];
+        [self getCardData];
     }
-
-        
+    
     __weakSelf
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [weakSelf getCardData];
+        weakSelf.isBalance ? [weakSelf getUserBalance] : [weakSelf getCardData];
     }];
+    [self.indicatorView startAnimating];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.tableView.mj_header beginRefreshing];
-}
 
 #pragma mark - Init
+
+-(NSMutableArray *)imageArray
+{
+    if (!_imageArray) {
+        _imageArray = [WPUserTool payTypeImageArray];
+    }
+    return _imageArray;
+}
+
+- (NSMutableArray *)wayArray
+{
+    if (!_wayArray) {
+        _wayArray = [WPUserTool payTypeTitleArray];
+    }
+    return _wayArray;
+}
 
 - (NSMutableArray *)cardArray
 {
@@ -215,6 +224,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
                                  };
     __weakSelf
     [WPHelpTool getWithURL:WPUserBanCardURL parameters:parameters success:^(id success) {
+        [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
@@ -226,26 +236,11 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         }
     } failure:^(NSError *error) {
         [weakSelf.tableView.mj_header endRefreshing];
+        [weakSelf.indicatorView stopAnimating];
     }];
 }
 
-#pragma mark - 获取用户信息
-- (void)getUserInforData
-{
-    __weakSelf
-    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success) {
-        NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            weakSelf.model = [WPEditUserInfoModel mj_objectWithKeyValues:result];
-            NSString *userMoney = [NSString stringWithFormat:@"%@(可用余额:%.2f元)", weakSelf.amount > weakSelf.model.avl_balance ? @"余额不足" : @"余额支付", weakSelf.model.avl_balance];
-            weakSelf.wayArray = @[@"微信支付", @"支付宝支付", @"QQ钱包支付", userMoney];
-        }
-    } failure:^(NSError *error) {
-        
-    }];
-}
-
+#pragma mark - 获取余额
 - (void)getUserBalance
 {
     __weakSelf
@@ -255,12 +250,12 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         if ([type isEqualToString:@"1"]) {
             weakSelf.model = [WPEditUserInfoModel mj_objectWithKeyValues:result];
             NSString *userMoney = [NSString stringWithFormat:@"%@(可用余额:%.2f元)", weakSelf.amount > weakSelf.model.avl_balance ? @"余额不足" : @"余额支付", weakSelf.model.avl_balance];
-            weakSelf.wayArray = @[@"微信支付", @"支付宝支付", @"QQ钱包支付", userMoney];
-            weakSelf.imageArray = @[@"icon_weixin_content_n", @"icon_zhifubao_content_n", @"qqIcon", @"icon_yue_content_n"];
+            [weakSelf.wayArray replaceObjectAtIndex:weakSelf.wayArray.count - 1 withObject:userMoney];
             [weakSelf getCardData];
         }
     } failure:^(NSError *error) {
-        
+        [weakSelf.tableView.mj_header endRefreshing];
+        [weakSelf.indicatorView stopAnimating];
     }];
 }
 

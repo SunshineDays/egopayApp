@@ -236,8 +236,9 @@
         }
     }
     else {
-        [self.payCell.switchs setOn:self.payCell.switchs.on];
-        [WPProgressHUD showInfoWithStatus:@"您的设备不支持指纹"];
+        [WPProgressHUD showInfoWithStatus:@"您的设备不支持指纹识别"];
+        [self.payCell.switchs setOn:NO];
+        [self.registerCell.switchs setOn:NO];
     }
 }
 

@@ -20,7 +20,7 @@
 
 @property (nonatomic, assign) float id;
 
-@property (nonatomic, assign) int inPaystate;
+@property (nonatomic, assign) NSInteger inPaystate;
 
 @property (nonatomic, copy) NSString *ip;
 
@@ -28,9 +28,9 @@
 
 @property (nonatomic, copy) NSString *orderno;
 
-@property (nonatomic, assign) int payState;
+@property (nonatomic, assign) NSInteger payState;
 
-@property (nonatomic, assign) int paychannelid;
+@property (nonatomic, assign) NSInteger paychannelid;
 
 @property (nonatomic, assign) float refund;
 
@@ -38,7 +38,7 @@
 
 @property (nonatomic, assign) float showNews;
 
-@property (nonatomic, assign) int tradeType;
+@property (nonatomic, assign) NSInteger tradeType;
 
 @property (nonatomic, assign) float userlvid;
 

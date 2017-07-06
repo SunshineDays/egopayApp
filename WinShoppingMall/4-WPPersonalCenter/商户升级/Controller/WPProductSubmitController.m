@@ -126,7 +126,7 @@
     __weakSelf
     //支付宝／微信支付
     vc.userPayTypeBlock = ^(NSInteger payTypeRow) {
-        [weakSelf registInformationTitle:[WPPublicTool payTypeTitleWith:payTypeRow] cvvHidden:YES];
+        [weakSelf registInformationTitle:[WPUserTool payTypeTitleWith:payTypeRow] cvvHidden:YES];
     };
     //银行卡支付
     vc.userCardBlock = ^(WPBankCardModel *model) {

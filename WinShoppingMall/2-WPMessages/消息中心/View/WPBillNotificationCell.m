@@ -20,20 +20,15 @@
 
 - (void)setModel:(WPBillModel *)model
 {
-    NSArray *typeArray = @[@" ", @"充值", @"转账", @"还款", @"提现到卡", @"付款", @"二维码收款", @"退款", @"提现到余额", @"商户升级", @"代理升级", @"", @""];
-    NSArray *wayArray = @[@" ", @"银行卡", @"微信", @"支付宝", @"余额", @"国际信用卡", @"QQ钱包", @" ", @" "];
-
-//    self.payResultLabel.text = model.payState == 1 ? @"成功" : @"失败";
-    
-    self.payResultLabel.text = [NSString stringWithFormat:@"%@%@", typeArray[model.tradeType], model.payState == 1 ? @"成功" : @"失败"];
+    self.payResultLabel.text = [NSString stringWithFormat:@"%@%@", [WPUserTool typePurposeWith:model.tradeType], model.payState == 1 ? @"成功" : @"失败"];
     
     self.dateLabel.text = [[WPPublicTool dateToLocalDate:model.finishDate] substringToIndex:[WPPublicTool dateToLocalDate:model.finishDate].length - 6];
     
     self.moneyLabel.text = [NSString stringWithFormat:@"¥ %.2f",model.amount];
     
-    self.wayLabel.text = wayArray[model.paychannelid];
+    self.wayLabel.text = [WPUserTool typeWayWith:model.paychannelid];
     
-    self.typeLabel.text = typeArray[model.tradeType];
+    self.typeLabel.text = [WPUserTool typePurposeWith:model.tradeType];
     
     self.stateLabel.text = model.orderno;
 }

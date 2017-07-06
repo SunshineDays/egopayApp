@@ -215,6 +215,7 @@
             weakSelf.profitBalance = [NSString stringWithFormat:@"%.2f", [result[@"benefitBalance"] floatValue]];
             weakSelf.isAgree = [[NSString stringWithFormat:@"%@", result[@"isAgreeAg"]] isEqualToString:@"1"] ? YES : NO;
             weakSelf.agreementString = [NSString stringWithFormat:@"%@", result[@"agAgreement"]];
+            weakSelf.contentView = nil;
             [weakSelf contentView];
         }
     } failure:^(NSError *error) {

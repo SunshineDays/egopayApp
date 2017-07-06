@@ -7,7 +7,6 @@
 //
 
 #import "WPNoResultLabel.h"
-#import "UIView+WPExtension.h"
 
 @implementation WPNoResultLabel
 
@@ -22,30 +21,21 @@
     return self;
 }
 
+// 显示在特定的View上
+- (void)showOnSuperView:(UIView *)view title:(NSString *)title
+{
+    [self showOnSuperView:view];
+    self.text = title;
+}
+
 - (void)showOnSuperView:(UIView *)view
 {
     if (![view.subviews containsObject:self])
     {
         [view addSubview:self];
-        self.frame = CGRectMake((self.superview.xc_width - 200)/2, self.superview.xc_height/2, 200, 30);
+        self.frame = CGRectMake((self.superview.frame.size.width - 200) / 2, self.superview.frame.size.height / 2, 200, 30);
     }
     self.hidden = NO;
-}
-
-- (void)showOnSuperView:(UIView *)view title:(NSString *)title {
-    [self showOnSuperView:view];
-    self.text = title;
-}
-
-- (void)showWithTitle:(NSString *)title {
-    [self show];
-    self.text = title;
-}
-
-
-- (void)show
-{
-    [self showOnSuperView:[UIApplication sharedApplication].keyWindow];
 }
 
 - (void)hidden
@@ -53,5 +43,18 @@
     self.hidden = YES;
     [self removeFromSuperview];
 }
+
+- (void)showWithTitle:(NSString *)title {
+    [self show];
+    self.text = title;
+}
+
+- (void)show
+{
+    [self showOnSuperView:[UIApplication sharedApplication].keyWindow];
+}
+
+
+
 
 @end

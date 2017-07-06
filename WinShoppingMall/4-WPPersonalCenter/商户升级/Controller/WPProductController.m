@@ -60,8 +60,8 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
         _userInforButton.backgroundColor = [UIColor whiteColor];
         [[SDImageCache sharedImageCache] clearDisk];
         [_userInforButton.userImageView sd_setImageWithURL:[NSURL URLWithString:self.userInforModel.picurl] placeholderImage:[UIImage imageNamed:@"titlePlaceholderImage"] options:SDWebImageRetryFailed];
-        NSArray *vipArray = self.isDelegateView ? @[@"您还不是代理哦", @"银牌代理", @"金牌代理", @"钻石代理", @"黑钻代理"] : @[@"普通会员",@"黄金会员", @"铂金会员", @"钻石会员"];
-        NSString *vipStr = self.isDelegateView ? vipArray[self.userInforModel.agentGradeId] : vipArray[self.userInforModel.merchantlvid - 1];
+
+        NSString *vipStr = self.isDelegateView ? [WPUserTool userAgencyVipWith:self.userInforModel.agentGradeId] : [WPUserTool userMemberVipWith:self.userInforModel.merchantlvid];
         NSString *rateString = self.isDelegateView ? [NSString stringWithFormat:@"分润费率:%@,佣金比例:%@", self.benefitRate, self.commissionRate] : [NSString stringWithFormat:@"充值费率:%.2f%@", self.userInforModel.rate * 100, @"%"];
         [_userInforButton userInforWithName:self.userInforModel.phone vip:vipStr rate:rateString arrowHidden:YES];
     }

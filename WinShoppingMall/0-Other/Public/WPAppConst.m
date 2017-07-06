@@ -84,7 +84,7 @@ NSString * const kUserPayPassword_Phone = @"com.wintopay.ios.userpaypasswordphon
 
 NSString * const WPBaseURL = @"http://www.egoopay.com";
 
-//NSString * const WPBaseURL = @"http://192.168.1.21:8080";
+//NSString * const WPBaseURL = @"http://192.168.1.3:8080";
 
 /*** H5 ***/
 

@@ -75,15 +75,5 @@
  */
 + (void)buttonWithButton:(WPButton *)button userInteractionEnabled:(BOOL)enabled;
 
-/**
- * 选择支付类型设置图片
- */
-+ (UIImage *)imageWithImageCode:(NSString *)imageCode;
-
-+ (NSString *)payTypeNumberWith:(NSInteger)row;
-
-+ (NSString *)payTypeTitleWith:(NSInteger)row;
-
-+ (UIImage *)payTypeImageWith:(NSInteger)row;
 
 @end

@@ -150,32 +150,5 @@
     }
 }
 
-// 选择支付类型设置图片
-+ (UIImage *)imageWithImageCode:(NSString *)imageCode
-{
-    UIImage *resultImage = [UIImage imageNamed:[NSString stringWithFormat:@"BANK_%@", imageCode]];
-    if (!resultImage) {
-        resultImage = [UIImage imageNamed:@"icon_yinhang_n"];
-    }
-    return resultImage;
-}
-
-+ (NSString *)payTypeNumberWith:(NSInteger)row
-{
-    NSArray *payTypeArray = @[@"2", @"3", @"6", @"4"];
-    return payTypeArray[row];
-}
-
-+ (NSString *)payTypeTitleWith:(NSInteger)row
-{
-    NSArray *titleArray = @[@"微信支付", @"支付宝支付", @"QQ钱包支付", @"余额支付"];
-    return titleArray[row];
-}
-
-+ (UIImage *)payTypeImageWith:(NSInteger)row
-{
-    NSArray *imageArray = @[@"icon_weixin_content_n", @"icon_zhifubao_content_n", @"qqIcon", @"icon_yue_content_n"];
-    return [UIImage imageNamed:imageArray[row]];
-}
 
 @end

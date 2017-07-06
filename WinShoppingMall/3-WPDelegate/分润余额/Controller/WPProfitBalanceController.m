@@ -11,7 +11,6 @@
 #import "WPUserEnrollController.h"
 #import "WPPayPopupController.h"
 #import "WPSuccessOrfailedController.h"
-#import "WPTouchIDShowController.h"
 
 @interface WPProfitBalanceController () <UITextFieldDelegate>
 

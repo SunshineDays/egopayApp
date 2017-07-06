@@ -60,7 +60,7 @@ static BOOL const isProduction = FALSE;
         [WPUserInfor sharedWPUserInfor].needTouchID = nil;
     }
     else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"]) {
-        [WPUserInfor sharedWPUserInfor].registerTouchID = @"YES";
+        [WPUserInfor sharedWPUserInfor].registerTouchID = nil;
         [WPUserInfor sharedWPUserInfor].needTouchID = nil;
     }
     else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {

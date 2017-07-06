@@ -188,9 +188,9 @@
     __weakSelf
     //微信/支付宝/余额支付
     vc.userPayTypeBlock = ^(NSInteger payTypeRow) {
-        weakSelf.cardCell.contentLabel.text = [WPPublicTool payTypeTitleWith:payTypeRow];
-        weakSelf.cardCell.cardImageView.image = [WPPublicTool payTypeImageWith:payTypeRow];
-        weakSelf.payType = [WPPublicTool payTypeNumberWith:payTypeRow];
+        weakSelf.cardCell.contentLabel.text = [WPUserTool payTypeTitleWith:payTypeRow];
+        weakSelf.cardCell.cardImageView.image = [WPUserTool payTypeImageWith:payTypeRow];
+        weakSelf.payType = [WPUserTool payTypeNumberWith:payTypeRow];
         weakSelf.cvvCell.hidden = YES;
     };
     //银行卡支付
@@ -200,7 +200,7 @@
         
         [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] index:model.bankName.length]];
         
-        weakSelf.cardCell.cardImageView.image = [WPPublicTool imageWithImageCode:model.bankCode];
+        weakSelf.cardCell.cardImageView.image = [WPUserTool payTypeImageCode:model.bankCode];
         weakSelf.payType = @"1";
     };
     [self presentViewController:vc animated:YES completion:nil];

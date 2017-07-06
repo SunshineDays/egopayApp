@@ -205,12 +205,10 @@
             }
             if ([result[@"isClerk"] isEqualToString:@"yes"]) { //子账户
                 [WPUserInfor sharedWPUserInfor].isSubAccount = @"YES";
-                [WPUserInfor sharedWPUserInfor].registerTouchID = nil;
             }
             else {
                 [WPUserInfor sharedWPUserInfor].isSubAccount = nil;
             }
-            
             [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             
             NSString *userId = [NSString stringWithFormat:@"%@", result[@"mer_id"]];

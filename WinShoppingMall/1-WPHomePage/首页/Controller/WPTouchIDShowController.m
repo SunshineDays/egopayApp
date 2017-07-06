@@ -14,6 +14,7 @@
 #import "WPJpushServiceController.h"
 #import "WPGatheringCodeController.h"
 #import "WPNavigationController.h"
+#import "WPUserEnrollController.h"
 
 @interface WPTouchIDShowController ()
 
@@ -23,8 +24,9 @@
 
 @property (nonatomic, strong) UIImageView *touchIDImageView;
 
-
 @property (nonatomic, strong) UILabel *buttonLabel;
+
+@property (nonatomic, strong) UIButton *otherWayButton;
 
 @end
 
@@ -41,6 +43,7 @@
     [self titleLabel];
     [self touchButton];
     [self buttonLabel];
+    [self otherWayButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,7 +70,7 @@
 - (UIButton *)touchButton
 {
     if (!_touchButton) {
-        _touchButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        _touchButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 50)];
         [_touchButton addTarget:self action:@selector(touchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_touchButton];
     }
@@ -98,6 +101,21 @@
     return _buttonLabel;
 }
 
+- (UIButton *)otherWayButton
+{
+    if (!_otherWayButton) {
+        _otherWayButton  = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - WPLeftMargin - 100, kScreenHeight - 50, 100, 50)];
+        [_otherWayButton setTitle:@"切换登录方式" forState:UIControlStateNormal];
+        [_otherWayButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        _otherWayButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _otherWayButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_otherWayButton addTarget:self action:@selector(otherWayButtonAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_otherWayButton];
+        
+    }
+    return _otherWayButton;
+}
+
 #pragma mark - Action
 
 - (void)touchButtonClick:(UIButton *)button
@@ -107,15 +125,24 @@
 
 - (void)showTouchIDView
 {
+    __weakSelf
     [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
         [WPHelpTool rootViewController:[[WPTabBarController alloc] init]];
         
     } failure:^(NSError *error) {
-        WPRegisterController *vc = [[WPRegisterController alloc] init];
-        WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
-        [WPHelpTool rootViewController:navi];
+        [weakSelf otherWayButtonAction];
     }];
 }
+
+- (void)otherWayButtonAction
+{
+    WPRegisterController *vc = [[WPRegisterController alloc] init];
+    WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
+    [WPHelpTool rootViewController:navi];
+    [WPUserInfor sharedWPUserInfor].clientId = nil;
+    [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+}
+
 
 - (void)didReceiveMemoryWarning
 {

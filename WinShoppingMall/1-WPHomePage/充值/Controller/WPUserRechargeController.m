@@ -173,15 +173,15 @@
     __weakSelf
     vc.userPayTypeBlock = ^(NSInteger payTypeRow) {
         weakSelf.cvvCell.hidden = YES;
-        weakSelf.cardCell.contentLabel.text = [WPPublicTool payTypeTitleWith:payTypeRow];
-        weakSelf.cardCell.cardImageView.image = [WPPublicTool payTypeImageWith:payTypeRow];
-        weakSelf.payType = [WPPublicTool payTypeNumberWith:payTypeRow];
+        weakSelf.cardCell.contentLabel.text = [WPUserTool payTypeTitleWith:payTypeRow];
+        weakSelf.cardCell.cardImageView.image = [WPUserTool payTypeImageWith:payTypeRow];
+        weakSelf.payType = [WPUserTool payTypeNumberWith:payTypeRow];
     };
     //银行卡支付
     vc.userCardBlock = ^(WPBankCardModel *model) {
         weakSelf.cvvCell.hidden = [[NSString stringWithFormat:@"%d", model.cardType] isEqualToString:@"1"] ? NO : YES;
         [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] index:model.bankName.length]];
-        weakSelf.cardCell.cardImageView.image = [WPPublicTool imageWithImageCode:model.bankCode];
+        weakSelf.cardCell.cardImageView.image = [WPUserTool payTypeImageCode:model.bankCode];
 
         weakSelf.payType = @"1";
     };

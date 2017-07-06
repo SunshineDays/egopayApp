@@ -58,7 +58,6 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     self.navigationItem.title = @"我";
     
     self.imageArray = @[@"icon_yue_n", @"icon_yinhang_n", @"icon_shiming_n", @"icon_shangjiarenzheng_n", @"icon_shanghushengji_n", @"icon_shanghu_n", @"icon_xiaoxi_content_n"];
-    [self getUserInforData];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshUserAvater:) name:WPNotificationChangeUserInfor object:nil];
     __weakSelf
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -74,6 +73,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self getUserInforData];
 }
 
 - (void)dealloc
@@ -100,8 +100,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.model.picurl]];
         _userInforButton.userImageView.image = data ? [UIImage imageWithData:data] : _userInforButton.userImageView.image;
-        NSArray *lvArray = @[@"白银会员", @"黄金会员", @"铂金会员", @"钻石会员"];
-        [_userInforButton userInforWithName:self.model.phone vip:lvArray[self.model.merchantlvid - 1] rate:nil arrowHidden:NO];
+        [_userInforButton userInforWithName:self.model.phone vip:[WPUserTool userMemberVipWith:self.model.merchantlvid] rate:nil arrowHidden:NO];
         self.tableView.tableHeaderView = _userInforButton;
     
     }
@@ -273,6 +272,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
             weakSelf.model = [WPEditUserInfoModel mj_objectWithKeyValues:result];
             NSString *money = [NSString stringWithFormat:@"余额：%.2f元", weakSelf.model.avl_balance];
             [weakSelf.dataArray addObjectsFromArray:@[money, @"银行卡", @"实名认证", @"商家认证", @"商户升级", @"子账户", @"系统消息"]];
+            weakSelf.userInforButton = nil;
             [weakSelf userInforButton];
         }
         [weakSelf.tableView.mj_header endRefreshing];

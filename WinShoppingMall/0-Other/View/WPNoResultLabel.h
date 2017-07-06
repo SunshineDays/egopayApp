@@ -10,14 +10,15 @@
 
 @interface WPNoResultLabel : UILabel
 
-- (void)showOnSuperView:(UIView *)view;
-
+/**
+ *  显示
+ */
 - (void)showOnSuperView:(UIView *)view title:(NSString *)title;
 
-- (void)showWithTitle:(NSString *)title;
 
-- (void)show;
-
+/**
+ *  隐藏
+ */
 - (void)hidden;
 
 
