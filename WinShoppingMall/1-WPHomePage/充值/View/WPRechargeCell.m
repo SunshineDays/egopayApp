@@ -18,10 +18,8 @@
 }
 
 - (void)setModel:(WPBankCardModel *)model {
-    self.bankImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"BANK_%@", model.bankCode]];
-    if (!self.bankImageView.image) {
-        self.bankImageView.image = [UIImage imageNamed:@"icon_yinhang_n"];
-    }
+    self.bankImageView.image = [WPUserTool payBankImageCode:model.bankCode];
+    
     NSString *cardNumber = [WPPublicTool base64DecodeString:model.cardNumber];
     cardNumber = [cardNumber substringFromIndex:cardNumber.length - 4];
     NSString *cardType = model.cardType == 1 ? @"信用卡" : @"储蓄卡";

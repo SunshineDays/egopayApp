@@ -20,7 +20,7 @@
     return [NSMutableArray arrayWithArray:@[@"icon_weixin_content_n", @"icon_zhifubao_content_n", @"qqIcon", @"icon_yue_content_n"]];
 }
 
-+ (UIImage *)payTypeImageCode:(NSString *)imageCode
++ (UIImage *)payBankImageCode:(NSString *)imageCode
 {
     UIImage *resultImage = [UIImage imageNamed:[NSString stringWithFormat:@"BANK_%@", imageCode]];
     if (!resultImage) {
@@ -34,15 +34,15 @@
     return [UIImage imageNamed:[self payTypeImageArray][row]];
 }
 
++ (NSString *)payTypeTitleWith:(NSInteger)row
+{
+    return [self payTypeTitleArray][row];
+}
+
 + (NSString *)payTypeNumberWith:(NSInteger)row
 {
     NSArray *payTypeArray = @[@"2", @"3", @"6", @"4"];
     return payTypeArray[row];
-}
-
-+ (NSString *)payTypeTitleWith:(NSInteger)row
-{
-    return [self payTypeTitleArray][row];
 }
 
 + (NSString *)userMemberVipWith:(NSInteger)vipID
@@ -57,10 +57,10 @@
     return agencyVipArray[vipID];
 }
 
-+ (NSString *)typeImageWith:(NSInteger)typeID
++ (UIImage *)typeImageWith:(NSInteger)typeID
 {
     NSArray *imageArray = @[@"", @"icon_chongzhi_content_n", @"icon_zhuanzhangi_content_n", @"icon_huankuan_content_n", @"icon_tixian_content_n", @"icon_fukuan_content_n", @"icon_shoukuanma_content_n", @"icon_fukuan_content_n", @"icon_tixian_content_n", @"icon_shanghushengji_n", @"icon_shanghushengji_n"];
-    return imageArray[typeID];
+    return [UIImage imageNamed:imageArray[typeID]];
 }
 
 + (NSString *)typeStateWith:(NSInteger)typeID

@@ -24,7 +24,7 @@
 /**
  * 支付银行图片
  */
-+ (UIImage *)payTypeImageCode:(NSString *)imageCode;
++ (UIImage *)payBankImageCode:(NSString *)imageCode;
 
 /**
  * 第三方支付图片
@@ -54,7 +54,7 @@
 /**
  * 支付方式图片
  */
-+ (NSString *)typeImageWith:(NSInteger)typeID;
++ (UIImage *)typeImageWith:(NSInteger)typeID;
 
 /**
  *  支付状态

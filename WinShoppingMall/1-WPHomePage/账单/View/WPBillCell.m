@@ -20,7 +20,7 @@
 
 - (void)setModel:(WPBillModel *)model {
 
-    self.wayImageView.image = [UIImage imageNamed:[WPUserTool typeImageWith:model.tradeType]];
+    self.wayImageView.image = [WPUserTool typeImageWith:model.tradeType];
     self.wayImageView.contentMode = UIViewContentModeScaleAspectFit;
 
     self.wayLabel.text = [WPUserTool typePurposeWith:model.tradeType];

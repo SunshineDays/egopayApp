@@ -200,7 +200,7 @@
         
         [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] index:model.bankName.length]];
         
-        weakSelf.cardCell.cardImageView.image = [WPUserTool payTypeImageCode:model.bankCode];
+        weakSelf.cardCell.cardImageView.image = [WPUserTool payBankImageCode:model.bankCode];
         weakSelf.payType = @"1";
     };
     [self presentViewController:vc animated:YES completion:nil];

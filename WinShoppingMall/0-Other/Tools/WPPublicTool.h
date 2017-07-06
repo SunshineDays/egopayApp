@@ -23,7 +23,6 @@
  */
 + (NSString *)base64DecodeString:(NSString *)string;
 
-
 /**
  *  base64 -> Data
  */
