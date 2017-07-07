@@ -37,12 +37,16 @@
 
 @implementation WPUserTransferController
 
+#pragma mark - Life Cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"转账";
     [self confirmButton];
 }
+
+#pragma mark - Init
 
 - (WPCardTableViewCell *)cardCell
 {
@@ -64,6 +68,7 @@
         [_phoneCell tableViewCellTitle:@"账号" placeholder:@"请输入对方手机号码/账号" rectMake:rect];
         [_phoneCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
+        [_phoneCell.textField becomeFirstResponder];
         [self.view addSubview:_phoneCell];
     }
     return _phoneCell;
@@ -162,8 +167,8 @@
     else{
         if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"]) {
             if ([WPAppTool isPayTouchID]) {
-                [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-                    [self pushTransferAccountsDataWithPassword:touchIDSuccess];
+                [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                    [self pushTransferAccountsDataWithPassword:success];
                     
                 } failure:^(NSError *error) {
                     [self initPayPopupView];

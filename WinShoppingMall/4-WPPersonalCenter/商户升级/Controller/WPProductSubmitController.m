@@ -151,8 +151,8 @@
     else {
         if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"]) {
             if ([WPAppTool isPayTouchID]) {
-                [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-                    [self pushMerchantGradeDataWithPayPassword:touchIDSuccess];
+                [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                    [self pushMerchantGradeDataWithPayPassword:success];
                     
                 } failure:^(NSError *error) {
                     [self initPayPopupView];

@@ -80,6 +80,7 @@
         [_busilicenceCell.textField setFrame:CGRectMake(CGRectGetMaxX(_busilicenceCell.titleLabel.frame) + 10, 0, kScreenWidth - CGRectGetMaxX(_busilicenceCell.titleLabel.frame) - WPLeftMargin, WPRowHeight)];
         _busilicenceCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [_busilicenceCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        [_busilicenceCell.textField becomeFirstResponder];
         [self.scrollView addSubview:_busilicenceCell];
     }
     return _busilicenceCell;

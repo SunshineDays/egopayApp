@@ -75,6 +75,9 @@
         _phoneCell.textField.enabled = [WPUserInfor sharedWPUserInfor].clientId.length == 0 ? YES : NO;
         _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         _phoneCell.hidden = self.isFirstPassword ? YES : NO;
+        if ([WPUserInfor sharedWPUserInfor].clientId.length == 0) {
+            [_phoneCell.textField becomeFirstResponder];
+        }
         [self.view addSubview:_phoneCell];
     }
     return _phoneCell;
@@ -89,6 +92,9 @@
         _verificationCodeCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         _verificationCodeCell.hidden = self.isFirstPassword ? YES : NO;
         [_verificationCodeCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        if (self.isFirstPassword) {
+            [_verificationCodeCell.textField becomeFirstResponder];
+        }
         [self.view addSubview:_verificationCodeCell];
     }
     return _verificationCodeCell;

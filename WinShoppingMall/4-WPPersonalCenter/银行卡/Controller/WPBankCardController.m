@@ -161,8 +161,8 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
                     weakSelf.deleteModel = weakSelf.cardArray[indexPath.row];
                     weakSelf.indexNumber = indexPath.row;
                     if ([WPAppTool isPayTouchID]) {
-                        [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-                            [weakSelf postDeleteCardDataWithPassword:touchIDSuccess];
+                        [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                            [weakSelf postDeleteCardDataWithPassword:success];
                             
                         } failure:^(NSError *error) {
                             [weakSelf initPayPopupView];

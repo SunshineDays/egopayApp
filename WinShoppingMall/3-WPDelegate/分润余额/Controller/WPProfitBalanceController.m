@@ -130,8 +130,8 @@
     }
     else {
         if ([WPAppTool isPayTouchID]) {
-            [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-                [self pushWithdrawDataWithPassword:touchIDSuccess];
+            [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                [self pushWithdrawDataWithPassword:success];
                 
             } failure:^(NSError *error) {
                 [self initPayPopupView];

@@ -44,6 +44,12 @@
     [self getPoundageData];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.moneyCell.textField becomeFirstResponder];
+}
+
 - (WPRowTableViewCell *)typeCell {
     if (!_typeCell) {
         _typeCell = [[WPRowTableViewCell alloc] init];
@@ -88,7 +94,6 @@
         [_moneyCell.textField addTarget:self action:@selector(moneyCellTextField) forControlEvents:UIControlEventEditingChanged];
         _moneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         _moneyCell.textField.delegate = self;
-        [_moneyCell.textField becomeFirstResponder];
         [self.view addSubview:_moneyCell];
     }
     return _moneyCell;

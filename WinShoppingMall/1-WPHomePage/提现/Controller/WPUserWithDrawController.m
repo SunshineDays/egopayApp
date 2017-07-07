@@ -39,6 +39,12 @@
     [self getUserInforData];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.withDrawView.moneyTextField becomeFirstResponder];
+}
+
 #pragma mark - Init
 
 - (WPCardTableViewCell *)cardCell
@@ -60,7 +66,6 @@
         _withDrawView.titleLabel.text = @"提现金额";
         _withDrawView.balanceLabel.text = [NSString stringWithFormat:@"可用余额 %.2f元", self.userInfoModel.avl_balance];
         _withDrawView.moneyTextField.delegate = self;
-        [_withDrawView.moneyTextField becomeFirstResponder];
         [_withDrawView.allButton addTarget:self action:@selector(allButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_withDrawView.moneyTextField addTarget:self action:@selector(moneyTextFieldAction) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_withDrawView];
@@ -144,8 +149,8 @@
     else {
         if ([WPAppTool isPayTouchID]) {
             __weakSelf
-            [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-                [weakSelf pushWithdrawDataWithPassword:touchIDSuccess];
+            [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                [weakSelf pushWithdrawDataWithPassword:success];
                 
             } failure:^(NSError *error) {
                 [weakSelf initPayPopupView];

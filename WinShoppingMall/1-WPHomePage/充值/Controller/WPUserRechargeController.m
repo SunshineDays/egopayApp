@@ -50,6 +50,12 @@
     [self getPoundageData];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.moneyCell.textField becomeFirstResponder];
+}
+
 #pragma mark - Init
 
 - (WPCardTableViewCell *)cardCell
@@ -85,7 +91,6 @@
         [_moneyCell.textField addTarget:self action:@selector(moneyCellTextField) forControlEvents:UIControlEventEditingChanged];
         _moneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         _moneyCell.textField.delegate = self;
-        [_moneyCell.textField becomeFirstResponder];
         [self.view addSubview:_moneyCell];
     }
     return _moneyCell;
@@ -209,8 +214,8 @@
     else {
         if ([self.payType isEqualToString:@"1"]) {
             if ([WPAppTool isPayTouchID]) {
-                [WPHelpTool payWithTouchIDsuccess:^(id touchIDSuccess) {
-                    [self pushWithChargeDataWithPassword:touchIDSuccess];
+                [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                    [self pushWithChargeDataWithPassword:success];
                 } failure:^(NSError *error) {
                     [self initPayPopupView];
                 }];

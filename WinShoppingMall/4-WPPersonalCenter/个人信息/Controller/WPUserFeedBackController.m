@@ -63,7 +63,11 @@
         _textField.layer.borderColor = [UIColor lineColor].CGColor;
         _textField.layer.borderWidth = WPLineHeight;
         _textField.layer.cornerRadius = WPCornerRadius;
-        _textView.keyboardType = UIKeyboardTypeNumberPad;
+        _textField.keyboardType = UIKeyboardTypeNumberPad;
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        dict[NSForegroundColorAttributeName] = [UIColor grayColor];
+        NSAttributedString *attribute = [[NSAttributedString alloc] initWithString:_textField.placeholder attributes:dict];
+        [_textField setAttributedPlaceholder:attribute];
         [self.view addSubview:_textField];
     }
     return _textField;

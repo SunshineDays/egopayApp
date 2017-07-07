@@ -16,7 +16,7 @@
 
 #pragma mark - 数据请求
 
-+ (void)getWithURL:(NSString *)url parameters:(NSDictionary *)parameters success:(void (^)(id))success failure:(void (^)(NSError *error))failure
++ (void)getWithURL:(NSString *)url parameters:(NSDictionary *)parameters success:(void (^)(id success))success failure:(void (^)(NSError *error))failure
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -44,7 +44,7 @@
 }
 
 
-+ (void)postWithURL:(NSString *)url parameters:(NSDictionary *)parameters success:(void (^)(id))success failure:(void (^)(NSError *error))failure
++ (void)postWithURL:(NSString *)url parameters:(NSDictionary *)parameters success:(void (^)(id success))success failure:(void (^)(NSError *error))failure
 {
     [WPProgressHUD showProgressIsLoading];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -175,7 +175,7 @@
 
 #pragma mark - Touch ID
 
-+ (void)payWithTouchIDsuccess:(void (^)(id))touchIDSuccess failure:(void (^)(NSError *error))touchIDFailure
++ (void)payWithTouchIDsuccess:(void (^)(id success))touchIDSuccess failure:(void (^)(NSError *error))touchIDFailure
 {
     //初始化上下文对象
     LAContext *context = [[LAContext alloc] init];
