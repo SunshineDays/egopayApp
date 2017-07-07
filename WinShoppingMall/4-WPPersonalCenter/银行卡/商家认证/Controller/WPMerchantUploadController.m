@@ -10,9 +10,8 @@
 #import "Header.h"
 #import "WPMerchantPhotoController.h"
 #import "WPAreaPickerView.h"
-//#import "WPSexAlertController.h"
 
-@interface WPMerchantUploadController () <WPAreaPickerViewDelegate>
+@interface WPMerchantUploadController () <WPAreaPickerViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UILabel *stateLabel;
 
@@ -78,6 +77,7 @@
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.stateLabel.frame), kScreenWidth, WPRowHeight);
         [_nameCell tableViewCellTitle:@"联系人" placeholder:@"请输入您的姓名" rectMake:rect];
         [_nameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _nameCell.textField.delegate = self;
         [self.view addSubview:_nameCell];
     }
     return _nameCell;
@@ -114,6 +114,7 @@
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.phoneCell.frame), kScreenWidth, WPRowHeight);
         [_shopNameCell tableViewCellTitle:@"店铺名称" placeholder:@"请输入店铺名称" rectMake:rect];
         [_shopNameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _shopNameCell.textField.delegate = self;
         [self.view addSubview:_shopNameCell];
     }
     return _shopNameCell;
@@ -138,6 +139,7 @@
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.shopAddressCell.frame), kScreenWidth, WPRowHeight);
         [_shopAddressDetailCell tableViewCellTitle:@"详细地址" placeholder:@"请输入店铺详细地址" rectMake:rect];
         [_shopAddressDetailCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _shopAddressDetailCell.textField.delegate = self;
         [self.view addSubview:_shopAddressDetailCell];
     }
     return _shopAddressDetailCell;
@@ -170,6 +172,13 @@
     self.province = province;
     self.city = city;
     self.area = area;
+}
+
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
 }
 
 #pragma mark - Action

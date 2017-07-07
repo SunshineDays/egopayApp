@@ -135,5 +135,14 @@
     }
 }
 
++ (BOOL)validateReplacementString:(NSString *)string
+{    
+    if ([string isEqualToString:@" "]) {
+        return NO;
+    }
+    else {
+        return YES;
+    }
+}
 
 @end

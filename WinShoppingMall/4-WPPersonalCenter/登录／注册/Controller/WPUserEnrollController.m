@@ -12,7 +12,7 @@
 #import "Header.h"
 #import "WPChoseAgreeView.h"
 
-@interface WPUserEnrollController ()<UITextViewDelegate>
+@interface WPUserEnrollController ()<UITextFieldDelegate>
 
 @property (nonatomic, strong) WPRowTableViewCell *phoneCell;
 
@@ -71,6 +71,7 @@
         [_phoneCell tableViewCellTitle:@"手机号码" placeholder:@"请输入手机号码" rectMake:rect];
         _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [_phoneCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        [_phoneCell.textField becomeFirstResponder];
         [self.view addSubview:_phoneCell];
     }
     return _phoneCell;
@@ -112,6 +113,7 @@
         [_passwordCell tableViewCellTitle:@"密        码" placeholder:@"请输入密码" rectMake:rect];
         _passwordCell.textField.secureTextEntry = YES;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _passwordCell.textField.delegate = self;
         [self.view addSubview:_passwordCell];
     }
     return _passwordCell;
@@ -125,6 +127,7 @@
         [_passwordConfirmCell tableViewCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
         _passwordConfirmCell.textField.secureTextEntry = YES;
         [_passwordConfirmCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _passwordConfirmCell.textField.delegate = self;
         [self.view addSubview:_passwordConfirmCell];
     }
     return _passwordConfirmCell;
@@ -165,6 +168,11 @@
     return _confirmButton;
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
+}
 
 #pragma mark - Action
 

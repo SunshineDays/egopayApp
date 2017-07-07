@@ -9,7 +9,7 @@
 #import "WPMoreBankController.h"
 #import "Header.h"
 
-@interface WPMoreBankController ()
+@interface WPMoreBankController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *textField;
 
@@ -22,16 +22,19 @@
     [super viewDidLoad];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick)];
-    [self textField];
+    
     [self initLineView];
+    [self textField];
 }
 
 - (UITextField *)textField
 {
     if (!_textField) {
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(WPLeftMargin, WPNavigationHeight + 50, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
-        _textField.placeholder = @"请输入开户银行名称";
+        _textField.placeholder = @"请输入银行名称";
         _textField.font = [UIFont systemFontOfSize:WPFontDefaultSize];
+        [_textField becomeFirstResponder];
+        _textField.delegate = self;
         [self.view addSubview:_textField];
     }
     return _textField;
@@ -46,13 +49,27 @@
     }
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
+}
+
 #pragma mark - Action
 
 - (void)saveClick
 {
-    if (self.inforBlock) {
-        self.inforBlock(self.textField.text);
-        [self.navigationController popViewControllerAnimated:YES];
+    if ([self.textField.text containsString:@" "]) {
+        [WPProgressHUD showInfoWithStatus:@"不能s"];
+    }
+    else if (self.textField.text.length == 0) {
+        [WPProgressHUD showInfoWithStatus:@"请输入银行名称"];
+    }
+    else {
+        if (self.inforBlock) {
+            self.inforBlock(self.textField.text);
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 

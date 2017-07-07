@@ -74,6 +74,9 @@
         if ([WPUserInfor sharedWPUserInfor].userPhone.length > 0) {
             self.accountCell.textField.text = [WPUserInfor sharedWPUserInfor].userPhone;
         }
+        else {
+            [self.accountCell.textField becomeFirstResponder];
+        }
         [_accountCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_accountCell];
     }
@@ -90,6 +93,10 @@
         _passwordCell.textField.secureTextEntry = YES;
         _passwordCell.textField.delegate = self;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        if ([WPUserInfor sharedWPUserInfor].userPhone > 0) {
+            [_passwordCell.textField becomeFirstResponder];
+        }
+        _passwordCell.textField.delegate = self;
         [self.view addSubview:_passwordCell];
     }
     return _passwordCell;
@@ -118,6 +125,12 @@
         [self.view addSubview:_forgetPasswordButton];
     }
     return _forgetPasswordButton;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
 }
 
 #pragma mark - Action

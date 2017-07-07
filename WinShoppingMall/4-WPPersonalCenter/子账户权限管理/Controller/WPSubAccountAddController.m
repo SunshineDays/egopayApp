@@ -10,7 +10,7 @@
 #import "Header.h"
 #import "WPSubAccountSettingController.h"
 
-@interface WPSubAccountAddController ()
+@interface WPSubAccountAddController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) WPRowTableViewCell *nameCell;
 
@@ -38,6 +38,7 @@
         CGRect rect = CGRectMake(0, WPTopMargin, kScreenWidth, WPRowHeight);
         [_nameCell tableViewCellTitle:@"账户名" placeholder:@"请输入账户名" rectMake:rect];
         [_nameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _nameCell.textField.delegate = self;
         [self.view addSubview:_nameCell];
     }
     return _nameCell;
@@ -51,6 +52,7 @@
         [_passwordCell tableViewCellTitle:@"密        码" placeholder:@"请输入密码" rectMake:rect];
         _passwordCell.textField.secureTextEntry = YES;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _passwordCell.textField.delegate = self;
         [self.view addSubview:_passwordCell];
     }
     return _passwordCell;
@@ -64,6 +66,7 @@
         [_passwordConfirmCell tableViewCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
         _passwordConfirmCell.textField.secureTextEntry = YES;
         [_passwordConfirmCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _passwordConfirmCell.textField.delegate = self;
         [self.view addSubview:_passwordConfirmCell];
     }
     return _passwordConfirmCell;
@@ -80,6 +83,12 @@
     return _confirmButton;
 }
 
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
+}
 
 #pragma mark - Actin
 

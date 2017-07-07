@@ -96,6 +96,7 @@
             button.titleLabel.numberOfLines = 0;
             [button setTitle:array[i] forState:UIControlStateNormal];
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            button.layer.cornerRadius = WPCornerRadius;
             button.tag = i;
             [button addTarget:self action:@selector(delegateButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             [_contentView addSubview:button];

@@ -12,8 +12,6 @@
 #import "WPBankCardController.h"
 #import "WPProductSubmitController.h"
 
-
-
 @interface WPConfirmVerificationController ()
 
 @property (nonatomic, strong) UILabel *hintLabel;

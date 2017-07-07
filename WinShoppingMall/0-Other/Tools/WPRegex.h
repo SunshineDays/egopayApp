@@ -45,5 +45,8 @@
  */
 + (BOOL)validateMoneyNumber:(NSString *)textField range:(NSRange)range replacementString:(NSString *)string;
 
-
+/**
+ *  文本不能输入空格
+ */
++ (BOOL)validateReplacementString:(NSString *)string;
 @end

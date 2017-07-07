@@ -10,7 +10,7 @@
 #import "WPUserLoadIDCardPhotoController.h"
 #import "Header.h"
 
-@interface WPAutonymApproveController ()
+@interface WPAutonymApproveController () <UITextFieldDelegate>
 
 
 @property (nonatomic, strong) UILabel *stateLabel;
@@ -58,6 +58,7 @@
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.stateLabel.frame), kScreenWidth, WPRowHeight);
         [_userNameCell tableViewCellTitle:@"姓        名" placeholder:self.userName rectMake:rect];
         [_userNameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _userNameCell.textField.delegate = self;
         [self.view addSubview:_userNameCell];
     }
     return _userNameCell;
@@ -70,6 +71,7 @@
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.userNameCell.frame), kScreenWidth, WPRowHeight);
         [_userIDNumberCell tableViewCellTitle:@"身份证号" placeholder:self.userIDNumber rectMake:rect];
         [_userIDNumberCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _userIDNumberCell.textField.delegate = self;
         [self.view addSubview:_userIDNumberCell];
     }
     return _userIDNumberCell;
@@ -84,6 +86,12 @@
         [self.view addSubview:_confirmButton];
     }
     return _confirmButton;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
 }
 
 #pragma mark - Action

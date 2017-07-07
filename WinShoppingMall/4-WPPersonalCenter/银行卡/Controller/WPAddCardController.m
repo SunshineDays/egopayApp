@@ -196,6 +196,12 @@
     }
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
+}
+
 #pragma mark - Data
 
 - (void)getVerificationData

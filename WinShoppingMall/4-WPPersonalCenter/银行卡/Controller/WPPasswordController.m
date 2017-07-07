@@ -10,7 +10,7 @@
 #import "Header.h"
 #import "WPUserInforController.h"
 
-@interface WPPasswordController ()
+@interface WPPasswordController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) WPRowTableViewCell *phoneCell;
 
@@ -117,6 +117,7 @@
         _passwordCell.textField.keyboardType = [self.passwordType isEqualToString:@"1"] ? UIKeyboardTypeDefault : UIKeyboardTypeNumberPad;
         _passwordCell.textField.secureTextEntry = YES;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _passwordCell.textField.delegate = self;
         [self.view addSubview:_passwordCell];
     }
     return _passwordCell;
@@ -131,6 +132,7 @@
         _passwordConfirmCell.textField.keyboardType = [self.passwordType isEqualToString:@"1"] ? UIKeyboardTypeDefault : UIKeyboardTypeNumberPad;
         _passwordConfirmCell.textField.secureTextEntry = YES;
         [_passwordConfirmCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        _passwordConfirmCell.textField.delegate = self;
         [self.view addSubview:_passwordConfirmCell];
     }
     return _passwordConfirmCell;
@@ -166,6 +168,12 @@
         [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
     }
     return _timer;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
 }
 
 

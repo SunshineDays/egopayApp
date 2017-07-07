@@ -10,7 +10,7 @@
 #import "Header.h"
 #import "WPAreaPickerView.h"
 
-@interface WPEditUserInfoController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, WPAreaPickerViewDelegate>
+@interface WPEditUserInfoController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, WPAreaPickerViewDelegate, UITextFieldDelegate>
 //  头像
 @property (nonatomic, strong) UIImageView *avatarImageView;
 @property (nonatomic, copy) NSString *avatarString;
@@ -135,6 +135,7 @@
         _addressDetailCell = [[WPRowTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.addressCell.frame), kScreenWidth, WPRowHeight);
         [_addressDetailCell tableViewCellTitle:@"详细地址" placeholder:self.model.address.length == 0 ? @"请输入详细地址" : self.model.address rectMake:rect];
+        _addressDetailCell.textField.delegate = self;
         [self.view addSubview:_addressDetailCell];
     }
     return _addressDetailCell;
@@ -146,6 +147,7 @@
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.addressDetailCell.frame), kScreenWidth, WPRowHeight);
         [_emailCell tableViewCellTitle:@"电子邮箱" placeholder:self.model.email.length == 0 ? @"请输入电子邮箱" : self.model.email rectMake:rect];
         _emailCell.textField.keyboardType = UIKeyboardTypeEmailAddress;
+        _emailCell.textField.delegate = self;
         [self.view addSubview:_emailCell];
     }
     return _emailCell;
@@ -181,6 +183,11 @@
     self.county = area;
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return [WPRegex validateReplacementString:string];
+}
 
 #pragma mark - Action
 
