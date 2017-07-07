@@ -9,7 +9,7 @@
 #import "WPHomePageController.h"
 #import "WPMessagesController.h"
 #import "WPPersonalCenterController.h"
-#import "WPDelegateController.h"
+#import "WPAgencyController.h"
 #import "WPUserInfor.h"
 #import "WPNavigationController.h"
 #import "WPSubAccountPersonalController.h"
@@ -56,7 +56,7 @@
     else {
         _titleArray = @[@"主页", @"消息", @"代理", @"我"];
         _imageArray = @[@"icon_shouye_tab", @"icon_xiaoxi_tab", @"icon_me_tab", @"icon_daili_tab"];
-        _ctrlsArray = @[[[WPHomePageController alloc] init], [[WPMessagesController alloc] init],[[WPDelegateController alloc] init], [[WPPersonalCenterController alloc] init]];
+        _ctrlsArray = @[[[WPHomePageController alloc] init], [[WPMessagesController alloc] init],[[WPAgencyController alloc] init], [[WPPersonalCenterController alloc] init]];
     }
     for (NSInteger i = 0 ; i < _titleArray.count; i++) {
         [self setupOneChildVc:[[WPNavigationController alloc] initWithRootViewController:_ctrlsArray[i]] image:[NSString stringWithFormat:@"%@_n",_imageArray[i]] selectedImage:[NSString stringWithFormat:@"%@_s",_imageArray[i]] title:_titleArray[i]];

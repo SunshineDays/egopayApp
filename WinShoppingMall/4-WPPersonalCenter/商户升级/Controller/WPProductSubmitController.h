@@ -11,14 +11,7 @@
 @interface WPProductSubmitController : WPBaseViewController
 
 
-/**
- *  判断代理／商户升级
- *  YES:代理  NO:商户
- */
-@property (nonatomic, assign) BOOL isDelegate;
+- (void)initWithTitle:(NSString *)title userLv:(NSString *)userLv gradeMoney:(NSString *)gradeMoney isAgency:(BOOL)isAgency;
 
-@property (nonatomic, copy) NSString *userLv;
-
-@property (nonatomic, copy) NSString *gradeMoney;
 
 @end

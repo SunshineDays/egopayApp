@@ -34,7 +34,7 @@
 @property (nonatomic, assign) BOOL isVip;
 
 // YES：代理升级 NO：商户升级
-@property (nonatomic, assign) BOOL isDelegate;
+@property (nonatomic, assign) BOOL isAgency;
 
 
 @end
@@ -45,7 +45,7 @@
 {
     self.navigationItem.title = title;
     self.titleImage = image;
-    self.isDelegate = isAgency;
+    self.isAgency = isAgency;
     if (isAgency) {
         self.delegateModel = model;
     }
@@ -87,7 +87,7 @@
 {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.imageView.frame) + 20, kScreenWidth - 2 * WPLeftMargin, 20)];
-        _titleLabel.text = self.isDelegate ? self.delegateModel.gradeName : self.merModel.lvname;
+        _titleLabel.text = self.isAgency ? self.delegateModel.gradeName : self.merModel.lvname;
         _titleLabel.textColor = [UIColor blackColor];
         _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -100,7 +100,7 @@
 {
     if (!_priceLabel) {
         _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, 30)];
-        _priceLabel.text = [NSString stringWithFormat:@"¥ %.2f", self.isDelegate ? self.delegateModel.price : self.merModel.price];
+        _priceLabel.text = [NSString stringWithFormat:@"¥ %.2f", self.isAgency ? self.delegateModel.price : self.merModel.price];
         _priceLabel.textColor = [UIColor redColor];
         _priceLabel.font = [UIFont systemFontOfSize:17];
         [self.scrollView addSubview:_priceLabel];
@@ -111,9 +111,9 @@
 - (UILabel *)descriptionLabel
 {
     if (!_descriptionLabel) {
-        float height = [WPPublicTool textHeightFromTextString:self.isDelegate ? self.delegateModel.adesp : self.merModel.mdesp width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15];
+        float height = [WPPublicTool textHeightFromTextString:self.isAgency ? self.delegateModel.adesp : self.merModel.mdesp width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15];
         _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.priceLabel.frame), kScreenWidth - 2 * WPLeftMargin, height)];
-        _descriptionLabel.text = self.isDelegate ? self.delegateModel.adesp : self.merModel.mdesp;
+        _descriptionLabel.text = self.isAgency ? self.delegateModel.adesp : self.merModel.mdesp;
         _descriptionLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _descriptionLabel.numberOfLines = 0;
         [self.scrollView addSubview:_descriptionLabel];
@@ -140,10 +140,14 @@
     
     WPProductSubmitController *vc = [[WPProductSubmitController alloc] init];
     
-    vc.navigationItem.title = self.isDelegate ? @"代理升级" : @"商户升级";
-    vc.isDelegate = self.isDelegate;
-    vc.userLv = self.isDelegate ? [NSString stringWithFormat:@"%ld", (long)self.delegateModel.id] : [NSString stringWithFormat:@"%ld", (long)self.merModel.id];
-    vc.gradeMoney = self.isDelegate ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price] : [NSString stringWithFormat:@"%.2f", self.merModel.price];
+    vc.navigationItem.title = self.isAgency ? @"代理升级" : @"商户升级";
+//    vc.isDelegate = self.isAgency;
+//    vc.userLv = self.isAgency ? [NSString stringWithFormat:@"%ld", (long)self.delegateModel.id] : [NSString stringWithFormat:@"%ld", (long)self.merModel.id];
+//    vc.gradeMoney = self.isAgency ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price] : [NSString stringWithFormat:@"%.2f", self.merModel.price];
+    [vc initWithTitle:self.isAgency ? @"代理升级" : @"商户升级"
+               userLv:self.isAgency ? [NSString stringWithFormat:@"%ld", (long)self.delegateModel.id] : [NSString stringWithFormat:@"%ld", (long)self.merModel.id]
+           gradeMoney:self.isAgency ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price] : [NSString stringWithFormat:@"%.2f", self.merModel.price]
+             isAgency:self.isAgency];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

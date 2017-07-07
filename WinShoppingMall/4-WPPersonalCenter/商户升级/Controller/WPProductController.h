@@ -17,7 +17,7 @@
 /**
  *  YES:升级代理 NO:商户升级界面
  */
-@property (nonatomic, assign) BOOL isDelegateView;
+@property (nonatomic, assign) BOOL isAgencyView;
 
 
 @end

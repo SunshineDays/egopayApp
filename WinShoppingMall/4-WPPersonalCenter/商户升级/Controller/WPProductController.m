@@ -61,8 +61,8 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
         [[SDImageCache sharedImageCache] clearDisk];
         [_userInforButton.userImageView sd_setImageWithURL:[NSURL URLWithString:self.userInforModel.picurl] placeholderImage:[UIImage imageNamed:@"titlePlaceholderImage"] options:SDWebImageRetryFailed];
 
-        NSString *vipStr = self.isDelegateView ? [WPUserTool userAgencyVipWith:self.userInforModel.agentGradeId] : [WPUserTool userMemberVipWith:self.userInforModel.merchantlvid];
-        NSString *rateString = self.isDelegateView ? [NSString stringWithFormat:@"分润费率:%@,佣金比例:%@", self.benefitRate, self.commissionRate] : [NSString stringWithFormat:@"充值费率:%.2f%@", self.userInforModel.rate * 100, @"%"];
+        NSString *vipStr = self.isAgencyView ? [WPUserTool userAgencyVipWith:self.userInforModel.agentGradeId] : [WPUserTool userMemberVipWith:self.userInforModel.merchantlvid];
+        NSString *rateString = self.isAgencyView ? [NSString stringWithFormat:@"分润费率:%@,佣金比例:%@", self.benefitRate, self.commissionRate] : [NSString stringWithFormat:@"充值费率:%.2f%@", self.userInforModel.rate * 100, @"%"];
         [_userInforButton userInforWithName:self.userInforModel.phone vip:vipStr rate:rateString arrowHidden:YES];
     }
     return _userInforButton;
@@ -94,7 +94,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 {
     WPMerchantGradeProductCell *cell = [tableView dequeueReusableCellWithIdentifier:WPMerchantGradeProductCellID];
     
-    if (self.isDelegateView) {
+    if (self.isAgencyView) {
         self.imageArray = @[@"icon_yin_content_n", @"icon_jin_content_n", @"icon_zuanshi_n", @"icon_heizuan_n"];
         cell.lvImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
         cell.lvImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -125,16 +125,16 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (self.isDelegateView) {
+    if (self.isAgencyView) {
         WPUpGradeProductModel *model = self.dataArray[indexPath.row];
         WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-        [vc initWithTitle:@"代理升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isDelegateView isUpgrade:model.id > self.userInforModel.agentGradeId ? YES : NO];
+        [vc initWithTitle:@"代理升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.agentGradeId ? YES : NO];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {
         WPMerchantGradeProuctModel *model = self.dataArray[indexPath.row];
         WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-        [vc initWithTitle:@"商户升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isDelegateView isUpgrade:model.id > self.userInforModel.merchantlvid ? YES : NO];
+        [vc initWithTitle:@"商户升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.merchantlvid ? YES : NO];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -154,7 +154,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 
             weakSelf.userInforModel = [WPEditUserInfoModel mj_objectWithKeyValues:result];
             
-            if (weakSelf.isDelegateView) {
+            if (weakSelf.isAgencyView) {
                 [weakSelf getPoundageData];
             }
             else {
@@ -170,11 +170,11 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 {
     
     __weakSelf
-    [WPHelpTool getWithURL:self.isDelegateView ? WPShowAgUpgradeURL : WPShowMerUpgradeURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:self.isAgencyView ? WPShowAgUpgradeURL : WPShowMerUpgradeURL parameters:nil success:^(id success) {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
-            if (weakSelf.isDelegateView) {
+            if (weakSelf.isAgencyView) {
                 [weakSelf.dataArray addObjectsFromArray:[WPUpGradeProductModel mj_objectArrayWithKeyValuesArray:result[@"agUpList"]]];
             }
             else {

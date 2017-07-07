@@ -31,9 +31,27 @@
 
 @property (nonatomic, copy) NSString *cardId;
 
+/**
+ *  判断代理／商户升级
+ *  YES:代理  NO:商户
+ */
+@property (nonatomic, assign) BOOL isAgency;
+
+@property (nonatomic, copy) NSString *userLv;
+
+@property (nonatomic, copy) NSString *gradeMoney;
+
 @end
 
 @implementation WPProductSubmitController
+
+- (void)initWithTitle:(NSString *)title userLv:(NSString *)userLv gradeMoney:(NSString *)gradeMoney isAgency:(BOOL)isAgency
+{
+    self.navigationItem.title = title;
+    self.userLv = userLv;
+    self.gradeMoney = gradeMoney;
+    self.isAgency = isAgency;
+}
 
 #pragma mark - Life Cycle
 
@@ -127,6 +145,7 @@
     //支付宝／微信支付
     vc.userPayTypeBlock = ^(NSInteger payTypeRow) {
         [weakSelf registInformationTitle:[WPUserTool payTypeTitleWith:payTypeRow] cvvHidden:YES];
+        weakSelf.payType = [WPUserTool payTypeNumberWith:payTypeRow];
     };
     //银行卡支付
     vc.userCardBlock = ^(WPBankCardModel *model) {
@@ -182,7 +201,6 @@
 
 - (void)pushMerchantGradeDataWithPayPassword:(NSString *)payPassword
 {
-    
 
     NSDictionary *parameters = @{
                                  @"uplvId" :  self.userLv,
@@ -192,13 +210,13 @@
                                  @"payPassword" : [WPPublicTool base64EncodeString:payPassword]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:self.isDelegate ? WPDelegateGradeURL : WPMerchantGradeURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:self.isAgency ? WPAgencyGradeURL : WPMerchantGradeURL parameters:parameters success:^(id success) {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
             WPSuccessOrfailedController *vc = [[WPSuccessOrfailedController alloc] init];
-            vc.navigationItem.title = self.isDelegate ? @"代理升级结果" : @"商户升级结果";
+            vc.navigationItem.title = self.isAgency ? @"代理升级结果" : @"商户升级结果";
             [weakSelf.navigationController pushViewController:vc animated:YES];
         }
         else if ([type isEqualToString:@"3"]) {

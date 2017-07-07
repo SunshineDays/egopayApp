@@ -1,12 +1,12 @@
 //
-//  WPDelegateController.m
+//  WPAgencyController.m
 //  WinShoppingMall
 //
 //  Created by 易购付 on 2017/3/20.
 //  Copyright © 2017年 易购付. All rights reserved.
 //
 
-#import "WPDelegateController.h"
+#import "WPAgencyController.h"
  
 #import "UIView+WPExtension.h"
 #import <SDCycleScrollView.h>
@@ -20,7 +20,7 @@
 #import "WPDelegateAgreementController.h"
 #import "WPInvitingPeopleController.h"
 
-@interface WPDelegateController ()<SDCycleScrollViewDelegate>
+@interface WPAgencyController ()<SDCycleScrollViewDelegate>
 
 @property (nonatomic, strong) SDCycleScrollView *cycleScrollView;
 
@@ -39,7 +39,7 @@
 
 @end
 
-@implementation WPDelegateController
+@implementation WPAgencyController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -148,7 +148,7 @@
                 if (self.isAgree) {
                     WPProductController *vc = [[WPProductController alloc] init];
                     vc.navigationItem.title = @"代理升级";
-                    vc.isDelegateView = YES;
+                    vc.isAgencyView = YES;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
                 else {
@@ -158,7 +158,7 @@
                     vc.agreeBlock = ^{
                         WPProductController *vc = [[WPProductController alloc] init];
                         vc.navigationItem.title = @"代理升级";
-                        vc.isDelegateView = YES;
+                        vc.isAgencyView = YES;
                         [weakSelf.navigationController pushViewController:vc animated:YES];
                     };
                     [self presentViewController:vc animated:YES completion:nil];

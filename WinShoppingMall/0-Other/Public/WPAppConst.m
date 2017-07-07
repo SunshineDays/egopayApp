@@ -154,7 +154,7 @@ NSString * const WPProfitDetailURL = @"client_beneDetails";
 
 NSString * const WPMerchantGradeURL = @"client_upUserlvAction";
 
-NSString * const WPDelegateGradeURL = @"client_upagentLvAction";
+NSString * const WPAgencyGradeURL = @"client_upagentLvAction";
 
 NSString * const WPGatheringCodeURL = @"client_createPayQr";
 

@@ -68,14 +68,14 @@
 /**  账单支付方式图片 */
 + (UIImage *)typeImageWith:(NSInteger)typeID
 {
-    NSArray *imageArray = @[@"", @"icon_chongzhi_content_n", @"icon_zhuanzhangi_content_n", @"icon_huankuan_content_n", @"icon_tixian_content_n", @"icon_fukuan_content_n", @"icon_shoukuanma_content_n", @"icon_fukuan_content_n", @"icon_tixian_content_n", @"icon_shanghushengji_n", @"icon_shanghushengji_n"];
+    NSArray *imageArray = @[@"", @"icon_chongzhi_content_n", @"icon_zhuanzhangi_content_n", @"icon_huankuan_content_n", @"icon_tixian_content_n", @"icon_fukuan_content_n", @"icon_shoukuanma_content_n", @"icon_fukuan_content_n", @"icon_tixian_content_n", @"icon_shanghushengji_n", @"icon_shanghushengji_n", @"", @""];
     return [UIImage imageNamed:imageArray[typeID]];
 }
 
 /**  支付状态 */
 + (NSString *)typeStateWith:(NSInteger)typeID
 {
-    NSArray *stateArray = @[@"失败", @"成功", @"取消", @"待处理", @"待确认", @"待返回", @"异常单", @" ", @" "];
+    NSArray *stateArray = @[@"失败", @"成功", @"", @"取消", @"待处理", @"待确认", @"待返回", @"异常单", @" ", @" "];
     return stateArray[typeID];
 }
 
@@ -96,7 +96,7 @@
 /**  支付方式 */
 + (NSString *)typeWayWith:(NSInteger)typeID
 {
-    NSArray *wayArray = @[@" ", @"银行卡", @"微信", @"支付宝", @"余额", @"国际信用卡", @"QQ钱包", @" ", @" "];
+    NSArray *wayArray = @[@" ", @"银行卡", @"微信", @"支付宝", @"余额", @"国际信用卡", @"QQ钱包", @"京东钱包", @" "];
     return wayArray[typeID];
 }
 

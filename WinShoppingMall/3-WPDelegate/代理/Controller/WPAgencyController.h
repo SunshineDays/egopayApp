@@ -1,5 +1,5 @@
 //
-//  WPDelegateController.h
+//  WPAgencyController.h
 //  WinShoppingMall
 //
 //  Created by 易购付 on 2017/3/20.
@@ -8,6 +8,6 @@
 
 #import "WPBaseViewController.h"
 
-@interface WPDelegateController : WPBaseViewController
+@interface WPAgencyController : WPBaseViewController
 
 @end

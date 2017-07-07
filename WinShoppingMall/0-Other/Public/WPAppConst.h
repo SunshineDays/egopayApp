@@ -164,7 +164,7 @@ UIKIT_EXTERN NSString * const WPProfitDetailURL;
 
 UIKIT_EXTERN NSString * const WPMerchantGradeURL;
 
-UIKIT_EXTERN NSString * const WPDelegateGradeURL;
+UIKIT_EXTERN NSString * const WPAgencyGradeURL;
 
 UIKIT_EXTERN NSString * const WPGatheringCodeURL;
 

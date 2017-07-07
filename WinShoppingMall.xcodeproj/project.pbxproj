@@ -82,7 +82,7 @@
 		4850745E1EA8613900422016 /* WPHomeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073901EA8613900422016 /* WPHomeButton.m */; };
 		4850745F1EA8613900422016 /* WPMessagesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073951EA8613900422016 /* WPMessagesController.m */; };
 		485074611EA8613900422016 /* WPTodayProfitController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073A21EA8613900422016 /* WPTodayProfitController.m */; };
-		485074621EA8613900422016 /* WPDelegateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073A81EA8613900422016 /* WPDelegateController.m */; };
+		485074621EA8613900422016 /* WPAgencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073A81EA8613900422016 /* WPAgencyController.m */; };
 		485074641EA8613900422016 /* WPProfitBalanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073B41EA8613900422016 /* WPProfitBalanceController.m */; };
 		485074651EA8613900422016 /* WPProfitDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073BA1EA8613900422016 /* WPProfitDetailController.m */; };
 		485074661EA8613900422016 /* WPProductDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485073C01EA8613900422016 /* WPProductDetailController.m */; };
@@ -346,8 +346,8 @@
 		485073951EA8613900422016 /* WPMessagesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPMessagesController.m; sourceTree = "<group>"; };
 		485073A11EA8613900422016 /* WPTodayProfitController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPTodayProfitController.h; sourceTree = "<group>"; };
 		485073A21EA8613900422016 /* WPTodayProfitController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPTodayProfitController.m; sourceTree = "<group>"; };
-		485073A71EA8613900422016 /* WPDelegateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPDelegateController.h; sourceTree = "<group>"; };
-		485073A81EA8613900422016 /* WPDelegateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPDelegateController.m; sourceTree = "<group>"; };
+		485073A71EA8613900422016 /* WPAgencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPAgencyController.h; sourceTree = "<group>"; };
+		485073A81EA8613900422016 /* WPAgencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPAgencyController.m; sourceTree = "<group>"; };
 		485073B31EA8613900422016 /* WPProfitBalanceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPProfitBalanceController.h; sourceTree = "<group>"; };
 		485073B41EA8613900422016 /* WPProfitBalanceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPProfitBalanceController.m; sourceTree = "<group>"; };
 		485073B91EA8613900422016 /* WPProfitDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPProfitDetailController.h; sourceTree = "<group>"; };
@@ -1273,8 +1273,8 @@
 		485073A61EA8613900422016 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				485073A71EA8613900422016 /* WPDelegateController.h */,
-				485073A81EA8613900422016 /* WPDelegateController.m */,
+				485073A71EA8613900422016 /* WPAgencyController.h */,
+				485073A81EA8613900422016 /* WPAgencyController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2128,7 +2128,7 @@
 				4850747F1EA8613900422016 /* WPConfirmVerificationController.m in Sources */,
 				4850746E1EA8613900422016 /* WPSelectButton.m in Sources */,
 				485074381EA8613900422016 /* WPAPPInfo.m in Sources */,
-				485074621EA8613900422016 /* WPDelegateController.m in Sources */,
+				485074621EA8613900422016 /* WPAgencyController.m in Sources */,
 				485074341EA8613900422016 /* WPAppConst.m in Sources */,
 				484243081EAF40960032F200 /* WPMessagesModel.m in Sources */,
 				483E61C31ED3D7E500CE680F /* WPNotificationBillDetailModel.m in Sources */,
