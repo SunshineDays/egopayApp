@@ -294,10 +294,10 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     __weakSelf
     [WPHelpTool getWithURL:WPShowMerShopsURL parameters:nil success:^(id success) {
         [weakSelf.indicatorView stopAnimating];
-        [weakSelf.dataArray removeAllObjects];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
+            [weakSelf.dataArray removeAllObjects];
             [weakSelf.dataArray addObjectsFromArray:[WPMerchantModel mj_objectArrayWithKeyValuesArray:result[@"shopList"]]];
         }
         [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商铺"];
@@ -320,10 +320,10 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
                                  };
     __weakSelf
     [WPHelpTool postWithURL:WPShowMerShopsURL parameters:parameters success:^(id success) {
-        [weakSelf.dataArray removeAllObjects];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"]) {
+            [weakSelf.dataArray removeAllObjects];
             [weakSelf.dataArray addObjectsFromArray:[WPMerchantModel mj_objectArrayWithKeyValuesArray:result[@"shopList"]]];
         }
         [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商铺"];
