@@ -237,34 +237,6 @@
     }
 }
 
-#pragma mark - 获取日期数组
-
-+ (NSMutableArray *)dateArrayWithMonthNumber:(NSInteger)monthNumber
-{
-    NSMutableArray *dateArray = [[NSMutableArray alloc] init];
-    
-    NSDate *date = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    
-    [formatter setDateFormat:@"yyyy"];
-    NSInteger year = [[formatter stringFromDate:date] integerValue];
-    
-    [formatter setDateFormat:@"MM"];
-    NSInteger month = [[formatter stringFromDate:date] integerValue];
-    
-    for (int i = 0; i < monthNumber; i++) {
-        if (month < 1) {
-            month = month + 12;
-            year = year - 1;
-        }
-        NSString *monthString = month < 10 ? [NSString stringWithFormat:@"0%ld", (long)month] : [NSString stringWithFormat:@"%ld", (long)month];
-        NSString *dateString = [NSString stringWithFormat:@"%ld年%@月", (long)year, monthString];
-        [dateArray addObject:dateString];
-        month --;
-    }
-    return dateArray;
-}
-
 
 #pragma mark - 返回指定界面
 + (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController
@@ -276,6 +248,7 @@
     }
 }
 
+#pragma mark - 跳转到根控制器动画
 + (void)rootViewController:(UIViewController *)controller
 {
     [UIView transitionWithView:[UIApplication sharedApplication].keyWindow duration:0.5f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -287,6 +260,9 @@
     }];
 }
 
+#pragma mark - UIAlertController
+
+#pragma mark - UIAlertControllerStyleAlert
 + (void)alertControllerTitle:(NSString *)title confirmTitle:(NSString *)confirmTitle confirm:(void (^)(UIAlertAction *alertAction))confirm cancel:(void (^)(UIAlertAction *alertAction))cancel
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -316,6 +292,7 @@
     
 }
 
+#pragma mark - UIAlertControllerStyleActionSheet
 + (void)alertControllerTitle:(NSString *)title rowOneTitle:(NSString *)rowOneTitle rowTwoTitle:(NSString *)rowTwoTitle rowOne:(void (^)(UIAlertAction *alertAction))rowOne rowTwo:(void (^)(UIAlertAction *alertAction))rowTwo
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];

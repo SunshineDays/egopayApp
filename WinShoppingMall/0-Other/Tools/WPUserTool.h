@@ -27,17 +27,17 @@
 + (UIImage *)payBankImageCode:(NSString *)imageCode;
 
 /**
- * 第三方支付图片
+ * 选择的第三方支付图片
  */
 + (UIImage *)payTypeImageWith:(NSInteger)row;
 
 /**
- *  支付类型ID
+ *  选择的支付类型ID
  */
 + (NSString *)payTypeNumberWith:(NSInteger)row;
 
 /**
- *  支付方式名
+ *  选择的支付方式名
  */
 + (NSString *)payTypeTitleWith:(NSInteger)row;
 
@@ -52,7 +52,7 @@
 + (NSString *)userAgencyVipWith:(NSInteger)vipID;
 
 /**
- * 支付方式图片
+ * 账单支付方式图片
  */
 + (UIImage *)typeImageWith:(NSInteger)typeID;
 
@@ -78,6 +78,12 @@
  *  银行卡, 微信, 支付宝, 余额, 国际信用卡, QQ钱包
  */
 + (NSString *)typeWayWith:(NSInteger)typeID;
+
+/**
+ * 获取日期数组
+ * monthNumber : 需要几个月
+ */
++ (NSMutableArray *)dateArrayWithMonthNumber:(NSInteger)monthNumber;
 
 
 @end

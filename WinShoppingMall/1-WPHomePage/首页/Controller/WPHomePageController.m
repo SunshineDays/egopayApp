@@ -147,6 +147,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
 - (void)initButtonClassView
 {
+    
     NSArray *array = @[@"充值", @"提现", @"账单", @"扫码", @"商家", @"收款", @"转账", @"推荐"];
     NSArray *imageArray = @[ @"icon_chongzhi_content_n", @"icon_tixian_content_n", @"icon_zhangdan_content_n", @"icon_saoma_content_n", @"icon_shangjiai_content_n", @"icon_shoukuan_content_n", @"icon_zhuanzhangi_content_n", @"icon_tuijian_content_n"];
     CGFloat width = (kScreenWidth - 2 * WPLeftMargin) / 4;

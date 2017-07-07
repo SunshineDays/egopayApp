@@ -192,7 +192,7 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 }
 
 - (void)getDateListData {
-    [self.dataArray addObjectsFromArray:[WPHelpTool dateArrayWithMonthNumber:12]];
+    [self.dataArray addObjectsFromArray:[WPUserTool dateArrayWithMonthNumber:12]];
     [self.tableView reloadData];
 }
 

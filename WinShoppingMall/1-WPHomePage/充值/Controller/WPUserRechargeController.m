@@ -185,7 +185,7 @@
     //银行卡支付
     vc.userCardBlock = ^(WPBankCardModel *model) {
         weakSelf.cvvCell.hidden = [[NSString stringWithFormat:@"%d", model.cardType] isEqualToString:@"1"] ? NO : YES;
-        [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] index:model.bankName.length]];
+        [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] replaceColor:[UIColor placeholderColor] index:model.bankName.length]];
         weakSelf.cardCell.cardImageView.image = [WPUserTool payBankImageCode:model.bankCode];
 
         weakSelf.payType = @"1";

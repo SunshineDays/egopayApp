@@ -28,14 +28,16 @@
  */
 + (NSData *)base64ToData:(NSString *)imageStr;
 
-
 /**
  *  NSString -> Date
  */
 + (NSString *)dateToLocalDate:(NSString *)dateString;
 
-//把一个秒字符串 转化为真正的本地时间
-//@"1419055200" -> 转化 日期字符串
+
+/**
+ *  把一个秒字符串 转化为真正的本地时间
+ *  @"1419055200" -> 转化 日期字符串
+ */
 + (NSString *)dateStringFromNumberTimer:(NSString *)timerStr;
 
 /**
@@ -57,7 +59,7 @@
 /**
  * 改变字符串部分颜色
  */
-+ (NSAttributedString *)stringColorWithString:(NSString *)string index:(NSInteger)index;
++ (NSAttributedString *)stringColorWithString:(NSString *)string replaceColor:(UIColor *)replaceColor index:(NSInteger)index;
 
 /**
  *  image -> NSString

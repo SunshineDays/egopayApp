@@ -44,13 +44,6 @@
 + (void)payWithTouchIDsuccess:(void (^)(id success))touchIDSuccess failure:(void (^)(NSError *error))touchIDFailure;
 
 /**
- * 获取日期数组
- * monthNumber : 需要几个月
- */
-+ (NSMutableArray *)dateArrayWithMonthNumber:(NSInteger)monthNumber;
-
-
-/**
  *  返回指定界面
  */
 + (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController;

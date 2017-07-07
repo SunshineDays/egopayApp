@@ -113,12 +113,12 @@
 }
 
 // 改变字符串部分颜色
-+ (NSAttributedString *)stringColorWithString:(NSString *)string index:(NSInteger)index
++ (NSAttributedString *)stringColorWithString:(NSString *)string replaceColor:(UIColor *)replaceColor index:(NSInteger)index
 {
     NSMutableAttributedString *colorString = [[NSMutableAttributedString alloc] initWithString:string];
     NSRange range = [[colorString string] rangeOfString:[string substringFromIndex:index]];
     [colorString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:WPFontDefaultSize] range:range];
-    [colorString addAttribute:NSForegroundColorAttributeName value:[UIColor placeholderColor] range:range];
+    [colorString addAttribute:NSForegroundColorAttributeName value:replaceColor range:range];
     return colorString;
 }
 

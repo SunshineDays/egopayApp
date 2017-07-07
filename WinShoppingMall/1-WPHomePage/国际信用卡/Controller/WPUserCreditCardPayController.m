@@ -152,7 +152,7 @@
     __weakSelf
     vc.cardInfoBlock = ^(WPBankCardModel *model) {
         weakSelf.model = model;
-        [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] index:model.bankName.length]];
+        [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] replaceColor:[UIColor placeholderColor] index:model.bankName.length]];
         weakSelf.cardCell.cardImageView.image = [WPUserTool payBankImageCode:model.bankCode];
     };
     [self.navigationController pushViewController:vc animated:YES];
