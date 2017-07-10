@@ -157,20 +157,22 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
             }
             else {
                 __weakSelf
-                [WPHelpTool alertControllerTitle:@"" rowOneTitle:@"解除绑定" rowTwoTitle:nil rowOne:^(UIAlertAction *alertAction) {
-                    weakSelf.deleteModel = weakSelf.cardArray[indexPath.row];
-                    weakSelf.indexNumber = indexPath.row;
-                    if ([WPAppTool isPayTouchID]) {
-                        [WPHelpTool payWithTouchIDsuccess:^(id success) {
-                            [weakSelf postDeleteCardDataWithPassword:success];
-                            
-                        } failure:^(NSError *error) {
+                [WPHelpTool alertControllerTitle:nil rowOneTitle:@"解除绑定" rowTwoTitle:nil rowOne:^(UIAlertAction *alertAction) {
+                    [WPHelpTool alertControllerTitle:@"确定解绑该银行卡" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction) {
+                        weakSelf.deleteModel = weakSelf.cardArray[indexPath.row];
+                        weakSelf.indexNumber = indexPath.row;
+                        if ([WPAppTool isPayTouchID]) {
+                            [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                                [weakSelf postDeleteCardDataWithPassword:success];
+                                
+                            } failure:^(NSError *error) {
+                                [weakSelf initPayPopupView];
+                            }];
+                        }
+                        else {
                             [weakSelf initPayPopupView];
-                        }];
-                    }
-                    else {
-                        [weakSelf initPayPopupView];
-                    }
+                        }
+                    } cancel:nil];
                 } rowTwo:nil];
             }
         }

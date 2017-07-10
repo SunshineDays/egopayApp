@@ -307,26 +307,8 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 - (void)userLogoutButtonAction:(UIButton *)button
 {
     __weakSelf
-    [WPHelpTool alertControllerTitle:@"您确定要退出登陆嘛" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction) {
-        {
-            
-            WPRegisterController *vc = [[WPRegisterController alloc] init];
-            WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
-            [WPHelpTool rootViewController:navi];
-            
-            [WPUserInfor sharedWPUserInfor].clientId = nil;
-            [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-            
-            [JPUSHService setTags:nil alias:@"" fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
-                
-                //        NSLog(@"绑定和解绑rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, iTags , iAlias);
-                if (iResCode == 0) {//对应的状态码返回为0，代表成功
-                    
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:kJPFNetworkDidLoginNotification object:nil];
-                }
-            }];
-            [weakSelf userLogout];
-        }
+    [WPHelpTool alertControllerTitle:@"确定退出登录" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction) {
+        [weakSelf userQuitRegister];
         
     } cancel:nil];
 }
@@ -357,16 +339,6 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
         if ([type isEqualToString:@"1"]) {
             weakSelf.model = [WPEditUserInfoModel mj_objectWithKeyValues:result];
         }
-    } failure:^(NSError *error) {
-        
-    }];
-}
-
-
-- (void)userLogout
-{
-    [WPHelpTool getWithURL:WPUserLogoutURL parameters:nil success:^(id success) {
-        
     } failure:^(NSError *error) {
         
     }];

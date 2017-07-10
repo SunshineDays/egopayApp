@@ -16,9 +16,9 @@
 @property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
 
 /**
- *  用户重新登录
+ *  用户退出登录
  */
-- (void)userRegisterAgain;
+- (void)userQuitRegister;
 
 /**
  *  选择照片

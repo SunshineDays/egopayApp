@@ -280,7 +280,7 @@
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         if ([type isEqualToString:@"1"]) {
-            [WPProgressHUD showSuccessWithStatus:[NSString stringWithFormat:[self.passwordType isEqualToString:@"1"] ? @"修改登陆密码成功" : @"修改支付密码成功"]];
+            [WPProgressHUD showSuccessWithStatus:[NSString stringWithFormat:[self.passwordType isEqualToString:@"1"] ? @"修改登录密码成功" : @"修改支付密码成功"]];
             
             [WPHelpTool popToViewController:[[WPUserInforController alloc] init] navigationController:weakSelf.navigationController];
             

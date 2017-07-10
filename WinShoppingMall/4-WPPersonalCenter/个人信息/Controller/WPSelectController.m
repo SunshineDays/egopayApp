@@ -93,7 +93,7 @@ static NSString * const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
             case 1: {
                 WPPasswordController *vc = [[WPPasswordController alloc] init];
                 vc.passwordType = indexPath.row == 0 ? @"1" : @"2";
-                vc.navigationItem.title = indexPath.row == 0 ? @"重置登陆密码" : @"重置支付密码";
+                vc.navigationItem.title = indexPath.row == 0 ? @"重置登录密码" : @"重置支付密码";
                 [self.navigationController pushViewController:vc animated:YES];
             }
             break;

@@ -130,8 +130,8 @@
 - (void)settingSubAccount
 {
     __weakSelf
-    [WPHelpTool alertControllerTitle:@"请选择" rowOneTitle:@"删除子账户" rowTwoTitle:@"重置密码" rowOne:^(UIAlertAction *alertAction) {
-        [WPHelpTool alertControllerTitle:@"您确定要删除该子账户嘛" confirmTitle:@"删除" confirm:^(UIAlertAction *alertAction) {
+    [WPHelpTool alertControllerTitle:nil rowOneTitle:@"删除子账户" rowTwoTitle:@"重置密码" rowOne:^(UIAlertAction *alertAction) {
+        [WPHelpTool alertControllerTitle:@"确定删除该子账户" confirmTitle:@"删除" confirm:^(UIAlertAction *alertAction) {
             [weakSelf postSubAccountDeleteData];
         } cancel:nil];
     } rowTwo:^(UIAlertAction *alertAction) {

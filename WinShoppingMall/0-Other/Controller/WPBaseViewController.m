@@ -16,6 +16,8 @@
 #import "WPGatheringCodeController.h"
 #import "WPJpushServiceController.h"
 #import "WPNavigationController.h"
+#import "JPUSHService.h"
+
 
 @interface WPBaseViewController () <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -129,19 +131,45 @@
     }
 }
 
+#pragma mark - 重新登录
+
 - (void)userRegisterAgain
 {
     __weakSelf
-    [WPHelpTool alertControllerTitle:@"登陆超时，请重新登陆" confirmTitle:@"重新登陆" confirm:^(UIAlertAction *alertAction) {
-        if (!weakSelf.navigationController) {
-            [weakSelf dismissViewControllerAnimated:YES completion:nil];
-        }
-        WPRegisterController *vc = [[WPRegisterController alloc] init];
-        WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
-        [WPHelpTool rootViewController:navi];
-        [WPUserInfor sharedWPUserInfor].clientId = nil;
-        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+    [WPHelpTool alertControllerTitle:@"登录超时，请重新登录" confirmTitle:@"重新登录" confirm:^(UIAlertAction *alertAction) {
+        [weakSelf userQuitRegister];
     } cancel:nil];
+}
+
+- (void)userQuitRegister
+{
+    if (!self.navigationController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    
+    WPRegisterController *vc = [[WPRegisterController alloc] init];
+    WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
+    [WPHelpTool rootViewController:navi];
+    
+    [WPUserInfor sharedWPUserInfor].clientId = nil;
+    [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+    
+    [JPUSHService setTags:nil alias:@"" fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
+        
+        if (iResCode == 0) {//对应的状态码返回为0，代表成功
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:kJPFNetworkDidLoginNotification object:nil];
+        }
+    }];
+    [self postUserLogout];
+}
+
+- (void)postUserLogout
+{
+    [WPHelpTool postWithURL:WPUserLogoutURL parameters:nil success:^(id success) {
+        
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 - (void)alertControllerWithPhoto:(BOOL)isPhoto
@@ -150,7 +178,7 @@
     UIImagePickerController *imagePicControl = [[UIImagePickerController alloc] init];
     imagePicControl.delegate = self;
     imagePicControl.allowsEditing = YES;
-    [WPHelpTool alertControllerTitle:@"请选择" rowOneTitle:@"拍照" rowTwoTitle:isPhoto ? @"从相册中选择" : nil rowOne:^(UIAlertAction *alertAction) {
+    [WPHelpTool alertControllerTitle:nil rowOneTitle:@"拍照" rowTwoTitle:isPhoto ? @"从相册中选择" : nil rowOne:^(UIAlertAction *alertAction) {
         AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
         NSError *error;
         AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:captureDevice error:&error];

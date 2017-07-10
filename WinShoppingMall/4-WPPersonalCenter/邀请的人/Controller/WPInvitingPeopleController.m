@@ -105,7 +105,7 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
             }
             [weakSelf.dataArray addObjectsFromArray:[WPInvitingPeopleModel mj_objectArrayWithKeyValuesArray:result[@"myRefers"]]];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"myRefers"] noResultLabel:weakSelf.noResultLabel title:@"您还没有邀请的人哦"];
+        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"myRefers"] noResultLabel:weakSelf.noResultLabel title:@"您还没有邀请的人"];
     } failure:^(NSError *error) {
         [weakSelf.tableView.mj_footer endRefreshing];
     }];
