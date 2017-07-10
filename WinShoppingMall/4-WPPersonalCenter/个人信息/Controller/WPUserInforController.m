@@ -84,8 +84,8 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
         _userInforButton = [[WPUserInforButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 100)];
         _userInforButton.backgroundColor = [UIColor whiteColor];
         self.userInforButton.userImageView.image = self.avaterImage;
-        NSArray *lvArray = @[@"白银会员", @"黄金会员", @"铂金会员", @"钻石会员"];
-        [_userInforButton userInforWithName:self.model.phone vip:lvArray[self.model.merchantlvid - 1] rate:nil arrowHidden:YES];
+        [_userInforButton userInforWithName:self.model.phone vip:[WPUserTool userMemberVipWith:self.model.merchantlvid] rate:nil arrowHidden:NO];
+        [_userInforButton addTarget:self action:@selector(userInforAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _userInforButton;
 }
@@ -187,22 +187,14 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
                 case 0:  //手机号
                     break;
                     
-                case 1: {  //修改个人信息
-                    WPEditUserInfoController *vc = [[WPEditUserInfoController alloc] init];
-                    vc.model = self.model;
-                    vc.avaterImage = self.userInforButton.userImageView.image;
-                    [self.navigationController pushViewController:vc animated:YES];
-                }
-                    break;
-                    
-                case 2: {  //修改密码
+                case 1: {  //修改密码
                     WPSelectController *vc = [[WPSelectController alloc] init];
                     vc.selectType = 1;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
                     break;
                     
-                case 3: {  //安全管理
+                case 2: {  //安全管理
                     WPTouchIDController *vc = [[WPTouchIDController alloc] init];
                     [self.navigationController pushViewController:vc animated:YES];
                 }
@@ -267,7 +259,7 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
                     __weakSelf
                     [shareView setShareBlock:^(NSString *appType){
                         WPShareTool *shareTool = [[WPShareTool alloc] init];
-                        if ([appType isEqualToString:@"二维码"])
+                        if ([appType isEqualToString:[[WPUserTool shareWayArray] lastObject]])
                         {
                             WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
                             vc.codeString = self.shareUrl;
@@ -302,8 +294,15 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 
 
 #pragma mark - Action
+//修改个人信息
+- (void)userInforAction
+{
+    WPEditUserInfoController *vc = [[WPEditUserInfoController alloc] init];
+    vc.model = self.model;
+    vc.avaterImage = self.userInforButton.userImageView.image;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
-#pragma mark - 退出登录
 - (void)userLogoutButtonAction:(UIButton *)button
 {
     __weakSelf
@@ -319,7 +318,7 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 {
     NSArray *arrayA;
 
-    arrayA = @[[NSString stringWithFormat:@"手机号:  %@",self.model.phone], @"修改个人信息", @"密码设置", @"安全管理"];
+    arrayA = @[[NSString stringWithFormat:@"手机号:  %@",self.model.phone], @"密码设置", @"安全管理"];
     
     NSArray *arrayB = @[@"用户帮助", @"意见反馈", @"用户举报",
                         [NSString stringWithFormat:@"客服电话:  %@", WPAppTelNumber]];

@@ -12,6 +12,16 @@
 @interface WPUserTool : NSObject
 
 /**
+ * 分享方式数组
+ */
++ (NSMutableArray *)shareWayArray;
+
+/**
+ * 分享方式图片数组
+ */
++ (NSMutableArray *)shareImageArray;
+
+/**
  * 支付方式名数组
  */
 + (NSMutableArray *)payTypeTitleArray;
@@ -42,12 +52,12 @@
 + (NSString *)payTypeTitleWith:(NSInteger)row;
 
 /**
- *  代理等级
+ *  会员等级
  */
 + (NSString *)userMemberVipWith:(NSInteger)vipID;
 
 /**
- *  会员等级
+ *  代理等级
  */
 + (NSString *)userAgencyVipWith:(NSInteger)vipID;
 

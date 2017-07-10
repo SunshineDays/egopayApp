@@ -214,10 +214,11 @@
     else {
         if ([self.payType isEqualToString:@"1"]) {
             if ([WPAppTool isPayTouchID]) {
+                __weakSelf
                 [WPHelpTool payWithTouchIDsuccess:^(id success) {
-                    [self pushWithChargeDataWithPassword:success];
+                    [weakSelf pushWithChargeDataWithPassword:success];
                 } failure:^(NSError *error) {
-                    [self initPayPopupView];
+                    [weakSelf initPayPopupView];
                 }];
             }
             else {

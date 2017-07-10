@@ -15,28 +15,45 @@
 
 @implementation WPShareTool
 
+
 - (void)shareWithUrl:(NSString *)url title:(NSString *)title description:(NSString *)description appType:(NSString *)appType
 {
-    if ([appType isEqualToString:@"微信好友"]) {
-        [self shareToWeiXinWithUrl:url title:title description:description shareType:0];
+    for (NSInteger i = 0 ; i < [[WPUserTool shareWayArray] count]; i++) {
+        if ([appType isEqualToString:[WPUserTool shareWayArray][i]]) {
+            [self shareWayWithUrl:url title:title description:description shareType:i];
+        }
     }
-    else if ([appType isEqualToString:@"微信朋友圈"]) {
-        [self shareToWeiXinWithUrl:url title:title description:description shareType:1];
-    }
-    else if ([appType isEqualToString:@"QQ好友"]) {
-        [self shareToQQWithUrl:url title:title description:description shareType:0];
-    }
-    else if ([appType isEqualToString:@"QQ空间"]) {
-        [self shareToQQWithUrl:url title:title description:description shareType:1];
-    }
-    else if ([appType isEqualToString:@"新浪微博"]) {
-        [self shareToSinaWithUrl:url title:title description:description];
-    }
-    else if ([appType isEqualToString:@"Safari中打开"]) {
-        [self shareToSafariWithUrl:url];
-    }
-    else if ([appType isEqualToString:@"复制链接"]) {
-        [self shareToCopyWithUrl:url];
+}
+
+- (void)shareWayWithUrl:(NSString *)url title:(NSString *)title description:(NSString *)description shareType:(NSInteger)shareType
+{
+    switch (shareType) {
+        case 0:  //微信好友
+            [self shareToWeiXinWithUrl:url title:title description:description shareType:0];
+            break;
+            
+        case 1:  //微信朋友圈
+            [self shareToWeiXinWithUrl:url title:title description:description shareType:1];
+            break;
+            
+        case 2:  //QQ好友
+            [self shareToQQWithUrl:url title:title description:description shareType:0];
+            break;
+            
+        case 3:  //QQ空间
+            [self shareToQQWithUrl:url title:title description:description shareType:1];
+            break;
+            
+        case 4:  //Safari中打开
+            [self shareToSafariWithUrl:url];
+            break;
+            
+        case 5:  //复制链接
+            [self shareToCopyWithUrl:url];
+            break;
+            
+        default:
+            break;
     }
 }
 

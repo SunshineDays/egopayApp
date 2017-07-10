@@ -170,11 +170,12 @@
     else {
         if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"]) {
             if ([WPAppTool isPayTouchID]) {
+                __weakSelf
                 [WPHelpTool payWithTouchIDsuccess:^(id success) {
-                    [self pushMerchantGradeDataWithPayPassword:success];
+                    [weakSelf pushMerchantGradeDataWithPayPassword:success];
                     
                 } failure:^(NSError *error) {
-                    [self initPayPopupView];
+                    [weakSelf initPayPopupView];
                 }];
             }
             else {

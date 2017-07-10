@@ -32,7 +32,6 @@ NSString * const kAppDefaultsVersionKey = @"CFBundleShortVersionString";
         else {
             if ([WPAppTool isRegisterTouchID]) {
                 return [[WPTouchIDShowController alloc] init];
-//                return [[WPTabBarController alloc] init];
             } else {
                 return [[WPTabBarController alloc] init];
             }

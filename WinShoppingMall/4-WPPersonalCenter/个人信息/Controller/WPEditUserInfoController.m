@@ -274,7 +274,6 @@
                 weakSelf.avatarImageView.image = avaterImage;
                 NSDictionary *statusDict = [[NSDictionary alloc] initWithObjectsAndKeys:avaterImage, @"avatarImage", nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationChangeUserInfor object:nil userInfo:statusDict];
-                
             }
             //  修改个人信息
             else {

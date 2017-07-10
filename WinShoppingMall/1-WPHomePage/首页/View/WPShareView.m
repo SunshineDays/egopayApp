@@ -49,15 +49,18 @@
         _titleArray = [[NSMutableArray alloc] init];
         _imageArray = [[NSMutableArray alloc] init];
         if ([WXApi isWXAppInstalled]) {
-            [_titleArray addObjectsFromArray:@[@"微信好友", @"微信朋友圈"]];
-            [_imageArray addObjectsFromArray:@[@"share_wechat", @"share_weixin"]];
+            
+            [_titleArray addObjectsFromArray:@[[WPUserTool shareWayArray][0], [WPUserTool shareWayArray][1]]];
+            [_imageArray addObjectsFromArray:@[[WPUserTool shareImageArray][0], [WPUserTool shareImageArray][1]]];
         }
         if ([TencentOAuth iphoneQQInstalled]) {
-            [_titleArray addObjectsFromArray:@[@"QQ好友", @"QQ空间"]];
-            [_imageArray addObjectsFromArray:@[@"share_qq", @"share_qqzone"]];
+            
+            [_titleArray addObjectsFromArray:@[[WPUserTool shareWayArray][2], [WPUserTool shareWayArray][3]]];
+            [_imageArray addObjectsFromArray:@[[WPUserTool shareImageArray][2], [WPUserTool shareImageArray][3]]];
+            
         }
-        [_titleArray addObjectsFromArray:@[@"Safari中打开", @"复制链接", @"二维码"]];
-        [_imageArray addObjectsFromArray:@[@"share_safari", @"share_copyurl", @"share_appCode"]];
+        [_titleArray addObjectsFromArray:@[[WPUserTool shareWayArray][4], [WPUserTool shareWayArray][5], [WPUserTool shareWayArray][6]]];
+        [_imageArray addObjectsFromArray:@[[WPUserTool shareImageArray][4], [WPUserTool shareImageArray][5], [WPUserTool shareImageArray][6]]];
         
         [self initShareView];
     }

@@ -12,6 +12,7 @@
 
 @property (nonatomic, copy) void(^shareCodeBlock)(NSString *shareUrl);
 
+
 - (void)shareWithUrl:(NSString *)url title:(NSString *)title description:(NSString *)description appType:(NSString *)appType;
 
 @end

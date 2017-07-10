@@ -10,6 +10,18 @@
 
 @implementation WPUserTool
 
+/** 分享方式数组 */
++ (NSMutableArray *)shareWayArray
+{
+    return [NSMutableArray arrayWithArray:@[@"微信好友", @"微信朋友圈", @"QQ好友", @"QQ空间", @"Safari中打开", @"复制链接", @"二维码"]];
+}
+
+/** 分享方式图片数组 */
++ (NSMutableArray *)shareImageArray
+{
+    return [NSMutableArray arrayWithArray:@[@"share_wechat", @"share_weixin", @"share_qq", @"share_qqzone", @"share_safari", @"share_copyurl", @"share_appCode"]];
+}
+
 /** 支付方式名数组 */
 + (NSMutableArray *)payTypeTitleArray
 {
@@ -51,14 +63,14 @@
     return payTypeArray[row];
 }
 
-/**  代理等级 */
+/**  会员等级 */
 + (NSString *)userMemberVipWith:(NSInteger)vipID
 {
     NSArray *memberVipArray = @[@"白银会员",@"黄金会员", @"铂金会员", @"钻石会员"];
     return memberVipArray[vipID - 1];
 }
 
-/**  会员等级 */
+/**  代理等级 */
 + (NSString *)userAgencyVipWith:(NSInteger)vipID
 {
     NSArray *agencyVipArray = @[@"您还不是代理", @"银牌代理", @"金牌代理", @"钻石代理", @"黑钻代理"];
@@ -75,28 +87,28 @@
 /**  支付状态 */
 + (NSString *)typeStateWith:(NSInteger)typeID
 {
-    NSArray *stateArray = @[@"失败", @"成功", @"", @"取消", @"待处理", @"待确认", @"待返回", @"异常单", @" ", @" "];
+    NSArray *stateArray = @[@"失败", @"成功", @"", @"取消", @"待处理", @"待确认", @"待返回", @"异常单", @"", @""];
     return stateArray[typeID];
 }
 
 /**  支付状态字体颜色 */
 + (NSString *)typeStateColorWith:(NSInteger)typeID
 {
-    NSArray *stateColorArray = @[@"EE3B3B", @"", @"", @"909090", @"50bca3", @"50bca3", @"50bca3", @"EE3B3B", @" ", @" "];
+    NSArray *stateColorArray = @[@"EE3B3B", @"", @"", @"909090", @"50bca3", @"50bca3", @"50bca3", @"EE3B3B", @"", @""];
     return stateColorArray[typeID];
 }
 
 /**  支付目的 */
 + (NSString *)typePurposeWith:(NSInteger)typeID
 {
-    NSArray *typeArray = @[@" ", @"充值", @"转账", @"还款", @"提现到卡", @"付款", @"二维码收款", @"退款", @"提现到余额", @"商户升级", @"代理升级", @" ", @" "];
+    NSArray *typeArray = @[@"", @"充值", @"转账", @"还款", @"提现到卡", @"付款", @"二维码收款", @"退款", @"提现到余额", @"商户升级", @"代理升级", @"", @""];
     return typeArray[typeID];
 }
 
 /**  支付方式 */
 + (NSString *)typeWayWith:(NSInteger)typeID
 {
-    NSArray *wayArray = @[@" ", @"银行卡", @"微信", @"支付宝", @"余额", @"国际信用卡", @"QQ钱包", @"京东钱包", @" "];
+    NSArray *wayArray = @[@"", @"银行卡", @"微信", @"支付宝", @"余额", @"国际信用卡", @"QQ钱包", @"京东钱包", @""];
     return wayArray[typeID];
 }
 

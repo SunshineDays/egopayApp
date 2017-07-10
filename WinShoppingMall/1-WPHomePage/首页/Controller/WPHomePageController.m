@@ -303,7 +303,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
     __weakSelf
     [shareView setShareBlock:^(NSString *appType){
         WPShareTool *shareTool = [[WPShareTool alloc] init];
-        if ([appType isEqualToString:@"二维码"])
+        if ([appType isEqualToString:[[WPUserTool shareWayArray] lastObject]])
         {
             WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
             vc.codeString = weakSelf.shareUrl;
