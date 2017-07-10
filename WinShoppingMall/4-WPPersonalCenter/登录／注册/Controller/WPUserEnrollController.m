@@ -178,7 +178,7 @@
 
 - (void)changeButtonSurface
 {
-    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length == 11 && self.verificationCodeCell.textField.text.length == 6 && self.passwordCell.textField.text.length >= 6 && self.passwordConfirmCell.textField.text.length >= 6) ? YES : NO];
+    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length > 6 && self.verificationCodeCell.textField.text.length == 6 && self.passwordCell.textField.text.length >= 6 && self.passwordConfirmCell.textField.text.length >= 6) ? YES : NO];
 }
 
 - (void)timerClick {

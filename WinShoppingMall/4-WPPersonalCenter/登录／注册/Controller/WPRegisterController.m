@@ -163,7 +163,7 @@
 {
     [[UIApplication sharedApplication].keyWindow endEditing:YES];
     
-    if ((![WPRegex validateMobile:self.accountCell.textField.text] && self.accountCell.textField.text.length == 11) || (self.accountCell.textField.text.length != 11 && self.accountCell.textField.text.length != 9)) {
+    if ((![WPRegex validateMobile:self.accountCell.textField.text] && self.accountCell.textField.text.length > 6) || (self.accountCell.textField.text.length != 11 && self.accountCell.textField.text.length != 9)) {
         [WPProgressHUD showInfoWithStatus:@"账号格式错误"];
     }
     else if (self.passwordCell.textField.text.length < 6) {

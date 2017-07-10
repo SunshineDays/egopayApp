@@ -146,10 +146,10 @@
 - (void)changeButtonSurface
 {
     if (self.cvvCell.hidden) {
-        [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length == 11 && [self.transferView.moneyTextField.text floatValue] > 0) ? YES : NO];
+        [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length > 6 && [self.transferView.moneyTextField.text floatValue] > 0) ? YES : NO];
     }
     else {
-        [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length == 11 && [self.transferView.moneyTextField.text floatValue] > 0 && self.cvvCell.textField.text.length == 3) ? YES : NO];
+        [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length > 6 && [self.transferView.moneyTextField.text floatValue] > 0 && self.cvvCell.textField.text.length == 3) ? YES : NO];
     }
 }
 

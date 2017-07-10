@@ -128,6 +128,8 @@
 		485900B41EBC3288007E1F83 /* WPNoResultLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 485900B31EBC3288007E1F83 /* WPNoResultLabel.m */; };
 		485927B41F0DDF4C007BB973 /* WPUserTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 485927B31F0DDF4C007BB973 /* WPUserTool.m */; };
 		4859E0A11ED8293E001B152B /* WPRowTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4859E09F1ED8293E001B152B /* WPRowTableViewCell.m */; };
+		485D6F9B1F13195B00C4AA4C /* WPAgencyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 485D6F991F13195B00C4AA4C /* WPAgencyCell.m */; };
+		485D6F9C1F13195B00C4AA4C /* WPAgencyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 485D6F9A1F13195B00C4AA4C /* WPAgencyCell.xib */; };
 		485DDD5A1F0B9A46006CED12 /* WPMessageDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485DDD591F0B9A46006CED12 /* WPMessageDetailController.m */; };
 		485DDD5D1F0B9ACA006CED12 /* WPUserWithDrawController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485DDD5C1F0B9ACA006CED12 /* WPUserWithDrawController.m */; };
 		485DDD621F0B9B04006CED12 /* WPRechargeStateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 485DDD5F1F0B9B04006CED12 /* WPRechargeStateController.m */; };
@@ -432,6 +434,9 @@
 		485927B31F0DDF4C007BB973 /* WPUserTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPUserTool.m; sourceTree = "<group>"; };
 		4859E09E1ED8293E001B152B /* WPRowTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPRowTableViewCell.h; sourceTree = "<group>"; };
 		4859E09F1ED8293E001B152B /* WPRowTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPRowTableViewCell.m; sourceTree = "<group>"; };
+		485D6F981F13195B00C4AA4C /* WPAgencyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPAgencyCell.h; path = "WinShoppingMall/3-WPDelegate/代理/View/WPAgencyCell.h"; sourceTree = SOURCE_ROOT; };
+		485D6F991F13195B00C4AA4C /* WPAgencyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPAgencyCell.m; path = "WinShoppingMall/3-WPDelegate/代理/View/WPAgencyCell.m"; sourceTree = SOURCE_ROOT; };
+		485D6F9A1F13195B00C4AA4C /* WPAgencyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WPAgencyCell.xib; path = "WinShoppingMall/3-WPDelegate/代理/View/WPAgencyCell.xib"; sourceTree = SOURCE_ROOT; };
 		485DDD581F0B9A46006CED12 /* WPMessageDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPMessageDetailController.h; sourceTree = "<group>"; };
 		485DDD591F0B9A46006CED12 /* WPMessageDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPMessageDetailController.m; sourceTree = "<group>"; };
 		485DDD5B1F0B9ACA006CED12 /* WPUserWithDrawController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPUserWithDrawController.h; sourceTree = "<group>"; };
@@ -1289,6 +1294,9 @@
 		485073AA1EA8613900422016 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				485D6F981F13195B00C4AA4C /* WPAgencyCell.h */,
+				485D6F991F13195B00C4AA4C /* WPAgencyCell.m */,
+				485D6F9A1F13195B00C4AA4C /* WPAgencyCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2032,6 +2040,7 @@
 				489183FE1EA8974D00EE445B /* LaunchScreen.storyboard in Resources */,
 				484FC3721EDFF8060074DEA8 /* WPRowTableViewCell.xib in Resources */,
 				485074821EA8613900422016 /* WPBankCardCell.xib in Resources */,
+				485D6F9C1F13195B00C4AA4C /* WPAgencyCell.xib in Resources */,
 				4850746B1EA8613900422016 /* areaArray.plist in Resources */,
 				4891840C1EA8B24000EE445B /* WPProfitDetailCell.xib in Resources */,
 				489183FD1EA8974D00EE445B /* Assets.xcassets in Resources */,
@@ -2175,6 +2184,7 @@
 				4850743D1EA8613900422016 /* WPBarButton.m in Sources */,
 				485074741EA8613900422016 /* WPUserLoadPhotoDetailController.m in Sources */,
 				485DDD631F0B9B04006CED12 /* WPUserRechargeController.m in Sources */,
+				485D6F9B1F13195B00C4AA4C /* WPAgencyCell.m in Sources */,
 				483CB2131ECC278C00A5A65C /* WPKeyChainTool.m in Sources */,
 				4850742C1EA8613900422016 /* UIBarButtonItem+WPExtention.m in Sources */,
 				48278FFF1EF1152B0034EF62 /* WPImageButton.m in Sources */,

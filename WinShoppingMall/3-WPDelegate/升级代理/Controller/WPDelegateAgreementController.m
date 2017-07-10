@@ -101,7 +101,7 @@
                                 @"isAgreeAg" : @"1"
                                 };
     __weakSelf
-    [WPHelpTool postWithURL:WPDelegateURL parameters:parameter success:^(id success) {
+    [WPHelpTool postWithURL:WPAgencyURL parameters:parameter success:^(id success) {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         if ([type isEqualToString:@"1"]) {

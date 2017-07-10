@@ -53,7 +53,7 @@
 
 - (void)changeButtonSurface
 {
-    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:self.phoneCell.textField.text.length == 11 ? YES : NO];
+    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:self.phoneCell.textField.text.length > 6 ? YES : NO];
 }
 
 - (void)nextButtonAction

@@ -185,7 +185,7 @@
 
 - (void)changeButtonSurface
 {
-    [WPPublicTool buttonWithButton:self.nextButton userInteractionEnabled:(self.nameCell.textField.text.length > 1 && self.phoneCell.textField.text.length == 11 && self.shopNameCell.textField.text.length > 0 && self.shopAddressDetailCell.textField.text.length > 2) ? YES : NO];
+    [WPPublicTool buttonWithButton:self.nextButton userInteractionEnabled:(self.nameCell.textField.text.length > 1 && self.phoneCell.textField.text.length > 6 && self.shopNameCell.textField.text.length > 0 && self.shopAddressDetailCell.textField.text.length > 2) ? YES : NO];
 }
 
 - (void)sexButtonClick:(UIButton *)button

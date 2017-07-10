@@ -133,7 +133,7 @@
 
 - (void)changeButtonSurface
 {
-    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.branchCell.textField.text.length > 2 && self.numberCell.textField.text.length > 10 && self.phoneCell.textField.text.length == 11) ? YES : NO];
+    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.branchCell.textField.text.length > 2 && self.numberCell.textField.text.length > 10 && self.phoneCell.textField.text.length > 6) ? YES : NO];
 }
 
 - (void)bankCellClick:(UIButton *)button

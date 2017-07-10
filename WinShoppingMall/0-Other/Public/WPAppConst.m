@@ -148,7 +148,7 @@ NSString * const WPBillURL = @"client_queryTradeDetail";
 
 NSString * const WPCheckBillURL = @"client_qrCheckBill";
 
-NSString * const WPDelegateURL = @"client_agent_home";
+NSString * const WPAgencyURL = @"client_agent_home";
 
 NSString * const WPProfitDetailURL = @"client_beneDetails";
 

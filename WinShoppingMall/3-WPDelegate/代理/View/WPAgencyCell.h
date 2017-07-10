@@ -10,4 +10,6 @@
 
 @interface WPAgencyCell : UICollectionViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
 @end

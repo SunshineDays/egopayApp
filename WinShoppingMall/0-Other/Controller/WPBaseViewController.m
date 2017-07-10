@@ -160,12 +160,12 @@
             [[NSNotificationCenter defaultCenter] removeObserver:self name:kJPFNetworkDidLoginNotification object:nil];
         }
     }];
-    [self postUserLogout];
+    [self getUserLogout ];
 }
 
-- (void)postUserLogout
+- (void)getUserLogout
 {
-    [WPHelpTool postWithURL:WPUserLogoutURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPUserLogoutURL parameters:nil success:^(id success) {
         
     } failure:^(NSError *error) {
         

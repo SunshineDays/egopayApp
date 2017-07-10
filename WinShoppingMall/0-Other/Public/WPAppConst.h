@@ -158,7 +158,7 @@ UIKIT_EXTERN NSString * const WPBillURL;
 
 UIKIT_EXTERN NSString * const WPCheckBillURL;
 
-UIKIT_EXTERN NSString * const WPDelegateURL;
+UIKIT_EXTERN NSString * const WPAgencyURL;
 
 UIKIT_EXTERN NSString * const WPProfitDetailURL;
 

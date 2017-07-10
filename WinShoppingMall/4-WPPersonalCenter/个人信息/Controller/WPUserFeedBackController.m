@@ -107,7 +107,7 @@
         _textView.layer.borderWidth = 1.0f;
         _textView.layer.cornerRadius = WPCornerRadius;
         _textView.font = [UIFont systemFontOfSize:WPFontDefaultSize];
-        _textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字儿)" : @"请输入您的举报内容(不少于20字儿)";
+        _textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)";
         _textView.textColor = [UIColor placeholderColor];
         
         _textView.scrollEnabled = YES;
@@ -143,7 +143,7 @@
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    if ([textView.text isEqualToString:self.isFeedback ? @"请输入您的反馈内容(不少于20字儿)" : @"请输入您的举报内容(不少于20字儿)"]) {
+    if ([textView.text isEqualToString:self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)"]) {
         textView.text = @"";
     }
     textView.textColor = [UIColor blackColor];
@@ -151,7 +151,7 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if (textView.text.length == 0) {
-        textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字儿)" : @"请输入您的举报内容(不少于20字儿)";
+        textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)";
         textView.textColor = [UIColor placeholderColor];
     }
 }
@@ -180,7 +180,7 @@
 
 - (void)confrirmButtonClick:(UIButton *)button {
     if (self.textView.text.length < 20) {
-        [WPProgressHUD showInfoWithStatus:self.isFeedback ? @"反馈内容至少需要20个字儿" : @"举报内容至少需要20个字儿"];
+        [WPProgressHUD showInfoWithStatus:self.isFeedback ? @"反馈内容至少需要20字" : @"举报内容至少需要20字"];
     }
     else if (!([WPRegex validateMobile:self.textField.text] || self.textField.text.length == 6) && !self.isFeedback) {
         [WPProgressHUD showInfoWithStatus:@"手机号或商户号错误"];
