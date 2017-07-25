@@ -74,7 +74,7 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 {
     WPMessagesCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPMessageCellID];
     WPInvitingPeopleModel *model = self.dataArray[indexPath.row];
-    cell.titleLabel.text = [WPPublicTool stringWithStarString:[NSString stringWithFormat:@"%@", model.phone] headerIndex:3 footerIndex:4];
+    cell.titleLabel.text = [WPPublicTool stringStarWithString:[NSString stringWithFormat:@"%@", model.phone] headerIndex:3 footerIndex:4];
     return cell;
 }
 
@@ -96,17 +96,21 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
                                  @"curPage" : [NSString stringWithFormat:@"%ld", (long)self.page],
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:WPMyRefersURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPMyRefersURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            if (weakSelf.page == 1) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (weakSelf.page == 1)
+            {
                 [weakSelf.dataArray removeAllObjects];
             }
             [weakSelf.dataArray addObjectsFromArray:[WPInvitingPeopleModel mj_objectArrayWithKeyValuesArray:result[@"myRefers"]]];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"myRefers"] noResultLabel:weakSelf.noResultLabel title:@"您还没有邀请的人"];
-    } failure:^(NSError *error) {
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"myRefers"] noResultLabel:weakSelf.noResultLabel title:@"您还没有邀请的人"];
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_footer endRefreshing];
     }];
 }

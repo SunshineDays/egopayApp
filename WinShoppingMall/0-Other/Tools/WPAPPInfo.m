@@ -26,7 +26,7 @@ Single_Implementation(WPAPPInfo)
 
 + (NSString *)deviceId
 {
-    return [[[UIDevice currentDevice]identifierForVendor]UUIDString];
+    return [[[UIDevice currentDevice]identifierForVendor] UUIDString];
 }
 
 + (double)iOSVersion

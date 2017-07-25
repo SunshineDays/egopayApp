@@ -1,65 +1,56 @@
 PODS:
-  - AFNetworking (2.6.3):
-    - AFNetworking/NSURLConnection (= 2.6.3)
-    - AFNetworking/NSURLSession (= 2.6.3)
-    - AFNetworking/Reachability (= 2.6.3)
-    - AFNetworking/Security (= 2.6.3)
-    - AFNetworking/Serialization (= 2.6.3)
-    - AFNetworking/UIKit (= 2.6.3)
-  - AFNetworking/NSURLConnection (2.6.3):
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.6.3):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.6.3)
-  - AFNetworking/Security (2.6.3)
-  - AFNetworking/Serialization (2.6.3)
-  - AFNetworking/UIKit (2.6.3):
-    - AFNetworking/NSURLConnection
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - IQKeyboardManager (4.0.10)
-  - JCore (1.1.3)
-  - JPush (3.0.5):
+  - JCore (1.1.5)
+  - JPush (3.0.6):
     - JCore (~> 1.1.1)
   - MJExtension (3.0.13)
   - MJRefresh (3.1.12)
-  - SDCycleScrollView (1.65):
-    - SDWebImage (~> 3.7)
-  - SDWebImage (3.7.6):
-    - SDWebImage/Core (= 3.7.6)
-  - SDWebImage/Core (3.7.6)
-  - SVProgressHUD (1.1.3)
-  - UMengAnalytics-NO-IDFA (3.6.7)
-  - UMengSocial (4.4)
+  - SDCycleScrollView (1.66):
+    - SDWebImage (~> 4.0.0)
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
+  - SVProgressHUD (2.1.2)
+  - UMengSocial (5.0)
 
 DEPENDENCIES:
-  - AFNetworking (~> 2.6.2)
+  - AFNetworking (~> 3.1.0)
   - IQKeyboardManager (~> 4.0.8)
   - JPush (~> 3.0.5)
   - MJExtension (~> 3.0.10)
   - MJRefresh (~> 3.1.0)
   - SDCycleScrollView (~> 1.65)
-  - SDWebImage (~> 3.7.3)
-  - SVProgressHUD (~> 1.1.3)
-  - UMengAnalytics-NO-IDFA (~> 3.6.7)
-  - UMengSocial (~> 4.3)
+  - SDWebImage (~> 4.0.0)
+  - SVProgressHUD (~> 2.1.2)
+  - UMengSocial (~> 5.0)
 
 SPEC CHECKSUMS:
-  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   IQKeyboardManager: 593ee99b88381f4b9ccb22bd680f22606351bd41
-  JCore: dff3c50e9a7522a508cd9096ca79165968e1aed3
-  JPush: dd0b776998aa705a6242b947bf72e5a640387cfe
+  JCore: 9bd9c770c877c583d98b90a68792b8361974c231
+  JPush: c41be50eb1a574a66aeb68d237f00a4ec6ec3a82
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
-  SDCycleScrollView: f72904c77698a7f93a41bcbbc2d78b073bf7326c
-  SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
-  SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
-  UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
-  UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0
+  SDCycleScrollView: e3ade90e9b3159bec04330b208fbfd81c3f3b671
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
+  UMengSocial: 48b67179c492a8cf7803fbb0438b8f55432e2fc1
 
-PODFILE CHECKSUM: 5e2ab3c02c79dbb86cac8d35882971e9665cc75f
+PODFILE CHECKSUM: 9a183e7c54b778b7a72d3c93e87aa11330b6d7a3
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.3.0.beta.2

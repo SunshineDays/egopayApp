@@ -38,7 +38,8 @@ static NSString *const WPBillCellID = @"WPBillCellID";
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = self.isCheck ? @"对账" : @"账单";
@@ -59,7 +60,8 @@ static NSString *const WPBillCellID = @"WPBillCellID";
 
 #pragma mark - Init
 
-- (NSMutableArray *)billArray {
+- (NSMutableArray *)billArray
+{
     if (!_billArray) {
         _billArray = [[NSMutableArray alloc] init];
     }
@@ -79,7 +81,8 @@ static NSString *const WPBillCellID = @"WPBillCellID";
     return _titleView;
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 50, kScreenWidth, kScreenHeight - WPNavigationHeight - 50) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor cellColor];
@@ -94,26 +97,31 @@ static NSString *const WPBillCellID = @"WPBillCellID";
     return _tableView;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.billArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPBillCell *cell = [tableView dequeueReusableCellWithIdentifier:WPBillCellID];
     cell.model = self.billArray[indexPath.row];
     
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 80;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     WPBillDetailController *vc = [[WPBillDetailController alloc] init];
     vc.model = self.billArray[indexPath.row];
@@ -138,7 +146,8 @@ static NSString *const WPBillCellID = @"WPBillCellID";
     vc.type = 4;
     
     __weakSelf
-    vc.selecteNameBlock = ^(NSString *nameStr) {
+    vc.selecteNameBlock = ^(NSString *nameStr)
+    {
         weakSelf.year = [nameStr substringToIndex:4];
         weakSelf.month = [nameStr substringWithRange:NSMakeRange(nameStr.length - 3, 2)];
         weakSelf.dateString = [NSString stringWithFormat:@"%@%@", self.year, self.month];
@@ -150,17 +159,21 @@ static NSString *const WPBillCellID = @"WPBillCellID";
 
 #pragma mark - Data
 
-- (void)getBillListData {
+- (void)getBillListData
+{
     NSDictionary *parameters = @{
                                  @"curPage" : [NSString stringWithFormat:@"%ld", (long)self.page],
                                  @"queryDate" : self.dateString
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:self.isCheck ? WPCheckBillURL : WPBillURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:self.isCheck ? WPCheckBillURL : WPBillURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            if (weakSelf.page == 1) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (weakSelf.page == 1)
+            {
                 [weakSelf.billArray removeAllObjects];
             }
             [weakSelf.billArray addObjectsFromArray:[WPBillModel mj_objectArrayWithKeyValuesArray:result[@"tradeList"]]];
@@ -173,8 +186,9 @@ static NSString *const WPBillCellID = @"WPBillCellID";
             [_titleView.titleButton setTitle:titleStr forState:UIControlStateNormal];
             [weakSelf titleView];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"tradeList"] noResultLabel:weakSelf.noResultLabel title:@"暂无记录"];
-    } failure:^(NSError *error) {
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"tradeList"] noResultLabel:weakSelf.noResultLabel title:@"暂无记录"];
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
     }];

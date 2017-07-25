@@ -16,9 +16,6 @@
 
 Single_Interface(WPAPPInfo)
 
-/** 网络状态 */
-@property (nonatomic,copy) NSString *networkType;
-
 /**
  *  获取Version版本号
  */

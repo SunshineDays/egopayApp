@@ -31,7 +31,8 @@
     return self;
 }
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     _width = _width > 0 ? _width : 240;
     _maskWidth = _width;
     CGSize size = rect.size;

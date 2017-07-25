@@ -18,7 +18,8 @@
 
 @implementation WPNavigationController
 
-+ (void)initialize {
++ (void)initialize
+{
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     [navigationBar setBackgroundImage:[UIImage imageToColor:[UIColor colorWithRGBString:@"#1B82E3" alpha:1]]
                        forBarPosition:UIBarPositionAny
@@ -31,13 +32,16 @@
     navigationBar.tintColor = [UIColor blackColor];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.interactivePopGestureRecognizer.delegate = self;
 }
 
-- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if (self.childViewControllers.count > 0) {
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{   
+    if (self.childViewControllers.count > 0)
+    {
         viewController.hidesBottomBarWhenPushed = YES;
     }
 

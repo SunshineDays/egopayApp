@@ -12,7 +12,6 @@
 #import "WPBankCardController.h"
 #import "WPBankCardModel.h"
 #import "WPUserWithDrawView.h"
-#import "WPPayPopupController.h"
 #import "WPSuccessOrfailedController.h"
 #import "WPEditUserInfoModel.h"
 
@@ -32,7 +31,8 @@
 
 @implementation WPUserWithDrawController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"提现";
     self.view.backgroundColor = [UIColor cellColor];
@@ -84,29 +84,11 @@
     return _confirmButton;
 }
 
-- (void)initPayPopupView
-{
-    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
-    vc.titleString = [NSString stringWithFormat:@"提现金额:%@元", self.withDrawView.moneyTextField.text];
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    __weakSelf
-    vc.payPasswordBlock = ^(NSString *payPassword) {
-        [weakSelf pushWithdrawDataWithPassword:payPassword];
-    };
-    vc.forgetPasswordBlock = ^{
-        WPPasswordController *vc = [[WPPasswordController alloc] init];
-        vc.passwordType = @"2";
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    };
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
-    
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateMoneyNumber:textField.text range:range replacementString:string];
+    return [WPJudgeTool validatePrice:textField.text range:range replacementString:string];
 }
 
 #pragma mark - Action
@@ -116,17 +98,18 @@
     WPBankCardController *vc = [[WPBankCardController alloc] init];
     vc.showCardType = @"3";
     __weakSelf
-    vc.cardInfoBlock = ^(WPBankCardModel *model) {
+    vc.cardInfoBlock = ^(WPBankCardModel *model)
+    {
         weakSelf.model = model;
-        [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] replaceColor:[UIColor placeholderColor] index:model.bankName.length]];
-        weakSelf.cardCell.cardImageView.image = [WPUserTool payBankImageCode:model.bankCode];
+        [WPPublicTool payCardWithView:weakSelf.cardCell model:model];
     };
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)moneyTextFieldAction
 {
-    if ([self.withDrawView.moneyTextField.text floatValue] > self.userInfoModel.avl_balance) {
+    if ([self.withDrawView.moneyTextField.text floatValue] > self.userInfoModel.avl_balance)
+    {
         self.withDrawView.moneyTextField.text = [NSString stringWithFormat:@"%.2f", self.userInfoModel.avl_balance];
     }
     [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:[self.withDrawView.moneyTextField.text floatValue] > 0 ? YES : NO];
@@ -140,26 +123,43 @@
 
 - (void)confirmButtonAction
 {
-    if ([self.cardCell.contentLabel.text isEqualToString:@"请选择银行卡"]) {
+    if ([self.cardCell.contentLabel.text isEqualToString:@"请选择银行卡"])
+    {
         [WPProgressHUD showInfoWithStatus:@"请选择银行卡"];
     }
-    else if ([self.withDrawView.moneyTextField.text floatValue] == 0) {
+    else if ([self.withDrawView.moneyTextField.text floatValue] == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入金额"];
     }
-    else {
-        if ([WPAppTool isPayTouchID]) {
+    else
+    {
+        if ([WPJudgeTool isPayTouchID])
+        {
             __weakSelf
-            [WPHelpTool payWithTouchIDsuccess:^(id success) {
+            [WPHelpTool payWithTouchIDsuccess:^(id success)
+            {
                 [weakSelf pushWithdrawDataWithPassword:success];
                 
-            } failure:^(NSError *error) {
+            } failure:^(NSError *error)
+            {
                 [weakSelf initPayPopupView];
             }];
         }
-        else {
+        else
+        {
             [self initPayPopupView];
         }
     }
+}
+
+- (void)initPayPopupView
+{
+    __weakSelf
+    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"提现金额:%@元", self.withDrawView.moneyTextField.text] navigationController:self.navigationController success:^(id success)
+    {
+        [weakSelf pushWithdrawDataWithPassword:success];
+        
+    }];
 }
 
 #pragma mark - Data
@@ -167,10 +167,12 @@
 - (void)getUserInforData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             weakSelf.userInfoModel = [WPEditUserInfoModel mj_objectWithKeyValues:result];
             [weakSelf confirmButton];
         }
@@ -188,17 +190,17 @@
                                  @"payPassword" : [WPPublicTool base64EncodeString:passwordString]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPWithdrawURL parameters:parameters success:^(id success) {
-        
-        
+    [WPHelpTool postWithURL:WPWithdrawURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             WPSuccessOrfailedController *vc = [[WPSuccessOrfailedController alloc] init];
             vc.navigationItem.title = @"提现结果";
             [weakSelf.navigationController pushViewController:vc animated:YES];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }

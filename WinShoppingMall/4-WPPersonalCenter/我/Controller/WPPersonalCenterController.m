@@ -27,6 +27,7 @@
 #import "WPUserInforButton.h"
 #import "WPMessagesCenterController.h"
 #import "WPSubAccountListController.h"
+#import "WPMerchantApproveInforController.h"
 
 static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
@@ -98,9 +99,9 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         _userInforButton.backgroundColor = [UIColor whiteColor];
         [_userInforButton addTarget:self action:@selector(userInfoButtonClick) forControlEvents:UIControlEventTouchUpInside];
         
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.model.picurl]];
-        _userInforButton.userImageView.image = data ? [UIImage imageWithData:data] : _userInforButton.userImageView.image;
-        [_userInforButton userInforWithName:self.model.phone vip:[WPUserTool userMemberVipWith:self.model.merchantlvid] rate:nil arrowHidden:NO];
+        [_userInforButton.userImageView sd_setImageWithURL:[NSURL URLWithString:self.model.picurl] placeholderImage:[UIImage imageNamed:@"titlePlaceholderImage"] options:SDWebImageRefreshCached];
+        
+        [_userInforButton userInforWithName:self.model.phone vip:[WPUserTool userMemberVipWithMerchantlvID:self.model.merchantlvid] rate:nil arrowHidden:NO];
         self.tableView.tableHeaderView = _userInforButton;
     
     }
@@ -157,84 +158,99 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    switch (indexPath.row) {
-        case 0: {  //余额
-            if ([WPAppTool isPassIDCardApprove]) {
+    switch (indexPath.row)
+    {
+        case 0:  // 余额
+        {
+            if ([WPJudgeTool isIDCardApprove])
+            {
                 WPUserMoneyController *vc = [[WPUserMoneyController alloc] init];
                 vc.model = self.model;
                 [self.navigationController pushViewController:vc animated:YES];
             }
-            else {
+            else
+            {
                 [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
             }
-        }
             break;
-            
-        case 1: {  //银行卡
+        }
+        case 1:  // 银行卡
+        {
             WPBankCardController *vc = [[WPBankCardController alloc] init];
             vc.showCardType = @"1";
             [self.navigationController pushViewController:vc animated:YES];
-        }
             break;
-            
-        case 2: {  //实名认证
+        }
+        case 2:
+        {  // 实名认证
             WPAutonymApproveController *vc = [[WPAutonymApproveController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
-        }
             break;
+        }
             
-        case 3: {  //商家认证
+        case 3:
+        {  // 商家认证
 //            WPMerchantUploadController *vc = [[WPMerchantUploadController alloc] init];
 //            [self.navigationController pushViewController:vc animated:YES];
-            if ([WPAppTool isPassIDCardApprove]) {
-                if ([WPAppTool isPassShopApprove]) {
+            if ([WPJudgeTool isIDCardApprove])
+            {
+                if ([WPJudgeTool isShopApprove])
+                {
                     WPStateController *vc = [[WPStateController alloc] init];
                     vc.status = @"1";
                     [self.navigationController pushViewController:vc animated:YES];
                 }
-                else {
+                else
+                {
                     [self getStateData];
                 }
             }
-            else {
+            else
+            {
                 [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
             }
-        }
             break;
+
+        }
             
-        case 4: {  //商户升级
-            if ([WPAppTool isPassIDCardApprove]) {
+        case 4:  // 商户升级
+        {
+            if ([WPJudgeTool isIDCardApprove])
+            {
                 WPProductController *vc = [[WPProductController alloc] init];
                 vc.navigationItem.title = @"商户升级";
                 [self.navigationController pushViewController:vc animated:YES];
             }
-            else {
+            else
+            {
                 [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
             }
-        }
             break;
-            
-        case 5: {  //子账户
-            if ([WPAppTool isPassIDCardApprove]) {
+        }
+        case 5:  // 子账户
+        {
+            if ([WPJudgeTool isIDCardApprove])
+            {
                 WPSubAccountListController *vc = [[WPSubAccountListController alloc] init];
                 [self.navigationController pushViewController:vc animated:YES];
             }
-            else {
+            else
+            {
                 [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
             }
-        }
             break;
+        }
             
-        case 6: {  //消息
+        case 6:  // 消息
+        {
             WPMessagesCenterController *vc = [[WPMessagesCenterController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
-        }
             break;
-            
+        }
         default:
             break;
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 
@@ -251,7 +267,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
 - (void)refreshUserAvater:(NSNotification *)notific
 {
-    if (notific.userInfo) {
+    if (notific.userInfo)
+    {
         self.userInforButton.userImageView.image = notific.userInfo[@"avatarImage"];
     }
     [self getUserInforData];
@@ -262,22 +279,25 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 - (void)getUserInforData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success)
+    {
         [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray removeAllObjects];
             weakSelf.model = [WPEditUserInfoModel mj_objectWithKeyValues:result];
             NSString *money = [NSString stringWithFormat:@"余额：%.2f元", weakSelf.model.avl_balance];
             [weakSelf.dataArray addObjectsFromArray:@[money, @"银行卡", @"实名认证", @"商家认证", @"商户升级", @"子账户", @"系统消息"]];
-            weakSelf.userInforButton = nil;
             [weakSelf userInforButton];
+            weakSelf.userInforButton.vipLabel.text = [WPUserTool userMemberVipWithMerchantlvID:weakSelf.model.merchantlvid];
         }
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView reloadData];
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         [weakSelf.indicatorView stopAnimating];
         [weakSelf.tableView.mj_header endRefreshing];
     }];
@@ -289,11 +309,12 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     [WPHelpTool getWithURL:WPQueryShopStatusURL parameters:nil success:^(id success) {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            
+        if ([type isEqualToString:@"1"])
+        {
             // 1 成功 2 失败 3 认证中
             NSString *status = [NSString stringWithFormat:@"%@",result[@"status"]];
-            if ([status isEqualToString:@"1"]) {
+            if ([status isEqualToString:@"1"])
+            {
                 [WPUserInfor sharedWPUserInfor].shopPassType = @"YES";
                 [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             }
@@ -305,7 +326,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
             
             [weakSelf.navigationController pushViewController:[status isEqualToString:@"2"] ? merVc : stateVc animated:YES];
         }
-        else {
+        else
+        {
             WPMerchantUploadController *vc = [[WPMerchantUploadController alloc] init];
             [weakSelf.navigationController pushViewController:vc animated:YES];
         }

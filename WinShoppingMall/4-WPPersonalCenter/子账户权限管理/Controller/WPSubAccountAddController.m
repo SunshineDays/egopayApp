@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong) WPButton *confirmButton;
 
+@property (nonatomic, strong) UILabel *stateLabel;
+
 @end
 
 @implementation WPSubAccountAddController
@@ -28,7 +30,7 @@
 {
     [super viewDidLoad];
     self.navigationItem.title = @"创建子账户";
-    [self confirmButton];
+    [self stateLabel];
 }
 
 - (WPRowTableViewCell *)nameCell
@@ -83,11 +85,25 @@
     return _confirmButton;
 }
 
+- (UILabel *)stateLabel
+{
+    if (!_stateLabel) {
+        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.confirmButton.frame) + 30, kScreenWidth - 2 * WPLeftMargin, 50)];
+        _stateLabel.textColor = [UIColor grayColor];
+        _stateLabel.numberOfLines = 0;
+        
+        NSString *stateString = @"添加子账户，您可以在多个设备上收款，方便、快捷";
+        _stateLabel.text = stateString;
+        
+    }
+    return _stateLabel;
+}
+
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 #pragma mark - Actin
@@ -99,16 +115,20 @@
 
 - (void)confirmButtonAction
 {
-    if (self.nameCell.textField.text.length < 2) {
+    if (self.nameCell.textField.text.length < 2)
+    {
         [WPProgressHUD showInfoWithStatus:@"子账户姓名格式错误"];
     }
-    else if (self.passwordCell.textField.text.length < 6) {
+    else if (self.passwordCell.textField.text.length < 6)
+    {
         [WPProgressHUD showInfoWithStatus:@"密码不能少于六位"];
     }
-    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text]) {
+    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"两次输入的密码不一致"];
     }
-    else {
+    else
+    {
         [self postSubAccountData];
     }
 }
@@ -121,11 +141,13 @@
                                  @"password" : [WPPublicTool base64EncodeString:self.passwordCell.textField.text]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPSubAccountAddURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPSubAccountAddURL parameters:parameters success:^(id success)
+    {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationSubAccountAddSuccess object:nil];
             WPSubAccountSettingController *vc = [[WPSubAccountSettingController alloc] init];
             vc.isFirst = YES;
@@ -134,7 +156,8 @@
             
             [weakSelf.navigationController pushViewController:vc animated:YES];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

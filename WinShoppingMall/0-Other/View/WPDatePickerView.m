@@ -9,6 +9,7 @@
 #import "WPDatePickerView.h"
 #import "UIColor+WPColor.h"
 #import "UIColor+WPExtension.h"
+#import "WPAppConst.h"
 
 @interface WPDatePickerView () <UIPickerViewDelegate, UIPickerViewDataSource>
 
@@ -24,22 +25,20 @@
 
 @end
 
-#define wp_ScreenWidth [[UIScreen mainScreen] bounds].size.width
-#define wp_ScreenHeight [[UIScreen mainScreen] bounds].size.height
-
 @implementation WPDatePickerView
 
 - (instancetype)initPickerView
 {
     if (self = [super init]) {
-        self.frame = CGRectMake(0, 0, wp_ScreenWidth, wp_ScreenHeight);
+        self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
         self.backgroundColor = [UIColor colorWithRGBString:@"#000000" alpha:0.3f];
         self.userInteractionEnabled = YES;
         [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelPickerView)]];
         [self initDateData];
         [self addSubview:self.pickerView];
-        [UIView animateWithDuration:0.2f animations:^{
-            self.pickerView.frame = CGRectMake(0, wp_ScreenHeight * 2 / 3, wp_ScreenWidth, wp_ScreenHeight / 3);
+        [UIView animateWithDuration:0.2f animations:^
+        {
+            self.pickerView.frame = CGRectMake(0, kScreenHeight * 2 / 3, kScreenWidth, kScreenHeight / 3);
         }];
     }
     return self;
@@ -57,7 +56,7 @@
 {
     if (!_pickerView) {
         _pickerView = [[UIPickerView alloc] init];
-        _pickerView.frame = CGRectMake(0, wp_ScreenHeight, wp_ScreenWidth, wp_ScreenHeight / 3);
+        _pickerView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight / 3);
         _pickerView.backgroundColor = [UIColor whiteColor];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
@@ -75,21 +74,24 @@
     self.year = [NSString stringWithFormat:@"%ld", (long)year];
     [formatter setDateFormat:@"MM"];
     NSInteger month = [[formatter stringFromDate:date] integerValue];
-    self.month = month < 10 ? [NSString stringWithFormat:@"0%ld", month] : [NSString stringWithFormat:@"%ld", (long)month];
+    self.month = month < 10 ? [NSString stringWithFormat:@"0%ld", (long)month] : [NSString stringWithFormat:@"%ld", (long)month];
     
     NSMutableArray *yearArrM = [[NSMutableArray alloc] init];
     NSMutableArray *monthArrM = [[NSMutableArray alloc] init];
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++)
+    {
         [yearArrM addObject:[NSString stringWithFormat:@"%ld", (long)year]];
         year ++;
     }
 
-    for (int i = 0; i < 12; i++) {
-        if (month > 12) {
+    for (int i = 0; i < 12; i++)
+    {
+        if (month > 12)
+        {
             month = month - 12;
         }
-        NSString *monthString = month < 10 ? [NSString stringWithFormat:@"0%ld", (long)month] : [NSString stringWithFormat:@"%ld", month];
+        NSString *monthString = month < 10 ? [NSString stringWithFormat:@"0%ld", (long)month] : [NSString stringWithFormat:@"%ld", (long)month];
 
         [monthArrM addObject:monthString];
         month ++;
@@ -106,7 +108,8 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    switch (component) {
+    switch (component)
+    {
         case 0:
             return [self.dataArray[0][@"year"] count];
             break;
@@ -121,8 +124,10 @@
     }
 }
 
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    if (!self.isSelected) {
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if (!self.isSelected)
+    {
         if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)]) {
             [self.pickerViewDelegate wp_selectedResultWithYear:self.dataArray[0][@"year"][0] month:self.dataArray[1][@"month"][0] day:nil];
         }
@@ -148,7 +153,8 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     self.isSelected = YES;
-    switch (component) {
+    switch (component)
+    {
         case 0:
             self.year = self.dataArray[0][@"year"][row];
             break;
@@ -159,7 +165,8 @@
         default:
             break;
     }
-    if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)]) {
+    if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)])
+    {
         [self.pickerViewDelegate wp_selectedResultWithYear:self.year month:self.month day:nil];
     }
 }
@@ -167,10 +174,12 @@
 
 - (void)cancelPickerView
 {
-    [UIView animateWithDuration:0.2f animations:^{
-        [self.pickerView setFrame:CGRectMake(0, wp_ScreenHeight, wp_ScreenWidth, 0)];
+    [UIView animateWithDuration:0.2f animations:^
+    {
+        [self.pickerView setFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 0)];
         self.alpha = 0;
-    } completion:^(BOOL finished) {
+    } completion:^(BOOL finished)
+    {
         [self removeFromSuperview];
     }];
 }

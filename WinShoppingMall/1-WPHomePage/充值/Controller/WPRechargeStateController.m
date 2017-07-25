@@ -28,7 +28,7 @@
 - (UILabel *)stateLabel
 {
     if (!_stateLabel) {
-        NSString *rechargeStateStr = [NSString stringWithFormat:@"充值说明：\n1、微信支付：每次最多充值500元\n2、支付宝支付：每次最多充值1000元\n3、银行卡支付：需要先绑定用户的银行卡\n如果超过上述金额，需要上传身份证照片进行认证。"];
+        NSString *rechargeStateStr = @"充值说明：\n1、微信支付：每次最多充值500元\n2、支付宝支付：每次最多充值1000元\n3、银行卡支付：需要先绑定用户的银行卡\n如果超过上述金额，需要上传身份证照片进行认证。";
         
         _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin, kScreenWidth - 2 * WPLeftMargin, 140)];
         _stateLabel.numberOfLines = 0;

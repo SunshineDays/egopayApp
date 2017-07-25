@@ -11,7 +11,6 @@
 
 @interface WPEditUserInfoController : WPBaseViewController
 
-
 @property (nonatomic, strong) WPEditUserInfoModel *model;
 
 @property (nonatomic, strong) UIImage *avaterImage;

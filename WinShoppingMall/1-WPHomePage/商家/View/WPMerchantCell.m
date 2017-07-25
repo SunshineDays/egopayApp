@@ -7,7 +7,7 @@
 //
 
 #import "WPMerchantCell.h"
-//#import "Header.h"
+#import "Header.h"
 
 @implementation WPMerchantCell
 
@@ -16,9 +16,9 @@
     // Initialization code
 }
 
-- (void)setModel:(WPMerchantModel *)model {
-//    [self.shopImageView sd_setImageWithURL:[NSURL URLWithString:model.cover_url] placeholderImage:[UIImage imageNamed:@"titlePlaceholderImage"] options:SDWebImageRefreshCached];
-    self.shopImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:model.cover_url]]];
+- (void)setModel:(WPMerchantModel *)model
+{    
+    [self.shopImageView sd_setImageWithURL:[NSURL URLWithString:model.cover_url] placeholderImage:nil options:SDWebImageRefreshCached];
     
     self.shopNameLabel.text = model.shopName;
     self.shopDescpLabel.text = model.descp;

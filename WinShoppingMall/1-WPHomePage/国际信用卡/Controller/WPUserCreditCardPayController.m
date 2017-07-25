@@ -36,7 +36,8 @@
 
 @implementation WPUserCreditCardPayController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"国际信用卡充值";
     self.view.backgroundColor = [UIColor cellColor];
@@ -50,7 +51,8 @@
     [self.moneyCell.textField becomeFirstResponder];
 }
 
-- (WPRowTableViewCell *)typeCell {
+- (WPRowTableViewCell *)typeCell
+{
     if (!_typeCell) {
         _typeCell = [[WPRowTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, WPNavigationHeight, kScreenWidth, WPRowHeight);
@@ -129,14 +131,14 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateMoneyNumber:textField.text range:range replacementString:string];
+    return [WPJudgeTool validatePrice:textField.text range:range replacementString:string];
 }
 
 #pragma mark - Action
 
 - (void)moneyCellTextField
 {
-    self.poundageLabel.text = [NSString stringWithFormat:@"手续费：%@", [WPPublicTool stringWithRateMoney:self.moneyCell.textField.text rate:self.rate]];
+    self.poundageLabel.text = [NSString stringWithFormat:@"手续费：%@", [WPPublicTool stringPoundageWithString:self.moneyCell.textField.text rate:self.rate]];
     [self changeButtonSurface];
 }
 
@@ -150,29 +152,34 @@
     WPBankCardController *vc = [[WPBankCardController alloc] init];
     vc.showCardType = @"2";
     __weakSelf
-    vc.cardInfoBlock = ^(WPBankCardModel *model) {
+    vc.cardInfoBlock = ^(WPBankCardModel *model)
+    {
         weakSelf.model = model;
-        [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] replaceColor:[UIColor placeholderColor] index:model.bankName.length]];
-        weakSelf.cardCell.cardImageView.image = [WPUserTool payBankImageCode:model.bankCode];
+        [WPPublicTool payCardWithView:weakSelf.cardCell model:model];
     };
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)confirmButtonAction
 {
-    if ([self.moneyCell.textField.text floatValue] > 5000) {
+    if ([self.moneyCell.textField.text floatValue] > 5000)
+    {
         [WPProgressHUD showInfoWithStatus:@"充值金额最多为5000元"];
     }
-    else if ([self.moneyCell.textField.text floatValue] == 0 || [self.moneyCell.textField.text isEqualToString:@""]) {
+    else if ([self.moneyCell.textField.text floatValue] == 0 || [self.moneyCell.textField.text isEqualToString:@""])
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入充值金额"];
     }
-    else if ([self.cardCell.contentLabel.text isEqualToString:@"请选择审核过的信用卡"]) {
+    else if ([self.cardCell.contentLabel.text isEqualToString:@"请选择审核过的信用卡"])
+    {
         [WPProgressHUD showInfoWithStatus:@"请选择审核过的信用卡"];
     }
-    else if (self.cvvCell.textField.text.length != 3) {
+    else if (self.cvvCell.textField.text.length != 3)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入CVV码"];
     }
-    else {
+    else
+    {
         [self pushChargeData];
     }
 }
@@ -186,14 +193,17 @@
                                 @"rateType" : @"1"
                                 };
     __weakSelf
-    [WPHelpTool getWithURL:WPPoundageURL parameters:parameter success:^(id success) {
+    [WPHelpTool getWithURL:WPPoundageURL parameters:parameter success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             weakSelf.rate = [result[@"rate"] floatValue];
             [weakSelf confirmButton];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -206,22 +216,26 @@
                                  @"cnv" : [WPPublicTool base64EncodeString:self.cvvCell.textField.text]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPCreditChargeURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPCreditChargeURL parameters:parameters success:^(id success)
+    {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"] || [type isEqualToString:@"3"] || [type isEqualToString:@"4"]) {
+        if ([type isEqualToString:@"1"] || [type isEqualToString:@"3"] || [type isEqualToString:@"4"])
+        {
             WPSuccessOrfailedController *vc = [[WPSuccessOrfailedController alloc] init];
             vc.navigationItem.title = @"充值结果";
-            if ([type isEqualToString:@"1"]) {
+            if ([type isEqualToString:@"1"])
+            {
                 vc.showType = 1;
             }
-            else if ([type isEqualToString:@"4"]) {
+            else if ([type isEqualToString:@"4"])
+            {
                 vc.showType = 2;
             }
             [weakSelf.navigationController pushViewController:vc animated:YES];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }

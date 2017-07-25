@@ -9,6 +9,7 @@
 #import "WPAutonymApproveController.h"
 #import "WPUserLoadIDCardPhotoController.h"
 #import "Header.h"
+#import "WPAutonymApproveModel.h"
 
 @interface WPAutonymApproveController () <UITextFieldDelegate>
 
@@ -24,6 +25,8 @@
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *userIDNumber;
 
+@property (nonatomic, strong) WPAutonymApproveModel *approveModel;
+
 
 @end
 
@@ -31,7 +34,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"实名认证";
     [self getUserApproveData];
@@ -91,7 +95,7 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 #pragma mark - Action
@@ -104,17 +108,22 @@
 - (void)userLoadIDCardPhotoButtonClick
 {
     
-    if ([self.stateLabel.text isEqualToString:@"请完善您的身份证照片信息"]) {
+    if ([self.stateLabel.text isEqualToString:@"请完善您的身份证照片信息"])
+    {
         [self pushUserInforData];
     }
-    else {
-        if (self.userNameCell.textField.text.length == 0) {
+    else
+    {
+        if (self.userNameCell.textField.text.length == 0)
+        {
             [WPProgressHUD showInfoWithStatus:@"请输入姓名"];
         }
-        else if (![WPRegex validateIDCard:self.userIDNumberCell.textField.text]) {
+        else if (![WPJudgeTool validateIDCard:self.userIDNumberCell.textField.text])
+        {
             [WPProgressHUD showInfoWithStatus:@"您输入的身份证号码有误"];
         }
-        else {
+        else
+        {
             [self pushUserInforData];
         }
     }
@@ -141,25 +150,28 @@
 {
 
     __weakSelf
-    [WPHelpTool getWithURL:WPUserApproveIDCardPassURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPUserApproveIDCardPassURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
+            weakSelf.approveModel = [WPAutonymApproveModel mj_objectWithKeyValues:result];
             
-            weakSelf.userName = [WPPublicTool stringWithStarString:result[@"fullName"] headerIndex:1 footerIndex:0];
-            weakSelf.userIDNumber = [WPPublicTool stringWithStarString:[WPPublicTool base64DecodeString:result[@"identityCard"]] headerIndex:3 footerIndex:2];
+            weakSelf.userName = [WPPublicTool stringStarWithString:weakSelf.approveModel.fullName headerIndex:1 footerIndex:0];
+            weakSelf.userIDNumber = [WPPublicTool stringStarWithString:[WPPublicTool base64DecodeString:weakSelf.approveModel.identityCard] headerIndex:3 footerIndex:2];
             [self confirmButton];
             
-            NSString *state = [NSString stringWithFormat:@"%@", result[@"state"]];
-            [weakSelf userIdCardApproveState:[state intValue]];
+            [weakSelf userIdCardApproveState:weakSelf.approveModel.state];
         }
-        else if ([type isEqualToString:@"2"]) {
+        else if ([type isEqualToString:@"2"])
+        {
             weakSelf.userName = @"请输入您的真实姓名";
             weakSelf.userIDNumber = @"请输入您的身份证号码";
             [weakSelf confirmButton];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -172,15 +184,17 @@
                                  @"fullName" : self.userNameCell.textField.text
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPUserApproveIDCardURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPUserApproveIDCardURL parameters:parameters success:^(id success)
+    {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             WPUserLoadIDCardPhotoController *vc = [[WPUserLoadIDCardPhotoController alloc] init];
             [weakSelf.navigationController pushViewController:vc animated:YES];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }

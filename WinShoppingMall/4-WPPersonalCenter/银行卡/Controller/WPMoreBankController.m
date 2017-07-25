@@ -18,7 +18,8 @@
 
 @implementation WPMoreBankController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick)];
@@ -47,7 +48,8 @@
 
 - (void)initLineView
 {
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++)
+    {
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 50 - 1 + 50 * i, kScreenWidth, 1)];
         lineView.backgroundColor = [UIColor lineColor];
         [self.view addSubview:lineView];
@@ -57,18 +59,21 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 #pragma mark - Action
 
 - (void)saveClick
 {
-    if (self.textField.text.length == 0) {
+    if (self.textField.text.length == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入银行名称"];
     }
-    else {
-        if (self.inforBlock) {
+    else
+    {
+        if (self.inforBlock)
+        {
             self.inforBlock(self.textField.text);
             [self.navigationController popViewControllerAnimated:YES];
         }

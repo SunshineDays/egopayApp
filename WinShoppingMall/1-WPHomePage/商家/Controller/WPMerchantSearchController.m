@@ -139,7 +139,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    if (searchBar.text.length > 0) {
+    if (searchBar.text.length > 0)
+    {
         [self getMerchantData];
     }
 }
@@ -157,15 +158,18 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
                                  @"shopName" : self.searchBar.text.length > 0 ? self.searchBar.text : @""
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPShowMerShopsURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPShowMerShopsURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray removeAllObjects];
             [weakSelf.dataArray addObjectsFromArray:[WPMerchantModel mj_objectArrayWithKeyValuesArray:result[@"shopList"]]];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商家"];
-    } failure:^(NSError *error) {
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商家"];
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
     }];

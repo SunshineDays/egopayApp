@@ -16,7 +16,8 @@
  *  @param data    传入你要生成二维码的数据
  *  @param imageViewWidth    图片的宽度
  */
-+ (UIImage *)SG_generateWithDefaultQRCodeData:(NSString *)data imageViewWidth:(CGFloat)imageViewWidth {
++ (UIImage *)SG_generateWithDefaultQRCodeData:(NSString *)data imageViewWidth:(CGFloat)imageViewWidth
+{
     // 1、创建滤镜对象
     CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
     
@@ -39,7 +40,8 @@
 }
 
 /** 根据CIImage生成指定大小的UIImage */
-+ (UIImage *)createNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat)size {
++ (UIImage *)createNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat)size
+{
     CGRect extent = CGRectIntegral(image.extent);
     CGFloat scale = MIN(size/CGRectGetWidth(extent), size/CGRectGetHeight(extent));
     
@@ -69,7 +71,8 @@
  *  @param logoImage    logo的image
  *  @param logoScaleToSuperView    logo相对于父视图的缩放比（取值范围：0-1，0，代表不显示，1，代表与父视图大小相同）
  */
-+ (UIImage *)SG_generateWithLogoQRCodeData:(NSString *)data logoImage:(UIImage *)logoImage logoScaleToSuperView:(CGFloat)logoScaleToSuperView {
++ (UIImage *)SG_generateWithLogoQRCodeData:(NSString *)data logoImage:(UIImage *)logoImage logoScaleToSuperView:(CGFloat)logoScaleToSuperView
+{
     // 1、创建滤镜对象
     CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
     
@@ -126,7 +129,8 @@
  *  @param backgroundColor    背景色
  *  @param mainColor    主颜色
  */
-+ (UIImage *)SG_generateWithColorQRCodeData:(NSString *)data backgroundColor:(CIColor *)backgroundColor mainColor:(CIColor *)mainColor {
++ (UIImage *)SG_generateWithColorQRCodeData:(NSString *)data backgroundColor:(CIColor *)backgroundColor mainColor:(CIColor *)mainColor
+{
     // 1、创建滤镜对象
     CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
     

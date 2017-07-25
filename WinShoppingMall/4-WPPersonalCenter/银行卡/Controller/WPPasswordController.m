@@ -40,16 +40,20 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    if (self.navigationItem.title.length == 0) {
+    if (self.navigationItem.title.length == 0)
+    {
         self.navigationItem.title = @"忘记密码";
     }
     self.currentTime = getVerificationCodeTime;
-    if (self.isFirstPassword) {
+    if (self.isFirstPassword)
+    {
         self.passwordHeight = WPNavigationHeight + 10;
     }
-    else {
+    else
+    {
         self.passwordHeight = WPNavigationHeight + 10 + WPRowHeight * 2;
         [self phoneCell];
         [self verificationCodeCell];
@@ -58,7 +62,8 @@
     [self passwordCell];
     [self passwordConfirmCell];
     [self confirmButton];
-    if (self.isShowState) {
+    if (self.isShowState)
+    {
         [self stateLabel];
     }
 }
@@ -179,7 +184,7 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 
@@ -193,14 +198,16 @@
 - (void)timerClick
 {
     self.currentTime--;
-    if (self.currentTime == 0) {
+    if (self.currentTime == 0)
+    {
         [self.verificationCodeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = YES;
         [self.timer invalidate];
         self.timer = nil;
         self.currentTime = getVerificationCodeTime;
     }
-    else {
+    else
+    {
         [self.verificationCodeButton setTitle:[NSString stringWithFormat:@"%ld秒后重发",(long)self.currentTime] forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = NO;
     }
@@ -208,10 +215,12 @@
 
 - (void)verificationCodeButtonClick:(UIButton *)sender
 {
-    if (![WPRegex validateMobile:self.phoneCell.textField.text] && [WPUserInfor sharedWPUserInfor].clientId.length == 0) {
+    if (![WPJudgeTool validateMobile:self.phoneCell.textField.text] && [WPUserInfor sharedWPUserInfor].clientId.length == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号"];
     }
-    else {
+    else
+    {
         [self getVerificationCodeData];
     }
 }
@@ -219,47 +228,58 @@
 - (void)confirmButtonAction:(UIButton *)button
 {
     [[UIApplication sharedApplication].keyWindow endEditing:YES];
-    if (![WPRegex validateMobile:self.phoneCell.textField.text] && [WPUserInfor sharedWPUserInfor].clientId.length == 0) {
+    if (![WPJudgeTool validateMobile:self.phoneCell.textField.text] && [WPUserInfor sharedWPUserInfor].clientId.length == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号"];
     }
-    else if (self.verificationCodeCell.textField.text.length != 6 && !self.isFirstPassword) {
+    else if (self.verificationCodeCell.textField.text.length != 6 && !self.isFirstPassword)
+    {
         [WPProgressHUD showInfoWithStatus:@"验证码格式错误"];
     }
-    else if ((self.passwordCell.textField.text.length < 6 || self.passwordConfirmCell.textField.text.length < 6) && [self.passwordType isEqualToString:@"1"]) {
+    else if ((self.passwordCell.textField.text.length < 6 || self.passwordConfirmCell.textField.text.length < 6) && [self.passwordType isEqualToString:@"1"])
+    {
         [WPProgressHUD showInfoWithStatus:@"登录密码不能少于六位"];
     }
-    else if ((self.passwordCell.textField.text.length != 6 || self.passwordConfirmCell.textField.text.length != 6) && ![self.passwordType isEqualToString:@"1"]) {
+    else if ((self.passwordCell.textField.text.length != 6 || self.passwordConfirmCell.textField.text.length != 6) && ![self.passwordType isEqualToString:@"1"])
+    {
         [WPProgressHUD showInfoWithStatus:@"支付密码为六位纯数数字密码"];
     }
-    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text]) {
+    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"两次输入的密码不一致"];
     }
-    else{
+    else
+    {
         self.isFirstPassword ? [self pushPayPasswordData] : [self pushPayOrPasswordData];
     }
 }
 
 #pragma mark - Data
 
-- (void)getVerificationCodeData {
+- (void)getVerificationCodeData
+{
     
     NSDictionary *parameters = @{
                                  @"phone" : [WPUserInfor sharedWPUserInfor].clientId.length > 0 ? self.phoneCell.textField.placeholder : self.phoneCell.textField.text,
                                  @"verType" : @"2"
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"验证码发送成功"];
             [weakSelf timer];
         }
-        else {
+        else
+        {
             weakSelf.currentTime = 0;
             [weakSelf timerClick];
         }
         
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -275,20 +295,22 @@
                                  @"newPassword" : [WPPublicTool base64EncodeString:self.passwordCell.textField.text]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPChangePasswordURL parameters:parameters success:^(id success) {
-        
-        
+    [WPHelpTool postWithURL:WPChangePasswordURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:[NSString stringWithFormat:[self.passwordType isEqualToString:@"1"] ? @"修改登录密码成功" : @"修改支付密码成功"]];
             
             [WPHelpTool popToViewController:[[WPUserInforController alloc] init] navigationController:weakSelf.navigationController];
             
-            if ([weakSelf.passwordType isEqualToString:@"2"]) {
+            if ([weakSelf.passwordType isEqualToString:@"2"])
+            {
                 [WPKeyChainTool keyChainSave:weakSelf.passwordCell.textField.text forKey:kUserPayPassword];
             }
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -300,19 +322,21 @@
                                  @"payPassword" : [WPPublicTool base64EncodeString:self.passwordCell.textField.text]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPSetPayPasswordURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPSetPayPasswordURL parameters:parameters success:^(id success)
+    {
         
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPUserInfor sharedWPUserInfor].payPasswordType = @"YES";
             [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             [WPProgressHUD showSuccessWithStatus:@"支付密码设置成功"];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }

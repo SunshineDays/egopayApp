@@ -20,7 +20,8 @@
 
 @implementation WPTodayProfitController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     self.navigationItem.title = @"今日分润";

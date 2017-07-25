@@ -19,7 +19,7 @@ NSString * const ODAlertIsLoading = nil;
 + (void)initialize
 {
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
-    [SVProgressHUD setBackgroundColor:[UIColor colorWithRGBString:@"#4a4a4a" alpha:0.8]];
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithRGBString:@"#4a4a4a" alpha:0.7f]];
     [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     [SVProgressHUD setInfoImage:nil];
 }
@@ -36,17 +36,20 @@ NSString * const ODAlertIsLoading = nil;
 
 + (void)showInfoWithStatus:(NSString *)status
 {
-    [SVProgressHUD showInfoWithStatus:status maskType:SVProgressHUDMaskTypeNone];
+    [SVProgressHUD dismissWithDelay:status.length * 0.02f + 0.6f];
+    [SVProgressHUD showInfoWithStatus:status];
 }
 
 
 + (void)showSuccessWithStatus:(NSString *)status
 {
+    [SVProgressHUD dismissWithDelay:0.6f];
     [SVProgressHUD showSuccessWithStatus:status];
 }
 
 + (void)showErrorWithStatus:(NSString *)status
 {
+    [SVProgressHUD dismissWithDelay:status.length * 0.02f + 0.6f];
     [SVProgressHUD showErrorWithStatus:status];
 }
 
@@ -54,12 +57,5 @@ NSString * const ODAlertIsLoading = nil;
 {
     [SVProgressHUD dismiss];
 }
-
-//+ (void)showToast:(UIView *)view status:(NSString *)status
-//{
-//    CGPoint center = CGPointMake(view.frame.size.width / 2, view.frame.size.height - 100);
-//    [view makeToast:status duration:3 position:[NSValue valueWithCGPoint:center]];
-//}
-
 
 @end

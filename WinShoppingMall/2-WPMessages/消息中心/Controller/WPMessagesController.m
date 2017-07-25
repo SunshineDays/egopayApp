@@ -39,8 +39,10 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"消息";
     
-    if ([WPAppTool isSubAccount]) {
-        if ([[WPUserInfor sharedWPUserInfor].threeTouch isEqualToString:@"gatheringCode"]) {
+    if ([WPJudgeTool isSubAccount])
+    {
+        if ([[WPUserInfor sharedWPUserInfor].threeTouch isEqualToString:@"gatheringCode"])
+        {
             __weakSelf
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
@@ -51,7 +53,8 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
             });
         }
         
-        else if ([WPUserInfor sharedWPUserInfor].userInfoDict) {
+        else if ([WPUserInfor sharedWPUserInfor].userInfoDict)
+        {
             __weakSelf
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
@@ -62,7 +65,6 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
             });
         }
     }
-    
     
     self.page = 1;
     [self getBillData];
@@ -145,7 +147,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     WPBillModel *model = self.dataArray[section];
-    NSString *dateStr = [[WPPublicTool dateToLocalDate:model.finishDate] substringFromIndex:[WPPublicTool dateToLocalDate:model.finishDate].length - 6];
+    NSString *dateStr = [[WPPublicTool stringToDateString:model.finishDate] substringFromIndex:[WPPublicTool stringToDateString:model.finishDate].length - 6];
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = dateStr;
     titleLabel.textColor = [UIColor grayColor];
@@ -175,19 +177,23 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
                                  @"curPage" : [NSString stringWithFormat:@"%ld", (long)self.page],
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:WPBillNotificationURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPBillNotificationURL parameters:parameters success:^(id success)
+    {
         [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         
-        if ([type isEqualToString:@"1"]) {
-            if (weakSelf.page == 1) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (weakSelf.page == 1)
+            {
                 [weakSelf.dataArray removeAllObjects];
             }
             [weakSelf.dataArray addObjectsFromArray:[WPBillModel mj_objectArrayWithKeyValuesArray:result[@"infoList"]]];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"infoList"] noResultLabel:weakSelf.noResultLabel title:@"暂无账单记录"];
-    } failure:^(NSError *error) {
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"infoList"] noResultLabel:weakSelf.noResultLabel title:@"暂无账单记录"];
+    } failure:^(NSError *error)
+    {
         [weakSelf.indicatorView stopAnimating];
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];

@@ -61,7 +61,7 @@
     if (!_hintLabel) {
         _hintLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _hintLabel.numberOfLines = 0;
-        _hintLabel.text = [NSString stringWithFormat:@"验证码已经发送到：%@", [WPPublicTool stringWithStarString:self.cardInfoDict[@"phone"] headerIndex:3 footerIndex:4]];
+        _hintLabel.text = [NSString stringWithFormat:@"验证码已经发送到：%@", [WPPublicTool stringStarWithString:self.cardInfoDict[@"phone"] headerIndex:3 footerIndex:4]];
         _hintLabel.font = [UIFont systemFontOfSize:13];
         _hintLabel.textColor = [UIColor blackColor];
         [self.view addSubview:_hintLabel];
@@ -114,13 +114,14 @@
 }
 
 #pragma mark - 获取验证码
-- (void)getVerificationCodeButtonClick:(UIButton *)button {
-    
+- (void)getVerificationCodeButtonClick:(UIButton *)button
+{
     [self getVerificationData];
 }
 
 #pragma mark - 定时器
-- (NSTimer *)timer {
+- (NSTimer *)timer
+{
     if (_timer == nil) {
         _timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(timerClick) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
@@ -128,23 +129,27 @@
     return _timer;
 }
 
-- (void)timerClick {
+- (void)timerClick
+{
     self.currentTime--;
-    if (self.currentTime == 0) {
+    if (self.currentTime == 0)
+    {
         [self.getVerificationCodeButton setTitle:@"重新发送验证码" forState:UIControlStateNormal];
         self.getVerificationCodeButton.userInteractionEnabled = YES;
         [self.timer invalidate];
         self.timer = nil;
         self.currentTime = getVerificationCodeTime;
     }
-    else {
+    else
+    {
         [self.getVerificationCodeButton setTitle:[NSString stringWithFormat:@"%ld秒后重发",(long)self.currentTime] forState:UIControlStateNormal];
         self.getVerificationCodeButton.userInteractionEnabled = NO;
     }
 }
 
 #pragma mark - 获取验证码
-- (void)getVerificationData {
+- (void)getVerificationData
+{
     
     NSDictionary *parameters = @{
                                  @"phone" : self.cardInfoDict[@"phone"],
@@ -152,26 +157,33 @@
                                  };
     
     __weakSelf
-    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf timer];
             [WPProgressHUD showSuccessWithStatus:@"验证码发送成功"];
         }
-        else {
+        else
+        {
             weakSelf.currentTime = 0;
             [weakSelf timerClick];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
-- (void)nextButton:(UIButton *)button {
-    if (self.verifiactionCell.textField.text.length != 6) {
+- (void)nextButton:(UIButton *)button
+{
+    if (self.verifiactionCell.textField.text.length != 6)
+    {
         [WPProgressHUD showInfoWithStatus:@"验证码格式错误"];
     }
-    else {
+    else
+    {
         [self pushAddCardData];
     }
 }
@@ -182,17 +194,20 @@
     [self.cardInfoDict setObject:self.verifiactionCell.textField.text forKey:@"ver"];
     
     __weakSelf
-    [WPHelpTool postWithURL:WPUserAddCardURL parameters:self.cardInfoDict success:^(id success) {
+    [WPHelpTool postWithURL:WPUserAddCardURL parameters:self.cardInfoDict success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"添加成功"];
             [weakSelf.cardInfoDict setObject:result[@"cardId"] forKey:@"cardId"];
             NSDictionary *statusDict = [[NSDictionary alloc] initWithDictionary:weakSelf.cardInfoDict];
             [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationAddCardSuccess object:nil userInfo:statusDict];
             [WPHelpTool popToViewController:[[WPBankCardController alloc] init] navigationController:weakSelf.navigationController];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

@@ -33,15 +33,13 @@
 
 @end
 
-#define wp_ScreenWidth [[UIScreen mainScreen] bounds].size.width
-#define wp_ScreenHeight [[UIScreen mainScreen] bounds].size.height
 
 @implementation WPAreaPickerView
 
 - (instancetype)initAreaPickerView
 {
     if (self = [super init]) {
-        self.frame = CGRectMake(0, 0, wp_ScreenWidth, wp_ScreenHeight);
+        self.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
         self.backgroundColor = [UIColor colorWithRGBString:@"#000000" alpha:0.3f];
         self.userInteractionEnabled = YES;
         [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelPickerView)]];
@@ -50,9 +48,11 @@
         [self addSubview:self.titleView];
         [self.titleView addSubview:self.confirmButton];
         [self.titleView addSubview:self.cancelButton];
-        [UIView animateWithDuration:0.2f animations:^{
-            self.pickerView.frame = CGRectMake(0, wp_ScreenHeight * 2 / 3 + 40, wp_ScreenWidth, wp_ScreenHeight / 3 - 40);
-            self.titleView.frame = CGRectMake(0, wp_ScreenHeight * 2 / 3, wp_ScreenWidth, 40);
+        
+        [UIView animateWithDuration:0.2f animations:^
+        {
+            self.pickerView.frame = CGRectMake(0, kScreenHeight * 2 / 3 + 40, kScreenWidth, kScreenHeight / 3 - 40);
+            self.titleView.frame = CGRectMake(0, kScreenHeight * 2 / 3, kScreenWidth, 40);
         }];
     }
     return self;
@@ -78,7 +78,7 @@
 - (UIView *)titleView
 {
     if (!_titleView) {
-        _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, wp_ScreenHeight, CGRectGetWidth(self.pickerView.frame), 40)];
+        _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, CGRectGetWidth(self.pickerView.frame), 40)];
         _titleView.backgroundColor = [UIColor whiteColor];
         _titleView.userInteractionEnabled = YES;
     }
@@ -113,7 +113,7 @@
 {
     if (!_pickerView) {
         _pickerView = [[UIPickerView alloc] init];
-        _pickerView.frame = CGRectMake(0, wp_ScreenHeight, wp_ScreenWidth, wp_ScreenHeight / 3 - 40);
+        _pickerView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight / 3 - 40);
         _pickerView.backgroundColor = [UIColor whiteColor];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
@@ -129,7 +129,8 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    switch (component) {
+    switch (component)
+    {
         case 0:
             return self.dataArray.count;
             break;
@@ -153,17 +154,20 @@
     NSDictionary *provinceDic = [self.dataArray objectAtIndex:self.provinceRow];
     NSArray *cityArray = [provinceDic objectForKey:@"citylist"];
 
-    switch (component) {
+    switch (component)
+    {
         case 0:
             return [self.dataArray[row] objectForKey:@"provinceName"];
             break;
             
-        case 1: {
+        case 1:
+        {
             return [[cityArray objectAtIndex:row] objectForKey:@"cityName"];
         }
             break;
             
-        case 2: {
+        case 2:
+        {
             return [[[cityArray objectAtIndex:self.cityRow] objectForKey:@"arealist"][row] objectForKey:@"areaName"];
         }
             break;
@@ -177,8 +181,10 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     self.isSelected = YES;
-    switch (component) {
-        case 0: {
+    switch (component)
+    {
+        case 0:
+        {
             self.provinceRow = row;
             self.cityRow = 0;
             self.areaRow = 0;
@@ -187,14 +193,16 @@
         }
             break;
           
-        case 1: {
+        case 1:
+        {
             self.cityRow = row;
             self.areaRow = 0;
             [pickerView selectRow:0 inComponent:2 animated:NO];
         }
             break;
             
-        case 2: {
+        case 2:
+        {
             self.areaRow = row;
         }
             break;
@@ -210,7 +218,7 @@
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
     UILabel* pickerLabel = (UILabel*)view;
-    if (!pickerLabel){
+    if (!pickerLabel) {
         pickerLabel = [[UILabel alloc] init];
         pickerLabel.adjustsFontSizeToFitWidth = YES;
         [pickerLabel setTextAlignment:NSTextAlignmentCenter];
@@ -223,7 +231,8 @@
 
 - (void)confirmButtonAction
 {
-    if (self.areaPickerViewDelegate && [self.areaPickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithProvince:city:area:)]) {
+    if (self.areaPickerViewDelegate && [self.areaPickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithProvince:city:area:)])
+    {
         [self.areaPickerViewDelegate wp_selectedResultWithProvince:[self pickerView:self.pickerView titleForRow:self.provinceRow forComponent:0]
                                                               city:[self pickerView:self.pickerView titleForRow:self.cityRow forComponent:1]
                                                               area:[self pickerView:self.pickerView titleForRow:self.areaRow forComponent:2]
@@ -234,11 +243,14 @@
 
 - (void)cancelPickerView
 {
-    [UIView animateWithDuration:0.2f animations:^{
-        [self.titleView setFrame:CGRectMake(0, wp_ScreenHeight, wp_ScreenWidth, 0)];
-        [self.pickerView setFrame:CGRectMake(0, wp_ScreenHeight, wp_ScreenWidth, 0)];
+    
+    [UIView animateWithDuration:0.2f animations:^
+    {
+        [self.titleView setFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 0)];
+        [self.pickerView setFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 0)];
         self.alpha = 0;
-    } completion:^(BOOL finished) {
+    } completion:^(BOOL finished)
+    {
         [self removeFromSuperview];
     }];
 }

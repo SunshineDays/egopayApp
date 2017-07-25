@@ -37,7 +37,8 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"分润明细";
 
@@ -46,11 +47,13 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
     [self getProfitAndTradingData];
     
     __weakSelf
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^
+    {
         weakSelf.page = 1;
         [weakSelf getProfitAndTradingData];
     }];
-    self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+    self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^
+    {
         weakSelf.page ++;
         [weakSelf getProfitAndTradingData];
     }];
@@ -58,7 +61,8 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 #pragma mark - Init
 
-- (NSMutableArray *)dataArray {
+- (NSMutableArray *)dataArray
+{
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
@@ -77,7 +81,8 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
     return _titleView;
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 50, kScreenWidth, kScreenHeight - WPNavigationHeight - 50) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor cellColor];
@@ -94,23 +99,27 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPProfitDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:WPProfitDetailCellID];
     cell.profitModel = self.dataArray[indexPath.row];
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 150;
 }
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 }
@@ -131,7 +140,8 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
     vc.type = 4;
     
     __weakSelf
-    vc.selecteNameBlock = ^(NSString *nameStr) {
+    vc.selecteNameBlock = ^(NSString *nameStr)
+    {
         self.year = [nameStr substringToIndex:4];
         self.month = [nameStr substringWithRange:NSMakeRange(nameStr.length - 3, 2)];
         weakSelf.dateString = [NSString stringWithFormat:@"%@%@", self.year, self.month];
@@ -144,18 +154,22 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 #pragma mark - Data
 
-- (void)getProfitAndTradingData {
+- (void)getProfitAndTradingData
+{
     NSDictionary *parameters = @{
                                  @"curPage" : [NSString stringWithFormat:@"%ld", (long)self.page],
                                  @"queryDate" : self.dateString
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:WPProfitDetailURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPProfitDetailURL parameters:parameters success:^(id success)
+    {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            if (weakSelf.page == 1) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (weakSelf.page == 1)
+            {
                 [weakSelf.dataArray removeAllObjects];
             }
             [weakSelf.dataArray addObjectsFromArray:[WPProfitDetailModel mj_objectArrayWithKeyValuesArray:result[@"benefitDetails"]]];
@@ -165,8 +179,9 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
             
             [weakSelf titleView];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"benefitDetails"] noResultLabel:weakSelf.noResultLabel title:@"暂无记录"];
-    } failure:^(NSError *error) {
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"benefitDetails"] noResultLabel:weakSelf.noResultLabel title:@"暂无记录"];
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
     }];

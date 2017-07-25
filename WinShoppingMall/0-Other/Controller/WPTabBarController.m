@@ -13,7 +13,7 @@
 #import "WPUserInfor.h"
 #import "WPNavigationController.h"
 #import "WPSubAccountPersonalController.h"
-#import "WPAppTool.h"
+#import "WPJudgeTool.h"
 
 @interface WPTabBarController () <UITabBarDelegate>
 
@@ -48,17 +48,20 @@
 
 - (void)createViewControllers
 {
-    if ([WPAppTool isSubAccount]) {
+    if ([WPJudgeTool isSubAccount])
+    {
         _titleArray = @[@"消息", @"我"];
         _imageArray = @[@"icon_xiaoxi_tab", @"icon_daili_tab"];
         _ctrlsArray = @[[[WPMessagesController alloc] init], [[WPSubAccountPersonalController alloc] init]];
     }
-    else {
+    else
+    {
         _titleArray = @[@"主页", @"消息", @"代理", @"我"];
         _imageArray = @[@"icon_shouye_tab", @"icon_xiaoxi_tab", @"icon_me_tab", @"icon_daili_tab"];
         _ctrlsArray = @[[[WPHomePageController alloc] init], [[WPMessagesController alloc] init],[[WPAgencyController alloc] init], [[WPPersonalCenterController alloc] init]];
     }
-    for (NSInteger i = 0 ; i < _titleArray.count; i++) {
+    for (NSInteger i = 0 ; i < _titleArray.count; i++)
+    {
         [self setupOneChildVc:[[WPNavigationController alloc] initWithRootViewController:_ctrlsArray[i]] image:[NSString stringWithFormat:@"%@_n",_imageArray[i]] selectedImage:[NSString stringWithFormat:@"%@_s",_imageArray[i]] title:_titleArray[i]];
     }
 }

@@ -35,20 +35,21 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRGBString:@"#000000" alpha:0.3];
     
-    switch (self.type) { // 1:城市 2:类别 3:银行 4:日期
-        case 1:
+    switch (self.type)
+    {
+        case 1:// 城市
             [self getCityListData];
             break;
             
-        case 2:
+        case 2:// 类别
             [self getCategoryListData];
             break;
             
-        case 3:
+        case 3:// 银行
             [self getBankListData];
             break;
             
-        case 4:
+        case 4:// 日期
             [self getDateListData];
             break;
             
@@ -104,10 +105,12 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 {
     WPSelectListCell *cell = [tableView dequeueReusableCellWithIdentifier:WPMerchantCityListCellID];
     
-    if (self.type == 2) {
+    if (self.type == 2)//类别
+    {
         cell.model = self.dataArray[indexPath.row];
     }
-    else {
+    else
+    {
         cell.cityName.text = self.dataArray[indexPath.row];
     }
     return cell;
@@ -123,14 +126,18 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (self.type == 2) {
+    if (self.type == 2)// 类别
+    {
         WPMerchantCityListModel *model = self.dataArray[indexPath.row];
-        if (self.selectCategoryBlock) {
+        if (self.selectCategoryBlock)
+        {
             self.selectCategoryBlock(model);
         }
     }
-    else {
-        if (self.selecteNameBlock) {
+    else
+    {
+        if (self.selecteNameBlock)
+        {
             self.selecteNameBlock(self.dataArray[indexPath.row]);
         }
     }
@@ -149,14 +156,17 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 - (void)getCityListData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPCityListURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPCityListURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray addObjectsFromArray:result[@"cities"]];
             [weakSelf.tableView reloadData];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -164,14 +174,17 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 - (void)getCategoryListData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPGetCategoryURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPGetCategoryURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray addObjectsFromArray:[WPMerchantCityListModel mj_objectArrayWithKeyValuesArray:result[@"cateList"]]];
             [weakSelf.tableView reloadData];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -179,20 +192,45 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 - (void)getBankListData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPBankListURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPBankListURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray addObjectsFromArray:result[@"bankName"]];
             [weakSelf.tableView reloadData];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
-- (void)getDateListData {
-    [self.dataArray addObjectsFromArray:[WPUserTool dateArrayWithMonthNumber:12]];
+- (void)getDateListData
+{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy"];
+    NSInteger year = [[formatter stringFromDate:date] integerValue];
+    
+    [formatter setDateFormat:@"MM"];
+    NSInteger month = [[formatter stringFromDate:date] integerValue];
+    
+    for (int i = 0; i < 12; i++)
+    {
+        if (month < 1)
+        {
+            month = month + 12;
+            year = year - 1;
+        }
+        NSString *monthString = month < 10 ? [NSString stringWithFormat:@"0%ld", (long)month] : [NSString stringWithFormat:@"%ld", (long)month];
+        NSString *dateString = [NSString stringWithFormat:@"%ld年%@月", (long)year, monthString];
+        [self.dataArray addObject:dateString];
+        month --;
+    }
+    
     [self.tableView reloadData];
 }
 

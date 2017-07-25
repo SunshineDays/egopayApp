@@ -10,24 +10,12 @@
 #import "Header.h"
 #import "WPMerchantPhotoController.h"
 #import "WPAreaPickerView.h"
+#import "WPMerchantUploadView.h"
+
 
 @interface WPMerchantUploadController () <WPAreaPickerViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, strong) UILabel *stateLabel;
-
-@property (nonatomic, strong) WPRowTableViewCell *nameCell;
-
-@property (nonatomic, strong) WPRowTableViewCell *sexCell;
-
-@property (nonatomic, strong) WPRowTableViewCell *phoneCell;
-
-@property (nonatomic, strong) WPRowTableViewCell *shopNameCell;
-
-@property (nonatomic, strong) WPRowTableViewCell *shopAddressCell;
-
-@property (nonatomic, strong) WPRowTableViewCell *shopAddressDetailCell;
-
-@property (nonatomic, strong) WPButton *nextButton;
+@property (nonatomic, strong) WPMerchantUploadView *uploadView;
 
 @property (nonatomic, copy) NSString *province;
 
@@ -42,118 +30,37 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"商家认证";
     
-    [self stateLabel];
-    [self nameCell];
-    [self sexCell];
-    [self phoneCell];
-    [self shopNameCell];
-    [self shopAddressCell];
-    [self shopAddressDetailCell];
-    [self nextButton];
+    [self uploadView];
 }
 
 #pragma mark -init
 
--(UILabel *)stateLabel {
-    if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPNavigationHeight, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
-        _stateLabel.text = self.failureString.length > 0 ? self.failureString : @"请填写您的真实信息";
-        _stateLabel.textColor = [UIColor themeColor];
-        _stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
-        [self.view addSubview:_stateLabel];
-
-    }
-    return _stateLabel;
-}
-
-- (WPRowTableViewCell *)nameCell
+- (WPMerchantUploadView *)uploadView
 {
-    if (!_nameCell) {
-        _nameCell = [[WPRowTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.stateLabel.frame), kScreenWidth, WPRowHeight);
-        [_nameCell tableViewCellTitle:@"联系人" placeholder:@"请输入您的姓名" rectMake:rect];
-        [_nameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
-        _nameCell.textField.delegate = self;
-        [self.view addSubview:_nameCell];
+    if (!_uploadView) {
+        _uploadView = [[WPMerchantUploadView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _uploadView.stateLabel.text = self.failureString.length > 0 ? self.failureString : @"请填写您的真实信息";
+        
+        [_uploadView.nameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        
+        [_uploadView.sexCell.button addTarget:self action:@selector(sexButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [_uploadView.shopNameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        
+        [_uploadView.shopAddressCell.button addTarget:self action:@selector(addressButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [_uploadView.shopAddressDetailCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
+        
+        [_uploadView.nextButton addTarget:self action:@selector(nextButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.view addSubview:_uploadView];
     }
-    return _nameCell;
-}
-
-- (WPRowTableViewCell *)sexCell {
-    if (!_sexCell) {
-        _sexCell = [[WPRowTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.nameCell.frame), kScreenWidth, WPRowHeight);
-        [_sexCell tableViewCellTitle:@"性别" buttonTitle:@"男" rectMake:rect];
-        [_sexCell.button addTarget:self action:@selector(sexButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:_sexCell];
-    }
-    return _sexCell;
-}
-
-- (WPRowTableViewCell *)phoneCell
-{
-    if (!_phoneCell) {
-        _phoneCell = [[WPRowTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.sexCell.frame), kScreenWidth, WPRowHeight);
-        [_phoneCell tableViewCellTitle:@"联系电话" placeholder:@"请输入电话号码" rectMake:rect];
-        _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
-        [_phoneCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
-        [self.view addSubview:_phoneCell];
-    }
-    return _phoneCell;
-}
-
-- (WPRowTableViewCell *)shopNameCell
-{
-    if (!_shopNameCell) {
-        _shopNameCell = [[WPRowTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.phoneCell.frame), kScreenWidth, WPRowHeight);
-        [_shopNameCell tableViewCellTitle:@"店铺名称" placeholder:@"请输入店铺名称" rectMake:rect];
-        [_shopNameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
-        _shopNameCell.textField.delegate = self;
-        [self.view addSubview:_shopNameCell];
-    }
-    return _shopNameCell;
-}
-
-- (WPRowTableViewCell *)shopAddressCell
-{
-    if (!_shopAddressCell) {
-        _shopAddressCell = [[WPRowTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.shopNameCell.frame), kScreenWidth, WPRowHeight);
-        [_shopAddressCell tableViewCellTitle:@"店铺地址" buttonTitle:@"请选择店铺地址" rectMake:rect];
-        [_shopAddressCell.button addTarget:self action:@selector(addressButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:_shopAddressCell];
-    }
-    return _shopAddressCell;
-}
-
-- (WPRowTableViewCell *)shopAddressDetailCell
-{
-    if (!_shopAddressDetailCell) {
-        _shopAddressDetailCell = [[WPRowTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.shopAddressCell.frame), kScreenWidth, WPRowHeight);
-        [_shopAddressDetailCell tableViewCellTitle:@"详细地址" placeholder:@"请输入店铺详细地址" rectMake:rect];
-        [_shopAddressDetailCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
-        _shopAddressDetailCell.textField.delegate = self;
-        [self.view addSubview:_shopAddressDetailCell];
-    }
-    return _shopAddressDetailCell;
-}
-
-- (WPButton *)nextButton
-{
-    if (!_nextButton) {
-        _nextButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.shopAddressDetailCell.frame) + 30, kScreenWidth - WPLeftMargin * 2, WPButtonHeight)];
-        [_nextButton setTitle:@"下一步" forState:UIControlStateNormal];
-        [_nextButton addTarget:self action:@selector(nextButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:_nextButton];
-    }
-    return _nextButton;
+    return _uploadView;
 }
 
 #pragma mark - WPAreaPickerViewDelegate
@@ -162,12 +69,12 @@
     
     if ([city isEqualToString:@"市辖区"] || [city isEqualToString:@"县"]) {
         city = province;
-        [self.shopAddressCell.button setTitle:[NSString stringWithFormat:@"%@%@",province, area] forState:UIControlStateNormal];
+        [self.uploadView.shopAddressCell.button setTitle:[NSString stringWithFormat:@"%@%@",province, area] forState:UIControlStateNormal];
     }
     else {
-        [self.shopAddressCell.button setTitle:[NSString stringWithFormat:@"%@%@%@",province,city ,area] forState:UIControlStateNormal];
+        [self.uploadView.shopAddressCell.button setTitle:[NSString stringWithFormat:@"%@%@%@",province,city ,area] forState:UIControlStateNormal];
     }
-    [self.shopAddressCell.button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.uploadView.shopAddressCell.button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
     self.province = province;
     self.city = city;
@@ -178,30 +85,32 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 #pragma mark - Action
 
 - (void)changeButtonSurface
 {
-    [WPPublicTool buttonWithButton:self.nextButton userInteractionEnabled:(self.nameCell.textField.text.length > 1 && self.phoneCell.textField.text.length > 6 && self.shopNameCell.textField.text.length > 0 && self.shopAddressDetailCell.textField.text.length > 2) ? YES : NO];
+    [WPPublicTool buttonWithButton:self.uploadView.nextButton userInteractionEnabled:(self.uploadView.nameCell.textField.text.length > 1 && self.uploadView.phoneCell.textField.text.length > 6 && self.uploadView.shopNameCell.textField.text.length > 0 && self.uploadView.shopAddressDetailCell.textField.text.length > 2) ? YES : NO];
 }
 
 - (void)sexButtonClick:(UIButton *)button
 {
     __weakSelf
-    [WPHelpTool alertControllerTitle:nil rowOneTitle:@"男" rowTwoTitle:@"女" rowOne:^(UIAlertAction *alertAction) {
+    [WPHelpTool alertControllerTitle:nil rowOneTitle:@"男" rowTwoTitle:@"女" rowOne:^(UIAlertAction *alertAction)
+    {
         [weakSelf sexButtonTitleWithSex:alertAction.title];
-    } rowTwo:^(UIAlertAction *alertAction) {
+    } rowTwo:^(UIAlertAction *alertAction)
+    {
         [weakSelf sexButtonTitleWithSex:alertAction.title];
     }];
 }
 
 - (void)sexButtonTitleWithSex:(NSString *)sex
 {
-    [self.sexCell.button setTitle:sex forState:UIControlStateNormal];
-    [self.sexCell.button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.uploadView.sexCell.button setTitle:sex forState:UIControlStateNormal];
+    [self.uploadView.sexCell.button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 }
 
 - (void)addressButtonClick:(UITapGestureRecognizer *)gesture
@@ -214,25 +123,32 @@
 
 - (void)nextButtonClick:(UIButton *)button
 {
-    if (self.nameCell.textField.text.length < 2) {
+    if (self.uploadView.nameCell.textField.text.length < 2)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入姓名"];
     }
-    else if ([self.sexCell.button.titleLabel.text isEqualToString:@"请选择性别"]) {
+    else if ([self.uploadView.sexCell.button.titleLabel.text isEqualToString:@"请选择性别"])
+    {
         [WPProgressHUD showInfoWithStatus:@"请选择性别"];
     }
-    else if (![WPRegex validateMobile:self.phoneCell.textField.text]) {
+    else if (![WPJudgeTool validateMobile:self.uploadView.phoneCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号码"];
     }
-    else if (self.shopNameCell.textField.text.length == 0) {
+    else if (self.uploadView.shopNameCell.textField.text.length == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入店铺名称"];
     }
-    else if ([self.shopAddressCell.textField.text isEqualToString:@"请选择店铺地址"]) {
+    else if ([self.uploadView.shopAddressCell.textField.text isEqualToString:@"请选择店铺地址"])
+    {
         [WPProgressHUD showInfoWithStatus:@"请选择店铺地址"];
     }
-    else if (self.shopAddressDetailCell.textField.text.length == 0) {
+    else if (self.uploadView.shopAddressDetailCell.textField.text.length == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入店铺详细地址"];
     }
-    else {
+    else
+    {
         [self pushToNextCtr];
     }
 }
@@ -241,15 +157,15 @@
 {
     
     NSDictionary *parameters = @{
-                                 @"telephone" : self.phoneCell.textField.text,
-                                 @"linkMan" : self.nameCell.textField.text,
-                                 @"linkManSex" : [self.sexCell.button.titleLabel.text isEqualToString:@"男"] ? @"1" : @"2",
-                                 @"shopName" : self.shopNameCell.textField.text,
+                                 @"telephone" : self.uploadView.phoneCell.textField.text,
+                                 @"linkMan" : self.uploadView.nameCell.textField.text,
+                                 @"linkManSex" : [self.uploadView.sexCell.button.titleLabel.text isEqualToString:@"男"] ? @"1" : @"2",
+                                 @"shopName" : self.uploadView.shopNameCell.textField.text,
                                  @"country" : @"中国",
                                  @"province" : self.province,
                                  @"city" : self.city,
                                  @"area" : self.area,
-                                 @"detailAddr" : self.shopAddressDetailCell.textField.text
+                                 @"detailAddr" : self.uploadView.shopAddressDetailCell.textField.text
                                  };
     
     

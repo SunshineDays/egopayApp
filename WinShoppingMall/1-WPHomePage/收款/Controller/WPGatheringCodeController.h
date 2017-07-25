@@ -7,24 +7,25 @@
 //
 
 #import "WPBaseViewController.h"
+#import "WPQRCodeModel.h"
+
 
 @interface WPGatheringCodeController : WPBaseViewController
 
 /**
  *  二维码图片链接
  */
-@property (nonatomic, copy) NSString *codeString;
-
-/**
- *  微信／支付宝
- *  1:微信 2:支付宝 3:QQ钱包
- */
-@property (nonatomic, assign) NSInteger payType;
+@property (nonatomic, copy) NSString *codeUrl;
 
 /**
  *  1:支付二维码 2:我的收款码 3:分享二维码
  */
 @property (nonatomic, assign) NSInteger codeType;
+
+/**
+ *  支付二维码Model
+ */
+@property (nonatomic, strong) WPQRCodeModel *codeModel;
 
 
 @end

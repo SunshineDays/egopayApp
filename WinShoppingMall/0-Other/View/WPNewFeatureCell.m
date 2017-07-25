@@ -15,12 +15,14 @@
 
 @implementation WPNewFeatureCell
 
-- (void)setImages:(NSArray *)imagesArray index:(NSUInteger)index {
+- (void)setImages:(NSArray *)imagesArray index:(NSUInteger)index
+{
     self.imageView.image = [UIImage imageNamed:imagesArray[index]];
     self.startButton.hidden = (index != (imagesArray.count - 1));
 }
 
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
     [super layoutSubviews];
     self.imageView.frame = [UIScreen mainScreen].bounds;
     
@@ -29,7 +31,8 @@
     self.startButton.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height * 0.87);
 }
 
-- (UIImageView *)imageView {
+- (UIImageView *)imageView
+{
     if (!_imageView) {
         UIImageView *imageView = [[UIImageView alloc] init];
         [self.contentView addSubview:imageView];
@@ -38,7 +41,8 @@
     return _imageView;
 }
 
-- (UIButton *)startButton {
+- (UIButton *)startButton
+{
     if (!_startButton) {
         UIButton *startButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [startButton addTarget:self action:@selector(startButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -48,7 +52,8 @@
     return _startButton;
 }
 
-- (void)startButtonClick:(UIButton *)button {
+- (void)startButtonClick:(UIButton *)button
+{
     [WPHelpTool rootViewController:[WPChooseInterface chooseRootViewController]];
 }
 

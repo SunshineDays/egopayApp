@@ -15,10 +15,9 @@
 #import "NSURL+WPExtension.h"
 
 @interface AppDelegate ()<UNUserNotificationCenterDelegate>
-{
-    NSUncaughtExceptionHandler *_uncaughtExceptionHandler;
-}
+
 @end
+
 
 @implementation AppDelegate
 
@@ -48,7 +47,7 @@
     //  极光推送
     [JPUSHService setBadge:0];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-    
+
     //  IQKeyboardManager键盘
     [IQKeyboardManager sharedManager].enableAutoToolbar = NO; //键盘不需要标题
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;  //点击背景隐藏键盘
@@ -83,14 +82,17 @@
     [JPUSHService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
     
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 10.0) {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 10.0)
+    {
         //  app在前台
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
+        {
             
             [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationReceiveSuccess object:@"jpushService" userInfo:userInfo];
             [WPUserInfor sharedWPUserInfor].userInfoDict = userInfo;
         }
-        else {
+        else
+        {
             [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationReceiveSuccess object:@"jpushService" userInfo:userInfo];
             [WPUserInfor sharedWPUserInfor].userInfoDict = userInfo;
         }
@@ -103,8 +105,8 @@
 #pragma mark - 3D Touch
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
-    if ([shortcutItem.type isEqualToString:@"TWO"]) {
-        
+    if ([shortcutItem.type isEqualToString:@"TWO"])
+    {
         [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationReceiveSuccess object:@"gatheringCode" userInfo:nil];
         [WPUserInfor sharedWPUserInfor].threeTouch = @"gatheringCode";
     }

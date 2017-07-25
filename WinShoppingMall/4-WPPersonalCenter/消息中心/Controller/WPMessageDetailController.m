@@ -25,7 +25,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"消息详情";
     
@@ -36,7 +37,8 @@
 
 #pragma mark - Init
 
-- (UIScrollView *)scrollView {
+- (UIScrollView *)scrollView
+{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self.view addSubview:_scrollView];
@@ -44,7 +46,8 @@
     return _scrollView;
 }
 
-- (UILabel *)titleLabel {
+- (UILabel *)titleLabel
+{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, kScreenWidth, WPRowHeight)];
         _titleLabel.text = self.model.title;
@@ -56,10 +59,9 @@
     return _titleLabel;
 }
 
-- (UILabel *)contentLabel {
+- (UILabel *)contentLabel
+{
     if (!_contentLabel) {
-        
-        
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:self.model.content width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
         _contentLabel.text = self.model.content;
         _contentLabel.textColor = [UIColor blackColor];
@@ -70,10 +72,11 @@
     return _contentLabel;
 }
 
-- (UILabel *)dateLabel {
+- (UILabel *)dateLabel
+{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.contentLabel.frame), kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
-        _dateLabel.text = [WPPublicTool dateToLocalDate:self.model.create_time];
+        _dateLabel.text = [WPPublicTool stringToDateString:self.model.create_time];
         _dateLabel.textColor = [UIColor blackColor];
         _dateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _dateLabel.textAlignment = NSTextAlignmentRight;

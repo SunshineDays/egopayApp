@@ -28,22 +28,26 @@
 {
     NSString *cString = [[color stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]uppercaseString];
     
-    if ([cString length] < 6) {
+    if ([cString length] < 6)
+    {
         return [UIColor clearColor];
     }
     
-    if ([cString hasPrefix:@"0X"]) {
+    if ([cString hasPrefix:@"0X"])
+    {
         cString = [cString substringFromIndex:2];
     }
-    if ([cString hasPrefix:@"0x"]) {
+    if ([cString hasPrefix:@"0x"])
+    {
         cString = [cString substringFromIndex:2];
     }
     
-    if ([cString hasPrefix:@"#"]) {
+    if ([cString hasPrefix:@"#"])
+    {
         cString = [cString substringFromIndex:1];
     }
-    
-    if ([cString length] != 6) {
+    if ([cString length] != 6)
+    {
         return [UIColor clearColor];
     }
     

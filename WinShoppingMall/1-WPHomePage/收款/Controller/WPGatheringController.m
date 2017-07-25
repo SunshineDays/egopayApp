@@ -113,7 +113,8 @@
     NSArray *imageArray = @[@"icon_duizhang_content_n", @"icon_shoukuanma_content_n"];
     NSArray *titleArray = @[@"对账",@"收款码"];
     
-    for (int i = 0; i < titleArray.count; i++) {
+    for (int i = 0; i < titleArray.count; i++)
+    {
         UIButton *imageButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth / 4 - 25 + kScreenWidth / 2 * i, 15, 50, 50)];
         [imageButton setImage:[UIImage imageNamed:imageArray[i]] forState:UIControlStateNormal];
         imageButton.tag = i;
@@ -130,7 +131,8 @@
 
 - (void)initBottomView
 {
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++)
+    {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.contentView.frame) + ((kScreenHeight - CGRectGetMaxY(self.contentView.frame) - 20) / 2 + 20) * i, kScreenWidth, (kScreenHeight - CGRectGetMaxY(self.contentView.frame) - 20) / 2)];
         label.text = @"资金很安全";
         label.textColor = [UIColor whiteColor];
@@ -144,11 +146,13 @@
 
 #pragma mark - Action
 
-- (void)nowButtonAction:(UIButton *)button {
+- (void)nowButtonAction:(UIButton *)button
+{
 
 }
 
-- (void)imageButtonAction:(UIButton *)button {
+- (void)imageButtonAction:(UIButton *)button
+{
     switch (button.tag) {
             //  对账
         case 0: {
@@ -172,16 +176,19 @@
 
 #pragma mark - Data 
 
-- (void)getTodayGatheringData {
+- (void)getTodayGatheringData
+{
     __weakSelf
-    [WPHelpTool getWithURL:WPTodayQrIncomeURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPTodayQrIncomeURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             weakSelf.moneyLabel.text = [NSString stringWithFormat:@"%.2f", [result[@"todayQrIncome"] floatValue]];
         }
-        
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

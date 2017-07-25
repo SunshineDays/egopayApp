@@ -9,21 +9,21 @@
 #import "WPJpushServiceController.h"
 #import "Header.h"
 #import "WPTabBarController.h"
-#import "WPNotificationBillDetailModel.h"
-#import "WPNotificationMessageModel.h"
+#import "WPMessagesModel.h"
 #import "WPNoticifationApproveModel.h"
 #import "WPNotificationMerchantModel.h"
 #import "WPNotificationCardModel.h"
+#import "WPBillModel.h"
 
 @interface WPJpushServiceController ()
 
 @property (nonatomic, strong) UILabel *messageContenLabel;
 
 //  账单详情
-@property (nonatomic, strong) WPNotificationBillDetailModel *billModel;
+@property (nonatomic, strong) WPBillModel *billModel;
 
 //  系统消息
-@property (nonatomic, strong) WPNotificationMessageModel *messageModel;
+@property (nonatomic, strong) WPMessagesModel *messageModel;
 
 //  实名认证
 @property (nonatomic, strong) WPNoticifationApproveModel *approveModel;
@@ -48,19 +48,24 @@
 
     NSString *target = self.resultDict[@"bis_result"][@"target"];
     
-    if ([target isEqualToString:@"trade_detail"] || [target isEqualToString:@"qr_bill"]) {
+    if ([target isEqualToString:@"trade_detail"] || [target isEqualToString:@"qr_bill"])
+    {
         [self getBillData];
     }
-    else if ([target isEqualToString:@"sys_notice"]) {
+    else if ([target isEqualToString:@"sys_notice"])
+    {
         [self getMessageData];
     }
-    else if ([target isEqualToString:@"authenticate"]) {
+    else if ([target isEqualToString:@"authenticate"])
+    {
         [self getApproveData];
     }
-    else if ([target isEqualToString:@"mer_cert"]) {
+    else if ([target isEqualToString:@"mer_cert"])
+    {
         [self getMerchantData];
     }
-    else if ([target isEqualToString:@"card_list"]) {
+    else if ([target isEqualToString:@"card_list"])
+    {
         [self getCardData];
     }
 }
@@ -71,8 +76,9 @@
 
 - (void)initBillHeaderLabel
 {
-    NSArray *headerArray = self.billModel.counterFee > 0 ? @[@"付款金额", @"手续费", @"可提现金额", @"当前状态", @"交易类型", @"支付方式", @"支付时间", @"账单编号", @"备        注"] : @[@"付款金额", @"当前状态", @"交易类型", @"支付方式", @"支付时间", @"账单编号", @"备        注"];
-    for (int i = 0; i < headerArray.count; i++) {
+    NSArray *headerArray = self.billModel.counterFee > 0 ? @[@"付款金额", @"手续费", @"可提现金额", @"当前状态", @"交易类型", @"支付方式", @"创建时间", @"账单编号", @"备        注"] : @[@"付款金额", @"当前状态", @"交易类型", @"支付方式", @"支付时间", @"账单编号", @"备        注"];
+    for (int i = 0; i < headerArray.count; i++)
+    {
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin + 40 * i, 100, 40)];
         headerLabel.text = headerArray[i];
         headerLabel.textColor = [UIColor darkGrayColor];
@@ -83,18 +89,17 @@
 
 - (void)initBillContentLabel
 {
-    
     NSString *moneyString = [NSString stringWithFormat:@"%.2f", self.billModel.amount];
     
     NSString *poundageString = [NSString stringWithFormat:@"%.2f", self.billModel.counterFee];
     
     NSString *trueMoneyString = [NSString stringWithFormat:@"%.2f", self.billModel.avl_amount];
     
-    NSString *stateString = [WPUserTool typeStateWith:self.billModel.payState];
+    NSString *stateString = [WPUserTool billTypeStateWithModel:self.billModel];
     
-    NSString *typeString = [WPUserTool typePurposeWith:self.billModel.tradeType];
+    NSString *typeString = [WPUserTool billTypePurposeWithModel:self.billModel];
     
-    NSString *wayString = [WPUserTool typeWayWith:self.billModel.paychannelid];
+    NSString *wayString = [WPUserTool billTypeWayWithModel:self.billModel];
     
     NSString *dateString = self.billModel.createDate;
     
@@ -107,7 +112,8 @@
     //  动态设置备注高度
     float height = [WPPublicTool textHeightFromTextString:self.billModel.remark width:kScreenWidth - WPLeftMarginField - WPLeftMargin miniHeight:40 fontSize:15];
     
-    for (int i = 0; i < contentArray.count; i++) {
+    for (int i = 0; i < contentArray.count; i++)
+    {
         UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, WPTopMargin + 40 * i, kScreenWidth - WPLeftMargin - 120, i == contentArray.count - 1 ? height : 40)];
         contentLabel.text = contentArray[i];
         contentLabel.textColor = [UIColor grayColor];
@@ -162,7 +168,8 @@
     stateLabel.textColor = [UIColor themeColor];
     stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
     [self.view addSubview:stateLabel];
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++)
+    {
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(stateLabel.frame) + WPRowHeight * i, kScreenWidth, WPLineHeight)];
         lineView.backgroundColor = [UIColor lineColor];
         [self.view addSubview:lineView];
@@ -172,7 +179,8 @@
 - (void)initApproveHeaderLabel
 {
     NSArray *headerArray = @[@"姓        名", @"身份证号"];
-    for (int i = 0; i < headerArray.count; i++) {
+    for (int i = 0; i < headerArray.count; i++)
+    {
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin + WPRowHeight + WPRowHeight * i, 80, WPRowHeight)];
         headerLabel.text = headerArray[i];
         headerLabel.textColor = [UIColor blackColor];
@@ -183,12 +191,13 @@
 
 - (void)initApproveContentLabel
 {
-    NSString *fullName = [WPPublicTool stringWithStarString:self.approveModel.fullName headerIndex:1 footerIndex:0];
-    NSString *userIDNmuber = [WPPublicTool stringWithStarString:[WPPublicTool base64DecodeString:self.approveModel.identityCard] headerIndex:3 footerIndex:2];
+    NSString *fullName = [WPPublicTool stringStarWithString:self.approveModel.fullName headerIndex:1 footerIndex:0];
+    NSString *userIDNmuber = [WPPublicTool stringStarWithString:[WPPublicTool base64DecodeString:self.approveModel.identityCard] headerIndex:3 footerIndex:2];
     
     NSArray *contentArray = @[fullName, userIDNmuber];
     
-    for (int i = 0; i < contentArray.count; i++) {
+    for (int i = 0; i < contentArray.count; i++)
+    {
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMarginField, WPTopMargin + WPRowHeight * i, kScreenWidth- WPLeftMarginField - WPLeftMargin, WPRowHeight)];
         headerLabel.text = contentArray[i];
         headerLabel.textColor = [UIColor blackColor];
@@ -248,7 +257,7 @@
 #pragma mark - 账单详情
 - (void)getBillData
 {
-    self.billModel = [WPNotificationBillDetailModel mj_objectWithKeyValues:[self stringToModelWithParameter:@"tradeInfo"]];
+    self.billModel = [WPBillModel mj_objectWithKeyValues:[self stringToModelWithParameter:@"tradeInfo"]];
     self.navigationItem.title = @"账单详情";
     [self initBillHeaderLabel];
     [self initBillContentLabel];
@@ -257,7 +266,7 @@
 #pragma mark - 系统消息
 - (void)getMessageData
 {
-    self.messageModel = [WPNotificationMessageModel mj_objectWithKeyValues:[self stringToModelWithParameter:@"content"]];
+    self.messageModel = [WPMessagesModel mj_objectWithKeyValues:[self stringToModelWithParameter:@"content"]];
     self.navigationItem.title = @"消息详情";
     [self initMessageTitleLabel];
     [self messageContenLabel];

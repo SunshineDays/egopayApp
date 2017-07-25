@@ -24,7 +24,8 @@
 
 @implementation WPUserLoadIDCardPhotoController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     self.navigationItem.title = @"上传身份证照片";

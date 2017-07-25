@@ -74,32 +74,37 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     [self.indicatorView startAnimating];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated
+{
     [super viewDidDisappear:animated];
 }
 
 #pragma mark - Init
 
-- (NSMutableArray *)dataArray {
+- (NSMutableArray *)dataArray
+{
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }
 
-- (NSMutableArray *)pictureArray {
+- (NSMutableArray *)pictureArray
+{
     if (!_pictureArray) {
         _pictureArray = [NSMutableArray array];
     }
     return _pictureArray;
 }
 
-- (UIView *)tableHeaderView {
+- (UIView *)tableHeaderView
+{
     if (!_tableHeaderView) {
         _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 40, kScreenWidth, kScreenWidth / 2 + 40)];
         self.tableView.tableHeaderView = _tableHeaderView;
@@ -107,7 +112,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return _tableHeaderView;
 }
 
-- (UISearchBar *)searchBar {
+- (UISearchBar *)searchBar
+{
     if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 5, kScreenWidth, 30)];
         _searchBar.delegate = self;
@@ -120,7 +126,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return _searchBar;
 }
 
-- (SDCycleScrollView *)cycleScrollView {
+- (SDCycleScrollView *)cycleScrollView
+{
     if (!_cycleScrollView) {
         CGRect rect = CGRectMake(0, 0, kScreenWidth, kScreenWidth / 2);
         _cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:rect
@@ -135,7 +142,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return _cycleScrollView;
 }
 
-- (UIButton *)defaultButton {
+- (UIButton *)defaultButton
+{
     if (!_defaultButton) {
         _defaultButton = [[UIButton alloc] initWithFrame:CGRectMake(0, kScreenWidth / 2, kScreenWidth / 3, 40)];
         [_defaultButton setTitle:@"默认" forState:UIControlStateNormal];
@@ -147,7 +155,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return _defaultButton;
 }
 
-- (UIButton *)cityButton {
+- (UIButton *)cityButton
+{
     if (!_cityButton) {
         _cityButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth / 3 * 1, kScreenWidth / 2, kScreenWidth / 3, 40)];
         [_cityButton setTitle:@"城市" forState:UIControlStateNormal];
@@ -160,7 +169,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return _cityButton;
 }
 
-- (UIButton *)classifyButton {
+- (UIButton *)classifyButton
+{
     if (!_classifyButton) {
         _classifyButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth / 3 * 2, kScreenWidth / 2, kScreenWidth / 3, 40)];
         [_classifyButton setTitle:@"分类" forState:UIControlStateNormal];
@@ -172,7 +182,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return _classifyButton;
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 40, kScreenWidth, kScreenHeight - WPNavigationHeight - 40) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor cellColor];
@@ -185,11 +196,13 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return _tableView;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPMerchantCell *cell = [tableView dequeueReusableCellWithIdentifier:WPMerchantCellID];
     cell.model = self.dataArray[indexPath.row];
     cell.backgroundColor = [UIColor whiteColor];
@@ -197,11 +210,13 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 100;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     [self.searchBar resignFirstResponder];
@@ -216,14 +231,16 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 
 #pragma mark - UISearchbar Delegate
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
     WPMerchantSearchController *vc = [[WPMerchantSearchController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Action
 
-- (void)defaultButtonClick:(UIButton *)button {
+- (void)defaultButtonClick:(UIButton *)button
+{
     [self.searchBar resignFirstResponder];
     self.categoryID = @"";
     self.cityName = @"";
@@ -232,7 +249,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     [self.tableView.mj_header beginRefreshing];
 }
 
-- (void)cityButtonClick:(UIButton *)button {
+- (void)cityButtonClick:(UIButton *)button
+{
     [self.searchBar resignFirstResponder];
 
     WPSelectListController *vc = [[WPSelectListController alloc] init];
@@ -242,7 +260,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     
     __weakSelf
     
-    vc.selecteNameBlock = ^(NSString *nameStr) {
+    vc.selecteNameBlock = ^(NSString *nameStr)
+    {
         [weakSelf.cityButton setTitle:nameStr forState:UIControlStateNormal];
         weakSelf.cityName = nameStr;
         [weakSelf.tableView.mj_header beginRefreshing];
@@ -250,7 +269,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)classifyButtonClick:(UIButton *)button {
+- (void)classifyButtonClick:(UIButton *)button
+{
     [self.searchBar resignFirstResponder];
 
     WPSelectListController *vc = [[WPSelectListController alloc] init];
@@ -259,7 +279,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     vc.type = 2;
     
     __weakSelf
-    vc.selectCategoryBlock = ^(WPMerchantCityListModel *model) {
+    vc.selectCategoryBlock = ^(WPMerchantCityListModel *model)
+    {
         [weakSelf.classifyButton setTitle:model.name forState:UIControlStateNormal];
         
         weakSelf.categoryID = [NSString stringWithFormat:@"%ld", model.id];
@@ -271,41 +292,47 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 
 #pragma mark - Data
 
-- (void)getCycleScrollData {
+- (void)getCycleScrollData
+{
     NSDictionary *parameters = @{
                                  @"bannerCode" : @"2"
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:WPCycleScrollURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPCycleScrollURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.pictureArray addObjectsFromArray:result[@"home_banner"]];
             [weakSelf.cycleScrollView reloadInputViews];
-            
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
-- (void)getShopListData {
-
+- (void)getShopListData
+{
     __weakSelf
-    [WPHelpTool getWithURL:WPShowMerShopsURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPShowMerShopsURL parameters:nil success:^(id success)
+    {
         [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray removeAllObjects];
             [weakSelf.dataArray addObjectsFromArray:[WPMerchantModel mj_objectArrayWithKeyValuesArray:result[@"shopList"]]];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商铺"];
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商铺"];
         [weakSelf defaultButton];
         [weakSelf cityButton];
         [weakSelf classifyButton];
         
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
         [weakSelf.indicatorView stopAnimating];
@@ -319,15 +346,18 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
                                  @"city" : self.cityName
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPShowMerShopsURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPShowMerShopsURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            [weakSelf.dataArray removeAllObjects];
+        [weakSelf.dataArray removeAllObjects];
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray addObjectsFromArray:[WPMerchantModel mj_objectArrayWithKeyValuesArray:result[@"shopList"]]];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商铺"];
-    } failure:^(NSError *error) {
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"shopList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的商铺"];
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
     }];

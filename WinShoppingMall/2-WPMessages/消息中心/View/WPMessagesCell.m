@@ -11,17 +11,19 @@
 
 @implementation WPMessagesCell
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     [super awakeFromNib];
     
     self.backgroundColor = [UIColor whiteColor];
 }
 
 
-- (void)setModel:(WPMessagesModel *)model {
+- (void)setModel:(WPMessagesModel *)model
+{
     self.titleLabel.text = model.title;
     
-    NSString *dateString = [WPPublicTool dateToLocalDate:model.create_time];
+    NSString *dateString = [WPPublicTool stringToDateString:model.create_time];
     self.dataLabel.text = dateString;
 }
 

@@ -26,7 +26,8 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
 @implementation WPMessagesCenterController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"系统消息";
     self.page = 1;
@@ -43,14 +44,16 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
     }];
 }
 
-- (NSMutableArray *)dataArray {
+- (NSMutableArray *)dataArray
+{
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
         _tableView.dataSource = self;
@@ -64,23 +67,27 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPMessagesCell *cell = [tableView dequeueReusableCellWithIdentifier:WPMessagesCellID];
     cell.model = self.dataArray[indexPath.row];
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 60;
 }
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     WPMessagesModel *model = self.dataArray[indexPath.row];
     WPMessageDetailController *vc =[[WPMessageDetailController alloc] init];
@@ -88,23 +95,28 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)getmessgaesData {
+- (void)getmessgaesData
+{
     NSDictionary *parameters = @{
-                                 @"curPage" : [NSString stringWithFormat:@"%ld", self.page]
+                                 @"curPage" : [NSString stringWithFormat:@"%ld", (long)self.page]
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:WPMessageURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPMessageURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         
-        if ([type isEqualToString:@"1"]) {
-            if (weakSelf.page == 1) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (weakSelf.page == 1)
+            {
                 [weakSelf.dataArray removeAllObjects];
             }
             [weakSelf.dataArray addObjectsFromArray:[WPMessagesModel mj_objectArrayWithKeyValuesArray:result[@"msgList"]]];
         }
-        [WPHelpTool messageEndRefreshWith:weakSelf.tableView array:result[@"msgList"] noResultLabel:weakSelf.noResultLabel title:@"暂无消息"];
-    } failure:^(NSError *error) {
+        [WPHelpTool messageEndRefreshingOnView:weakSelf.tableView array:result[@"msgList"] noResultLabel:weakSelf.noResultLabel title:@"暂无消息"];
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
     }];

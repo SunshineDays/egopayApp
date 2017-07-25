@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WinShoppingMall/4-WPPersonalCenter/&#x94f6;&#x884c;&#x5361;/Controller/WPBankCardController.m"
-            timestampString = "521342502.191349"
+            filePath = "WinShoppingMall/3-WpDelegate/&#x4ee3;&#x7406;/Controller/WPAgencyController.m"
+            timestampString = "522574147.547971"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
-            landmarkName = "-postDeleteCardDataWithPassword:"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
+            landmarkName = "-getCycleScrollData"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

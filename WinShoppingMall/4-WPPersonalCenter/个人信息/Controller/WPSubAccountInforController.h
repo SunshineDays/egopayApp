@@ -17,7 +17,6 @@
 
 @property (nonatomic, strong) UIImage *avaterImage;
 
-
 @property (nonatomic, copy) void(^avaterImageBlcok)(UIImage *avaterImage);
 
 @end

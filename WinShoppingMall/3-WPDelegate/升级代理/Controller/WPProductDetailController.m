@@ -55,7 +55,8 @@
     self.isVip = isUpgrade;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     self.isVip ? [self submitButton] : [self descriptionLabel];
@@ -64,7 +65,8 @@
 
 #pragma mark - Init
 
-- (UIScrollView *)scrollView {
+- (UIScrollView *)scrollView
+{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self.view addSubview:_scrollView];
@@ -136,14 +138,12 @@
 
 #pragma mark - Action 
 
-- (void)submitOrderButtonClick:(UIButton *)button {
+- (void)submitOrderButtonClick:(UIButton *)button
+{
     
     WPProductSubmitController *vc = [[WPProductSubmitController alloc] init];
     
     vc.navigationItem.title = self.isAgency ? @"代理升级" : @"商户升级";
-//    vc.isDelegate = self.isAgency;
-//    vc.userLv = self.isAgency ? [NSString stringWithFormat:@"%ld", (long)self.delegateModel.id] : [NSString stringWithFormat:@"%ld", (long)self.merModel.id];
-//    vc.gradeMoney = self.isAgency ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price] : [NSString stringWithFormat:@"%.2f", self.merModel.price];
     [vc initWithTitle:self.isAgency ? @"代理升级" : @"商户升级"
                userLv:self.isAgency ? [NSString stringWithFormat:@"%ld", (long)self.delegateModel.id] : [NSString stringWithFormat:@"%ld", (long)self.merModel.id]
            gradeMoney:self.isAgency ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price] : [NSString stringWithFormat:@"%.2f", self.merModel.price]

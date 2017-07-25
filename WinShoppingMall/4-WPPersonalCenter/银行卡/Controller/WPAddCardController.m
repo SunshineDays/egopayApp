@@ -7,7 +7,6 @@
 //
 
 #import "WPAddCardController.h"
-#import "WPSelectButton.h"
 #import "Header.h"
 #import "WPConfirmVerificationController.h"
 #import "WPSelectListController.h"
@@ -33,7 +32,8 @@
 
 @implementation WPAddCardController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [self dateCell];
@@ -142,12 +142,16 @@
     vc.modalPresentationStyle = UIModalPresentationCustom;
     vc.type = 3;
     __weakSelf
-    vc.selecteNameBlock = ^(NSString *nameStr) {
-        if ([nameStr isEqualToString:@"其他银行"]) {
+    vc.selecteNameBlock = ^(NSString *nameStr)
+    {
+        if ([nameStr isEqualToString:@"其他银行"])
+        {
             WPMoreBankController *vc = [[WPMoreBankController alloc] init];
             vc.navigationItem.title = @"开户银行";
-            vc.inforBlock = ^(NSString *inforBlock) {
-                if (inforBlock.length > 0) {
+            vc.inforBlock = ^(NSString *inforBlock)
+            {
+                if (inforBlock.length > 0)
+                {
                     [weakSelf.bankCell.button setTitle:inforBlock forState:UIControlStateNormal];
                     [weakSelf.bankCell.button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 }
@@ -176,22 +180,28 @@
 {
     [[UIApplication sharedApplication].keyWindow endEditing:YES];
     
-    if ([self.bankCell.button.titleLabel.text isEqualToString:@"请选择开户银行"]) {
+    if ([self.bankCell.button.titleLabel.text isEqualToString:@"请选择开户银行"])
+    {
         [WPProgressHUD showInfoWithStatus:@"请选择开户银行"];
     }
-    else if (self.branchCell.textField.text.length == 0) {
+    else if (self.branchCell.textField.text.length == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入支行名称"];
     }
-    else if (self.numberCell.textField.text.length < 10 || self.numberCell.textField.text.length > 20) {
+    else if (self.numberCell.textField.text.length < 10 || self.numberCell.textField.text.length > 20)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的银行卡号"];
     }
-    else if (![WPRegex validateMobile:self.phoneCell.textField.text]) {
+    else if (![WPJudgeTool validateMobile:self.phoneCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号码"];
     }
-    else if ([self.cardType isEqualToString:@"1"] && [self.dateCell.button.titleLabel.text isEqualToString:@"请选择有效期限"]) {
+    else if ([self.cardType isEqualToString:@"1"] && [self.dateCell.button.titleLabel.text isEqualToString:@"请选择有效期限"])
+    {
         [WPProgressHUD showInfoWithStatus:@"请选择有效期限"];
     }
-    else {
+    else
+    {
         [self getVerificationData];
     }
 }
@@ -199,7 +209,7 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 #pragma mark - Data
@@ -212,13 +222,15 @@
                                  @"verType" : @"3"
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf tradsmitData];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }

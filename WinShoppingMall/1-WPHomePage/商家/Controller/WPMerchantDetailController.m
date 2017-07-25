@@ -37,7 +37,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     [self getMerchantDetailData];
@@ -45,7 +46,8 @@
 
 #pragma mark - Init
 
-- (UIScrollView *)scrollView {
+- (UIScrollView *)scrollView
+{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self.view addSubview:_scrollView];
@@ -53,7 +55,8 @@
     return _scrollView;
 }
 
-- (UIImageView *)titleImageView {
+- (UIImageView *)titleImageView
+{
     if (!_titleImageView) {
         _titleImageView = [[UIImageView alloc] initWithFrame:CGRectMake(WPLeftMargin, 10, 80, 80)];
         [_titleImageView sd_setImageWithURL:[NSURL URLWithString:self.model.cover_url] placeholderImage:[UIImage imageNamed:@"123"] options:SDWebImageRefreshCached];
@@ -62,7 +65,8 @@
     return _titleImageView;
 }
 
-- (UILabel *)titleLabel {
+- (UILabel *)titleLabel
+{
     if (!_titleLabel) {
         NSArray *array = @[self.model.shopName, self.model.detailAddr];
         for (int i = 0; i < array.count; i++) {
@@ -77,7 +81,8 @@
     return _titleLabel;
 }
 
-- (UILabel *)shopNameLabel {
+- (UILabel *)shopNameLabel
+{
     if (!_shopNameLabel) {
         _shopNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleImageView.frame), kScreenWidth - 2 * WPLeftMargin, 30)];
         _shopNameLabel.text = [NSString stringWithFormat:@"联系人:    %@", self.model.linkMan];
@@ -89,7 +94,8 @@
     return _shopNameLabel;
 }
 
-- (UIButton *)telButton {
+- (UIButton *)telButton
+{
     if (!_telButton) {
         _telButton = [[UIButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.shopNameLabel.frame), kScreenWidth - 2 * WPLeftMargin, 30)];
         [_telButton setTitle:[NSString stringWithFormat:@"联系电话:%@", self.model.telephone] forState:UIControlStateNormal];
@@ -103,7 +109,8 @@
 }
 
 
-- (UILabel *)descripLabel {
+- (UILabel *)descripLabel
+{
     if (!_descripLabel) {
         NSString *labelText = [NSString stringWithFormat:@"商户描述:\n        %@", self.model.descp];
         _descripLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.telButton.frame), kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:labelText width:kScreenWidth - 2 * WPLeftMargin miniHeight:30 fontSize:15])];
@@ -116,11 +123,13 @@
     return _descripLabel;
 }
 
-- (UIImageView *)descripImageView {
+- (UIImageView *)descripImageView
+{
     if (!_descripImageView) {
         float imageWidth = (kScreenWidth - 3 * WPLeftMargin) / 2;
         NSArray *array = @[@"123"];
-        for (int i = 0; i < array.count; i++) {
+        for (int i = 0; i < array.count; i++)
+        {
             _descripImageView = [[UIImageView alloc] initWithFrame:CGRectMake(WPLeftMargin + (imageWidth + WPLeftMargin) * (i % 2), CGRectGetMaxY(self.descripLabel.frame) + 10 + (imageWidth + 10) * (i / 2), imageWidth, imageWidth)];
             [_descripImageView sd_setImageWithURL:[NSURL URLWithString:self.model.cover_url] placeholderImage:[UIImage imageNamed:@"123"] options:SDWebImageRefreshCached];
             
@@ -133,27 +142,31 @@
 
 #pragma mark - Action
 
-- (void)telButtonClick:(UIButton *)button {
+- (void)telButtonClick:(UIButton *)button
+{
     [self.view callToNum:self.model.telephone];
 }
 
 #pragma mark - Data
 
-- (void)getMerchantDetailData {
+- (void)getMerchantDetailData
+{
     NSDictionary *parameters = @{
                                  @"shop_id" : self.merID
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:WPMerShopDetailURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPMerShopDetailURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             weakSelf.model = [WPMerchantDetailModel mj_objectWithKeyValues:result];
             [weakSelf titleLabel];
             [weakSelf descripImageView];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

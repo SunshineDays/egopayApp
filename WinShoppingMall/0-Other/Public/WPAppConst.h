@@ -1,5 +1,19 @@
 #import <UIKit/UIKit.h>
 
+/********************************  屏幕尺寸  ************************************/
+#pragma mark - 屏幕尺寸
+
+/** 屏幕尺寸 */
+#define kScreenSize [UIScreen mainScreen].bounds.size
+
+/** 屏幕宽度 */
+#define kScreenWidth kScreenSize.width
+
+/** 屏幕高度 */ 
+#define kScreenHeight kScreenSize.height
+
+
+
 /********************************  UI相关常量  ************************************/
 #pragma mark - UI相关常量
 
@@ -31,6 +45,7 @@ UIKIT_EXTERN CGFloat const WPButtonHeight;
 UIKIT_EXTERN CGFloat const WPFontDefaultSize;
 
 
+
 /********************************  App常量 ************************************/
 #pragma mark - App常量
 
@@ -40,21 +55,6 @@ UIKIT_EXTERN NSTimeInterval const getVerificationCodeTime;
 /** 电话号码 */
 UIKIT_EXTERN NSString * const WPAppTelNumber;
 
-
-/********************************  通知  ************************************/
-#pragma mark - 通知
-
-UIKIT_EXTERN NSString * const WPNotificationPayPasswordImportEnd;
-
-UIKIT_EXTERN NSString * const WPNotificationChangeUserInfor;
-
-UIKIT_EXTERN NSString * const WPNotificationAddCardSuccess;
-
-UIKIT_EXTERN NSString * const WPNotificationReceiveSuccess;
-
-UIKIT_EXTERN NSString * const WPNotificationSubAccountAddSuccess;
-
-UIKIT_EXTERN NSString * const WPNotificationUserLogout;
 
 
 /******************************  静态参数  ***********************************/
@@ -72,26 +72,39 @@ UIKIT_EXTERN NSString * const WPUserShopPass;
 
 UIKIT_EXTERN NSString * const WPUserPhone;
 
-UIKIT_EXTERN NSString * const WPCodeUrl;
-
 UIKIT_EXTERN NSString * const WPNeedTouchID;
 
 UIKIT_EXTERN NSString * const WPRegisterTouchID;
 
 UIKIT_EXTERN NSString * const WPPayTouchID;
 
+UIKIT_EXTERN NSString * const WPIsRemindTouchID;
+
 UIKIT_EXTERN NSString * const WPIsSubAccount;
 
 UIKIT_EXTERN NSString * const kUserPayPassword;
 
-UIKIT_EXTERN NSString * const kUserPhone;
-
-UIKIT_EXTERN NSString * const kUserPayPassword_Phone;
+UIKIT_EXTERN NSString * const kUserPayPassword_Infor;
 
 
 
-/******************************* 统一的URL **********************************/
-#pragma mark - 统一的URL
+/********************************  通知  ************************************/
+#pragma mark - 通知
+
+UIKIT_EXTERN NSString * const WPNotificationChangeUserInfor;
+
+UIKIT_EXTERN NSString * const WPNotificationAddCardSuccess;
+
+UIKIT_EXTERN NSString * const WPNotificationReceiveSuccess;
+
+UIKIT_EXTERN NSString * const WPNotificationSubAccountAddSuccess;
+
+UIKIT_EXTERN NSString * const WPNotificationUserLogout;
+
+
+
+/******************************* URL **********************************/
+#pragma mark - URL
 
 /*** baseURL ***/
 UIKIT_EXTERN NSString * const WPBaseURL;
@@ -108,13 +121,21 @@ UIKIT_EXTERN NSString * const WPDelegateAgentWebURL;
 
 UIKIT_EXTERN NSString * const WPTouchIDWebURL;
 
-/***/
+/**********/
 
 UIKIT_EXTERN NSString * const WPRegisterURL;
 
+UIKIT_EXTERN NSString * const WPConfirmEnrollURL;
+
+UIKIT_EXTERN NSString * const WPUserLogoutURL;
+
 UIKIT_EXTERN NSString * const WPGetMessageURL;
 
-UIKIT_EXTERN NSString * const WPConfirmEnrollURL;
+UIKIT_EXTERN NSString * const WPTransferAccountsURL;
+
+UIKIT_EXTERN NSString * const WPWithdrawURL;
+
+UIKIT_EXTERN NSString * const WPProfitWithdrawURL;
 
 UIKIT_EXTERN NSString * const WPRechargeURL;
 
@@ -126,6 +147,8 @@ UIKIT_EXTERN NSString * const WPUserApproveBankCardPhotoURL;
 
 UIKIT_EXTERN NSString * const WPUserApproveIDCardPassURL;
 
+UIKIT_EXTERN NSString * const WPUserBanKCardURL;
+
 UIKIT_EXTERN NSString * const WPUserAddCardURL;
 
 UIKIT_EXTERN NSString * const WPUserDeleteCardURL;
@@ -136,23 +159,13 @@ UIKIT_EXTERN NSString * const WPSetPayPasswordURL;
 
 UIKIT_EXTERN NSString * const WPAddTouchIDPayPasswordURL;
 
-UIKIT_EXTERN NSString * const WPUserLogoutURL;
-
-UIKIT_EXTERN NSString * const WPUserBanCardURL;
-
-UIKIT_EXTERN NSString * const WPUserHasCardURL;
+UIKIT_EXTERN NSString * const WPUserJudgeInforURL;
 
 UIKIT_EXTERN NSString * const WPUserInforURL;
 
 UIKIT_EXTERN NSString * const WPUserChangeAvatarURL;
 
 UIKIT_EXTERN NSString * const WPUserChangeInforURL;
-
-UIKIT_EXTERN NSString * const WPTransferAccountsURL;
-
-UIKIT_EXTERN NSString * const WPWithdrawURL;
-
-UIKIT_EXTERN NSString * const WPProfitWithdrawURL;
 
 UIKIT_EXTERN NSString * const WPBillURL;
 

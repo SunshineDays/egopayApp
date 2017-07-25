@@ -26,7 +26,8 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"子账户";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_jia_content_n"] style:UIBarButtonItemStylePlain target:self action:@selector(addSubAccount)];
@@ -40,14 +41,16 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (NSMutableArray *)dataArray {
+- (NSMutableArray *)dataArray
+{
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
         _tableView.delegate = self;
@@ -60,22 +63,26 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPMessagesCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPMessageCellID];
     WPSubAccountListModel *model = self.dataArray[indexPath.row];
     cell.titleLabel.text = model.clerkName;
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 60;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     WPSubAccountSettingController *vc = [[WPSubAccountSettingController alloc] init];
@@ -101,19 +108,23 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 
 #pragma mark - Data
 
-- (void)getSubAccountListData {
+- (void)getSubAccountListData
+{
     
     __weakSelf
-    [WPHelpTool getWithURL:WPSubAccountListURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPSubAccountListURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray removeAllObjects];
             [weakSelf.dataArray addObjectsFromArray:[WPSubAccountListModel mj_objectArrayWithKeyValuesArray:result[@"clerkList"]]];
             [weakSelf.tableView reloadData];
         }
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"clerkList"] noResultLabel:weakSelf.noResultLabel title:@"暂无子账户"];
-    } failure:^(NSError *error) {
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"clerkList"] noResultLabel:weakSelf.noResultLabel title:@"暂无子账户"];
+    } failure:^(NSError *error)
+    {
         
     }];
 }

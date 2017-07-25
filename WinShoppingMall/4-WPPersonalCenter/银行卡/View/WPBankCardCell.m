@@ -21,10 +21,10 @@
 }
 
 - (void)setModel:(WPBankCardModel *)model {
-    self.cardImageView.image = [WPUserTool payBankImageCode:model.bankCode];
+    self.cardImageView.image = [WPUserTool payBankImageWithBankCode:model.bankCode];
     
     self.cardNameLabel.text = model.bankName;
-    self.cardNumberLabel.text = [WPPublicTool stringWithStarString:[WPPublicTool base64DecodeString:model.cardNumber] headerIndex:0 footerIndex:4];
+    self.cardNumberLabel.text = [WPPublicTool stringStarWithString:[WPPublicTool base64DecodeString:model.cardNumber] headerIndex:0 footerIndex:4];
     self.cardTypeLabel.text = model.cardType == 1 ? @"信用卡" : @"储蓄卡";
     self.backgroundColor = model.cardType == 1 ? [UIColor colorWithRGBString:@"#E7576E"] : [UIColor colorWithRGBString:@"#1BB093"];
     if (model.auditStatus == 1) {

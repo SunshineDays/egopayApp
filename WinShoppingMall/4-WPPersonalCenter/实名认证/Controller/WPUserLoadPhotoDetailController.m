@@ -9,7 +9,6 @@
 #import "WPUserLoadPhotoDetailController.h"
 
 #import "Header.h"
-#import "WPImageButton.h"
 
 @interface WPUserLoadPhotoDetailController ()<UIImagePickerControllerDelegate,UIActionSheetDelegate, UINavigationControllerDelegate, UIScrollViewDelegate>
 
@@ -35,7 +34,8 @@
 
 @implementation WPUserLoadPhotoDetailController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.imageHeight = kScreenWidth * 0.4f;
     self.titleArray = self.isIDCard ? @[@"身份证正面照", @"身份证背面照", @"手持身份证"] : @[@"银行卡正面照"];
@@ -54,7 +54,8 @@
     return _imageArray;
 }
 
-- (UIScrollView *)scrollView {
+- (UIScrollView *)scrollView
+{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self.view addSubview:_scrollView];
@@ -75,17 +76,22 @@
 
 - (void)initPhotoButton
 {
-    for (int i = 0; i < self.titleArray.count; i++) {
-        WPImageButton *imageButton = [[WPImageButton alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - self.imageHeight / 2, 10 + (self.imageHeight + 10) * i, self.imageHeight, self.imageHeight)];
+    for (int i = 0; i < self.titleArray.count; i++)
+    {
+        WPSelectImageButton *imageButton = [WPSelectImageButton buttonWithType:UIButtonTypeCustom];
+        [imageButton setFrame:CGRectMake(kScreenWidth / 2 - self.imageHeight / 2, 10 + (self.imageHeight + 10) * i, self.imageHeight, self.imageHeight)];
+        [imageButton setImage:[UIImage imageNamed:@"icon-jiahao_content_n"] forState:UIControlStateNormal];
+        
+        [imageButton setTitle:self.titleArray[i] forState:UIControlStateNormal];
         imageButton.tag = i;
         [imageButton addTarget:self action:@selector(imageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        imageButton.label.text = self.titleArray[i];
         [self.backgroundView addSubview:imageButton];
     }
 }
 
 
-- (WPButton *)confirmLoadButton {
+- (WPButton *)confirmLoadButton
+{
     if (!_confirmLoadButton) {
         _confirmLoadButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.backgroundView.frame) + 30, kScreenWidth - 2 * WPLeftMargin, 40)];
         [_confirmLoadButton setTitle:@"提交认证" forState:UIControlStateNormal];
@@ -99,14 +105,17 @@
 
 #pragma mark - UIImagePickerControllerDelegate
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
-    for (int i = 0; i < self.titleArray.count; i++) {
-        WPImageButton *imageButton = self.backgroundView.subviews[i];
-        if (self.selectedLine == i) {
+    for (int i = 0; i < self.titleArray.count; i++)
+    {
+        WPSelectImageButton *imageButton = self.backgroundView.subviews[i];
+        if (self.selectedLine == i)
+        {
             [imageButton setImage:image forState:UIControlStateNormal];
             self.imageArray[i] = [WPPublicTool imageToString:image];
         }
@@ -121,26 +130,33 @@
 
 #pragma mark - Action
 
-- (void)imageButtonClick:(WPImageButton *)sender
+- (void)imageButtonClick:(WPSelectImageButton *)sender
 {
     self.selectedLine = sender.tag;
     [self alertControllerWithPhoto:NO];
 }
 
-- (void)confirmLoadButtonClick {
-    if (self.isIDCard) {
-        if ([self.imageArray[0] length] == 0 || [self.imageArray[1] length] == 0 || [self.imageArray[2] length] == 0) {
+- (void)confirmLoadButtonClick
+{
+    if (self.isIDCard)
+    {
+        if ([self.imageArray[0] length] == 0 || [self.imageArray[1] length] == 0 || [self.imageArray[2] length] == 0)
+        {
             [WPProgressHUD showInfoWithStatus:@"请完善照片"];
         }
-        else {
+        else
+        {
             [self pushUserIDCardPhotoData];
         }
     }
-    else {
-        if ([self.imageArray[0] length] == 0) {
+    else
+    {
+        if ([self.imageArray[0] length] == 0)
+        {
             [WPProgressHUD showInfoWithStatus:@"请完善照片"];
         }
-        else {
+        else
+        {
             [self pushBankCardPhotoData];
         }
     }
@@ -148,49 +164,50 @@
 
 #pragma mark - Data
 
-- (void)pushUserIDCardPhotoData {
-    
+- (void)pushUserIDCardPhotoData
+{
     NSDictionary *parameters = @{
                                  @"fileA" : self.imageArray[0],
                                  @"fileB" : self.imageArray[1],
                                  @"fileC" : self.imageArray[2]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPUserApproveIDCardPhotoURL parameters:parameters success:^(id success) {
-        
-
+    [WPHelpTool postWithURL:WPUserApproveIDCardPhotoURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"提交认证成功"];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
-- (void)pushBankCardPhotoData {
-    
-    
+- (void)pushBankCardPhotoData
+{
     NSDictionary *parameters = @{
                                  @"fileA" : self.imageArray[0],
                                  @"cardId" : [NSString stringWithFormat:@"%@", self.cardId]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPUserApproveBankCardPhotoURL parameters:parameters success:^(id success) {
-        
-
+    [WPHelpTool postWithURL:WPUserApproveBankCardPhotoURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"提交认证成功"];
             
-            if (weakSelf.loadApproveBlock) {
+            if (weakSelf.loadApproveBlock)
+            {
                 weakSelf.loadApproveBlock(4);
             }
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }

@@ -10,8 +10,6 @@
 #import "UIColor+WPColor.h"
 #import "WPAppConst.h"
 
-#define wp_ScreenWidth [[UIScreen mainScreen] bounds].size.width
-#define wp_ScreenHeight [[UIScreen mainScreen] bounds].size.height
 
 @interface WPPopupTitleView ()
 
@@ -27,7 +25,7 @@
 {
     if (self = [super init]) {
         self.userInteractionEnabled = YES;
-        [self setFrame:CGRectMake(0, 0, wp_ScreenWidth, wp_ScreenHeight * 7 / 24 + 60.5)];
+        [self setFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight * 7 / 24 + 60.5)];
         [self cancelButton];
         [self imageButton];
         [self titleLabel];
@@ -39,7 +37,7 @@
 - (UIButton *)cancelButton
 {
     if (!_cancelButton) {
-        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, wp_ScreenWidth, wp_ScreenHeight * 7 / 24)];
+        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight * 7 / 24)];
         [self addSubview:_cancelButton];
     }
     return _cancelButton;
@@ -48,7 +46,7 @@
 - (UIView *)titleView
 {
     if (!_titleView) {
-        _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cancelButton.frame), wp_ScreenWidth, 60)];
+        _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cancelButton.frame), kScreenWidth, 60)];
         _titleView.backgroundColor = [UIColor whiteColor];
         _titleView.userInteractionEnabled = YES;
         [self addSubview:_titleView];
@@ -59,7 +57,7 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(wp_ScreenWidth / 2 - 100, 0, 200, 60)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 100, 0, 200, 60)];
         _titleLabel.font = [UIFont systemFontOfSize:17];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.titleView addSubview:_titleLabel];
@@ -80,7 +78,7 @@
 - (UIView *)lineView
 {
     if (!_lineView) {
-        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.titleView.frame), wp_ScreenWidth, 0.5f)];
+        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.titleView.frame), kScreenWidth, 0.5f)];
         _lineView.backgroundColor = [UIColor placeholderColor];
         [self addSubview:_lineView];
     }

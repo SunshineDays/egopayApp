@@ -4,16 +4,16 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target ‘WinShoppingMall’ do
     pod 'SDCycleScrollView', '~> 1.65'
-    pod 'SDWebImage', '~> 3.7.3'
-    pod 'AFNetworking', '~> 2.6.2'
+    pod 'SDWebImage', '~> 4.0.0'
+    pod 'AFNetworking', '~> 3.1.0'
     pod 'MJRefresh' , '~> 3.1.0'
     pod 'MJExtension' , '~> 3.0.10'
-    pod 'SVProgressHUD','~> 1.1.3'
+    pod 'SVProgressHUD','~> 2.1.2'
     pod 'IQKeyboardManager','~> 4.0.8'
-    pod 'UMengSocial', '~> 4.3'
-    pod 'UMengAnalytics-NO-IDFA', '~> 3.6.7'
+    pod 'UMengSocial', '~> 5.0'
     pod 'JPush', '~> 3.0.5'
-    
+
+#    pod 'UMengAnalytics-NO-IDFA', '~> 4.2.5'
 #    pod 'Toast', '~> 3.0'
 #    pod 'Masonry' , '~> 1.0.0'
 #    pod 'AMapLocation','~> 1.1.1'

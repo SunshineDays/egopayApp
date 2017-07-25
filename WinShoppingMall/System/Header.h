@@ -17,19 +17,19 @@
 //#import <MJRefresh/MJRefresh.h>
 #import <AFNetworking/AFNetworking.h>
 #import "WPPublicTool.h"
-//#import "IQKeyboardManager.h"
 #import "UIColor+WPColor.h"
 #import "NSURL+WPExtension.h"
 #import "UIImageView+WebCache.h"
 #import "WPHelpTool.h"
-#import "WPRegex.h"
+#import "WPJudgeTool.h"
 #import "MJRefresh.h"
 #import "WPKeyChainTool.h"
 #import "WPRowTableViewCell.h"
-#import "WPButton.h"
+#import "WPCustomButton.h"
 #import "WPPasswordController.h"
-#import "WPAppTool.h"
+#import "WPJudgeTool.h"
 #import "WPUserTool.h"
+#import "WPCustomButton.h"
 
 //#import "UIBarButtonItem+WPExtention.h"
 
@@ -57,14 +57,6 @@
 
 /**  判断手机的系统版本 */
 #define iOS(v) ([UIDevice currentDevice].systemVersion.doubleValue >= (v))
-
-
-// 屏幕尺寸
-#define kScreenSize [UIScreen mainScreen].bounds.size
-// 屏幕宽度
-#define kScreenWidth kScreenSize.width
-// 屏幕高度
-#define kScreenHeight kScreenSize.height
 
 
 #endif /* Header_h */

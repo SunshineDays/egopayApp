@@ -28,7 +28,8 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
 
 @implementation WPUserMoneyController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"余额";
     self.dataArray = @[@"充值", @"提现"];
@@ -65,7 +66,8 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
 
 }
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor cellColor];
@@ -81,15 +83,18 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPRechargeCell *cell = [tableView dequeueReusableCellWithIdentifier:WPRechargeCellMoneyID];
     cell.bankNameLabel.text = self.dataArray[indexPath.row];
     cell.bankImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
@@ -98,30 +103,36 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return WPRowHeight;
 }
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    switch (indexPath.row) {
+    switch (indexPath.row)
+    {
         case 0: // 充值
         {
             WPUserRechargeController *vc = [[WPUserRechargeController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
-        }
             break;
+        }
         case 1: // 提现
         {
-            if (self.model.avl_balance > 0) {
-                if ([WPAppTool isPassIDCardApprove]) {
+            if (self.model.avl_balance > 0)
+            {
+                if ([WPJudgeTool isIDCardApprove])
+                {
                     WPUserWithDrawController *vc = [[WPUserWithDrawController alloc] init];
                     [self.navigationController pushViewController:vc animated:YES];
                 }
-                else {
+                else
+                {
                     [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
                 }
             }

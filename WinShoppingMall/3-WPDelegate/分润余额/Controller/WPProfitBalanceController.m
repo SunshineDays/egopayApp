@@ -9,7 +9,6 @@
 #import "WPProfitBalanceController.h"
 #import "Header.h"
 #import "WPUserEnrollController.h"
-#import "WPPayPopupController.h"
 #import "WPSuccessOrfailedController.h"
 
 @interface WPProfitBalanceController () <UITextFieldDelegate>
@@ -28,7 +27,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"分润余额";
     
@@ -39,7 +39,8 @@
 }
 
 #pragma mark - Init
-- (UILabel *)titleLabel {
+- (UILabel *)titleLabel
+{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _titleLabel.text = @"分润余额(元)";
@@ -50,7 +51,8 @@
     return _titleLabel;
 }
 
-- (UILabel *)moneyLabel {
+- (UILabel *)moneyLabel
+{
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, 80)];
         _moneyLabel.text = self.moneyString;
@@ -88,82 +90,87 @@
     return _confirmButton;
 }
 
-- (void)initPayPopupView {
-    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
-    vc.titleString = [NSString stringWithFormat:@"提现金额:%@元", self.moneyCell.textField.text];
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    __weakSelf
-    vc.payPasswordBlock = ^(NSString *payPassword) {
-        [weakSelf pushWithdrawDataWithPassword:payPassword];
-    };
-    vc.forgetPasswordBlock = ^{
-        WPPasswordController *vc = [[WPPasswordController alloc] init];
-        vc.passwordType = @"2";
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    };
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
-}
-
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateMoneyNumber:textField.text range:range replacementString:string];
+    return [WPJudgeTool validatePrice:textField.text range:range replacementString:string];
 }
 
 #pragma mark - Action
 
 - (void)changeButtonSurface
 {
-    if ([self.moneyCell.textField.text floatValue] > [self.moneyString floatValue]) {
+    if ([self.moneyCell.textField.text floatValue] > [self.moneyString floatValue])
+    {
         self.moneyCell.textField.text = self.moneyString;
     }
     [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:[self.moneyCell.textField.text floatValue] > 0 ? YES : NO];
 }
 
-- (void)withDrawButtonClick:(UIButton *)button {
-    if ([self.moneyString floatValue] < [self.moneyCell.textField.text floatValue]) {
+- (void)withDrawButtonClick:(UIButton *)button
+{
+    if ([self.moneyString floatValue] < [self.moneyCell.textField.text floatValue])
+    {
         [WPProgressHUD showInfoWithStatus:@"转出金额不能大于分润余额"];
     }
-    else if ([self.moneyCell.textField.text floatValue] == 0) {
+    else if ([self.moneyCell.textField.text floatValue] == 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入转出金额"];
     }
-    else {
-        if ([WPAppTool isPayTouchID]) {
+    else
+    {
+        if ([WPJudgeTool isPayTouchID])
+        {
             __weakSelf
-            [WPHelpTool payWithTouchIDsuccess:^(id success) {
+            [WPHelpTool payWithTouchIDsuccess:^(id success)
+            {
                 [weakSelf pushWithdrawDataWithPassword:success];
                 
-            } failure:^(NSError *error) {
+            } failure:^(NSError *error)
+            {
                 [weakSelf initPayPopupView];
             }];
         }
-        else {
+        else
+        {
             [self initPayPopupView];
         }
     }
 }
 
+
+- (void)initPayPopupView
+{
+    __weakSelf
+    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"提现金额:%@元", self.moneyCell.textField.text] navigationController:self.navigationController success:^(id success)
+    {
+        [weakSelf pushWithdrawDataWithPassword:success];
+        
+    }];
+}
+
 #pragma mark - Data
 
-- (void)pushWithdrawDataWithPassword:(NSString *)passwordString{
-    
+- (void)pushWithdrawDataWithPassword:(NSString *)passwordString
+{
     NSDictionary *parameters = @{
                                  @"withdrawAmount" : self.moneyCell.textField.text,
                                  @"payPassword" : [WPPublicTool base64EncodeString:passwordString]
                                  };
     
     __weakSelf
-    [WPHelpTool postWithURL:WPProfitWithdrawURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPProfitWithdrawURL parameters:parameters success:^(id success)
+    {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             WPSuccessOrfailedController *vc = [[WPSuccessOrfailedController alloc] init];
             vc.navigationItem.title = @"提现结果";
             [weakSelf.navigationController pushViewController:vc animated:YES];
         }
-    } failure:^(NSError *error) {
-        
+    } failure:^(NSError *error)
+    {
         
     }];
 }

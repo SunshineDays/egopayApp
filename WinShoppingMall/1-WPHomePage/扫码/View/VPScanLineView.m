@@ -10,7 +10,8 @@
 
 @implementation VPScanLineView
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = rect;
     gradient.startPoint = CGPointMake(0.1, .5);

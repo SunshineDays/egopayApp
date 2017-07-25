@@ -17,14 +17,12 @@
 #import "WPTouchIDController.h"
 #import "WPPublicWebViewController.h"
 #import "WPUserFeedBackController.h"
-#import "JPUSHService.h"
+#import <JPush/JPUSHService.h>
 #import <StoreKit/StoreKit.h>
 #import "WPNavigationController.h"
 #import "WPUserInforButton.h"
-#import "WPShareView.h"
-#import "WPGatheringCodeController.h"
-#import "WPShareTool.h"
 #import "WPAPPInfo.h"
+#import "WPShareModel.h"
 
 static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 
@@ -40,11 +38,7 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 
 @property (nonatomic, strong) NSArray *titleArray;
 
-@property (nonatomic, copy) NSString *shareTitle;
-
-@property (nonatomic, copy) NSString *shareDescription;
-
-@property (nonatomic, copy) NSString *shareUrl;
+@property (nonatomic, strong) WPShareModel *shareModel;
 
 @end
 
@@ -64,9 +58,9 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 
 - (void)refreshUserAvater:(NSNotification *)notific
 {
-    if (notific.userInfo) {
+    if (notific.userInfo)
+    {
         self.userInforButton.userImageView.image = notific.userInfo[@"avatarImage"];
-        
     }
     [self getUserInforData];
 }
@@ -84,7 +78,7 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
         _userInforButton = [[WPUserInforButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 100)];
         _userInforButton.backgroundColor = [UIColor whiteColor];
         self.userInforButton.userImageView.image = self.avaterImage;
-        [_userInforButton userInforWithName:self.model.phone vip:[WPUserTool userMemberVipWith:self.model.merchantlvid] rate:nil arrowHidden:NO];
+        [_userInforButton userInforWithName:self.model.phone vip:[WPUserTool userMemberVipWithMerchantlvID:self.model.merchantlvid] rate:nil arrowHidden:NO];
         [_userInforButton addTarget:self action:@selector(userInforAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _userInforButton;
@@ -134,27 +128,32 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
     
     WPUserInforCell *cell = [tableView dequeueReusableCellWithIdentifier:WPUSerInforCellID];
 
-    switch (indexPath.section) {
-        case 0: {
+    switch (indexPath.section)
+    {
+        case 0:
+        {
             cell.titleLabel.text = self.titleArray[0][indexPath.row];
-            if (indexPath.row != 0) {
+            if (indexPath.row != 0)
+            {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
-        }
             break;
-            
+        }
         case 1:
+        {
             cell.titleLabel.text = self.titleArray[1][indexPath.row];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
-            
+        }
         case 2:
+        {
             cell.titleLabel.text = self.titleArray[2][indexPath.row];
-            if (indexPath.row != 3) {
+            if (indexPath.row != 3)
+            {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
             break;
-            
+        }
         default:
             break;
     }
@@ -181,101 +180,95 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    switch (indexPath.section) {
+    switch (indexPath.section)
+    {
         case 0: {
-            switch (indexPath.row) {
+            switch (indexPath.row)
+            {
                 case 0:  //手机号
                     break;
                     
-                case 1: {  //修改密码
+                case 1:  //修改密码
+                {
                     WPSelectController *vc = [[WPSelectController alloc] init];
                     vc.selectType = 1;
                     [self.navigationController pushViewController:vc animated:YES];
-                }
                     break;
-                    
-                case 2: {  //安全管理
+                }
+                case 2:  //安全管理
+                {
                     WPTouchIDController *vc = [[WPTouchIDController alloc] init];
                     [self.navigationController pushViewController:vc animated:YES];
-                }
                     break;
+                }
                 default:
                     break;
             }
-            
-        }
             break;
+        }
             
-        case 1: {
-            switch (indexPath.row) {
-                case 0: {  //用户帮助
+        case 1:
+        {
+            switch (indexPath.row)
+            {
+                case 0:  //用户帮助
+                {
                     WPPublicWebViewController *vc = [[WPPublicWebViewController alloc] init];
                     vc.navigationItem.title = @"用户帮助";
                     vc.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPUserHelpWebURL];
                     [self.navigationController pushViewController:vc animated:YES];
-                }
                     break;
+                }
                     
-                case 1: {  //意见反馈
+                case 1:  //意见反馈
+                {
                     WPUserFeedBackController *vc = [[WPUserFeedBackController alloc] init];
                     vc.navigationItem.title = @"意见反馈";
                     vc.isFeedback = YES;
                     [self.navigationController pushViewController:vc animated:YES];
-                }
                     break;
+                }
                     
-                case 2: {  //用户举报
+                case 2:  //用户举报
+                {
                     WPUserFeedBackController *vc = [[WPUserFeedBackController alloc] init];
                     vc.navigationItem.title = @"用户举报";
                     vc.isFeedback = NO;
                     [self.navigationController pushViewController:vc animated:YES];
-                }
                     break;
+                }
                     
-                case 3: {  //客服电话
+                case 3:  //客服电话
+                {
                     [self.view callToNum:WPAppTelNumber];
-                }
                     break;
+                }
                     
                 default:
                     break;
             }
-        }
             break;
+        }
             
-        case 2: {
-            switch (indexPath.row) {
-                    
-                case 0: {  //关于我们
+        case 2:
+        {
+            switch (indexPath.row)
+            {
+                case 0:  //关于我们
+                {
                     WPPublicWebViewController *vc = [[WPPublicWebViewController alloc] init];
                     vc.navigationItem.title = @"关于我们";
                     vc.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPAboutOurWebURL];
                     [self.navigationController pushViewController:vc animated:YES];
-                }
                     break;
-                    
-                case 1: {  //分享App
-                    WPShareView *shareView = [[WPShareView alloc] initShareToApp];
-                    __weakSelf
-                    [shareView setShareBlock:^(NSString *appType){
-                        WPShareTool *shareTool = [[WPShareTool alloc] init];
-                        if ([appType isEqualToString:[[WPUserTool shareWayArray] lastObject]])
-                        {
-                            WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
-                            vc.codeString = self.shareUrl;
-                            vc.codeType = 3;
-                            [weakSelf.navigationController pushViewController:vc animated:YES];
-                        }
-                        else
-                        {
-                            [shareTool shareWithUrl:weakSelf.shareUrl title:weakSelf.shareTitle description:weakSelf.shareDescription appType:appType];
-                        }
-                    }];
-                    [[UIApplication sharedApplication].keyWindow addSubview:shareView];
                 }
+                case 1:  //分享App
+                {
+                    [WPHelpTool shareToAppWithModel:self.shareModel navigationController:self.navigationController];
                     break;
-                    
-                case 2: {  //App评分
+                }
+                case 2:  //App评分
+                {
                     [[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=1240608651&pageNumber=0&sortOrdering=2&type=Purple+Software&mt=8"]];
                 }
                     break;
@@ -283,14 +276,13 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
                 default:
                     break;
             }
-        }
             break;
+        }
             
         default:
             break;
     }
 }
-
 
 
 #pragma mark - Action
@@ -306,7 +298,8 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 - (void)userLogoutButtonAction:(UIButton *)button
 {
     __weakSelf
-    [WPHelpTool alertControllerTitle:@"确定退出登录" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction) {
+    [WPHelpTool alertControllerTitle:@"确定退出登录" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction)
+    {
         [weakSelf userQuitRegister];
         
     } cancel:nil];
@@ -331,14 +324,16 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 - (void)getUserInforData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             weakSelf.model = [WPEditUserInfoModel mj_objectWithKeyValues:result];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -346,15 +341,17 @@ static NSString * const WPUSerInforCellID = @"WPUSerInforCellID";
 - (void)getShareData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPShareToAppURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPShareToAppURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            weakSelf.shareTitle = result[@"title"];
-            weakSelf.shareDescription = result[@"description"];
-            weakSelf.shareUrl = result[@"webpageUrl"];
+        if ([type isEqualToString:@"1"])
+        {
+            weakSelf.shareModel = [WPShareModel mj_objectWithKeyValues:result];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
+    
     }];
 }
 

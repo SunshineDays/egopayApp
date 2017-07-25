@@ -11,8 +11,6 @@
 #import "WPCardTableViewCell.h"
 #import "WPUserWithDrawView.h"
 #import "WPCardTableViewCell.h"
-#import "WPPayTypeController.h"
-#import "WPPayPopupController.h"
 #import "WPSuccessOrfailedController.h"
 #import "WPGatheringCodeController.h"
 #import "WPBankCardModel.h"
@@ -39,7 +37,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"转账";
@@ -53,7 +52,7 @@
     if (!_cardCell) {
         _cardCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, WPNavigationHeight + 20, kScreenWidth, 80);
-        [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择银行卡" rectMake:rect];
+        [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择支付方式" rectMake:rect];
         [_cardCell.backgroundButton addTarget:self action:@selector(wayButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_cardCell];
     }
@@ -114,30 +113,11 @@
     return _confirmButton;
 }
 
-- (void)initPayPopupView
-{
-    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
-    vc.titleString = [NSString stringWithFormat:@"转账金额:%@元", self.transferView.moneyTextField.text];
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    
-    __weakSelf
-    vc.payPasswordBlock = ^(NSString *payPassword) {
-        [weakSelf pushTransferAccountsDataWithPassword:payPassword];
-    };
-    vc.forgetPasswordBlock = ^{
-        WPPasswordController *vc = [[WPPasswordController alloc] init];
-        vc.passwordType = @"2";
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    };
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
-    
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateMoneyNumber:textField.text range:range replacementString:string];
+    return [WPJudgeTool validatePrice:textField.text range:range replacementString:string];
 }
 
 
@@ -145,71 +125,80 @@
 
 - (void)changeButtonSurface
 {
-    if (self.cvvCell.hidden) {
+    if (self.cvvCell.hidden)
+    {
         [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length > 6 && [self.transferView.moneyTextField.text floatValue] > 0) ? YES : NO];
     }
-    else {
+    else
+    {
         [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length > 6 && [self.transferView.moneyTextField.text floatValue] > 0 && self.cvvCell.textField.text.length == 3) ? YES : NO];
-    }
-}
-
-- (void)confirmButtonAction
-{
-    if (![WPRegex validateMobile:self.phoneCell.textField.text]) {
-        [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号"];
-    }
-    else if ([self.transferView.moneyTextField.text floatValue] == 0) {
-        [WPProgressHUD showInfoWithStatus:@"请输入转账金额"];
-    }
-    else if ([self.cardCell.backgroundButton.titleLabel.text isEqualToString:@"请选择支付方式"]) {
-        [WPProgressHUD showInfoWithStatus:@"请选择支付方式"];
-    }
-    else{
-        if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"]) {
-            if ([WPAppTool isPayTouchID]) {
-                __weakSelf
-                [WPHelpTool payWithTouchIDsuccess:^(id success) {
-                    [weakSelf pushTransferAccountsDataWithPassword:success];
-                    
-                } failure:^(NSError *error) {
-                    [weakSelf initPayPopupView];
-                }];
-            }
-            else {
-                [self initPayPopupView];
-            }
-        }
-        else {
-            [self pushTransferAccountsDataWithPassword:@""];
-        }
     }
 }
 
 - (void)wayButtonAction
 {
-    WPPayTypeController *vc = [[WPPayTypeController alloc] init];
-    vc.isBalance = YES;
-    vc.amount = [self.transferView.moneyTextField.text floatValue];
-    vc.modalPresentationStyle = UIModalPresentationCustom;
     __weakSelf
-    //微信/支付宝/余额支付
-    vc.userPayTypeBlock = ^(NSInteger payTypeRow) {
-        weakSelf.cardCell.contentLabel.text = [WPUserTool payTypeTitleWith:payTypeRow];
-        weakSelf.cardCell.cardImageView.image = [WPUserTool payTypeImageWith:payTypeRow];
-        weakSelf.payType = [WPUserTool payTypeNumberWith:payTypeRow];
-        weakSelf.cvvCell.hidden = YES;
-    };
-    //银行卡支付
-    vc.userCardBlock = ^(WPBankCardModel *model) {
-        weakSelf.model = model;
+    [WPHelpTool showPayTypeWithAmount:self.transferView.moneyTextField.text navigationController:self.navigationController Card:^(WPBankCardModel *model)
+    {
         weakSelf.cvvCell.hidden = [[NSString stringWithFormat:@"%d", model.cardType] isEqualToString:@"1"] ? NO : YES;
+        weakSelf.payType = [WPPublicTool payCardWithView:weakSelf.cardCell model:model];
         
-        [weakSelf.cardCell.contentLabel setAttributedText:[WPPublicTool stringColorWithString:[WPPublicTool stringWithCardName:model.bankName cardNumber:model.cardNumber] replaceColor:[UIColor placeholderColor] index:model.bankName.length]];
-        
-        weakSelf.cardCell.cardImageView.image = [WPUserTool payBankImageCode:model.bankCode];
-        weakSelf.payType = @"1";
-    };
-    [self presentViewController:vc animated:YES completion:nil];
+    } other:^(id rowType)
+    {
+        weakSelf.cvvCell.hidden = YES;
+        weakSelf.payType = [WPPublicTool payThirdWithView:weakSelf.cardCell rowType:rowType];
+    }];
+}
+
+- (void)confirmButtonAction
+{
+    if (![WPJudgeTool validateMobile:self.phoneCell.textField.text])
+    {
+        [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号"];
+    }
+    else if ([self.transferView.moneyTextField.text floatValue] == 0)
+    {
+        [WPProgressHUD showInfoWithStatus:@"请输入转账金额"];
+    }
+    else if ([self.cardCell.contentLabel.text isEqualToString:@"请选择支付方式"])
+    {
+        [WPProgressHUD showInfoWithStatus:@"请选择支付方式"];
+    }
+    else
+    {
+        if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"])
+        {
+            if ([WPJudgeTool isPayTouchID])
+            {
+                __weakSelf
+                [WPHelpTool payWithTouchIDsuccess:^(id success)
+                {
+                    [weakSelf pushTransferAccountsDataWithPassword:success];
+                    
+                } failure:^(NSError *error)
+                {
+                    [weakSelf initPayPopupView];
+                }];
+            }
+            else
+            {
+                [self initPayPopupView];
+            }
+        }
+        else
+        {
+            [self pushTransferAccountsDataWithPassword:@""];
+        }
+    }
+}
+
+- (void)initPayPopupView
+{
+    __weakSelf
+    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"转账金额:%@元", self.transferView.moneyTextField.text] navigationController:self.navigationController success:^(id success)
+    {
+        [weakSelf pushTransferAccountsDataWithPassword:success];
+    }];
 }
 
 #pragma mark - Data
@@ -220,38 +209,18 @@
                                  @"phone" : self.phoneCell.textField.text,
                                  @"transferAmount" : self.transferView.moneyTextField.text,
                                  @"payMethod" : self.payType,
-                                 @"cardId" : [NSString stringWithFormat:@"%ld", (long)self.model.id] ? [NSString stringWithFormat:@"%ld", self.model.id] : @"",
+                                 @"cardId" : self.model.id ? [NSString stringWithFormat:@"%ld", (long)self.model.id] : @"",
                                  @"cnv" : [WPPublicTool base64EncodeString:self.cvvCell.textField.text],
                                  @"payPassword" : [WPPublicTool base64EncodeString:passwordString]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPTransferAccountsURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPTransferAccountsURL parameters:parameters success:^(id success)
+    {
         
-        
-        NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            WPSuccessOrfailedController *vc = [[WPSuccessOrfailedController alloc] init];
-            vc.navigationItem.title = @"转账结果";
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-        }
-        else if ([type isEqualToString:@"3"]) {
-            WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
-            vc.codeType = 1;
-            vc.codeString = result[@"CodeUrl"];
-            if ([result[@"method"] isEqualToString:@"2"]) {
-                vc.payType = 1;
-            }
-            else if ([result[@"method"] isEqualToString:@"3"]) {
-                vc.payType = 2;
-            }
-            else if (([result[@"method"] isEqualToString:@"6"])) {
-                vc.payType = 3;
-            }
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-        }
-    } failure:^(NSError *error) {
-        
+        [WPHelpTool payResultControllerWithTitle:@"转账结果" successResult:success navigationController:weakSelf.navigationController];
+
+    } failure:^(NSError *error)
+    {
         
     }];
 }

@@ -126,10 +126,12 @@
 - (void)showTouchIDView
 {
     __weakSelf
-    [WPHelpTool payWithTouchIDsuccess:^(id success) {
+    [WPHelpTool payWithTouchIDsuccess:^(id success)
+    {
         [WPHelpTool rootViewController:[[WPTabBarController alloc] init]];
         
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         [weakSelf otherWayButtonAction];
     }];
 }

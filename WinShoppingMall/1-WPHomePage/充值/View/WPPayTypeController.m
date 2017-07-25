@@ -42,10 +42,12 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRGBString:@"#000000" alpha:0.3f];
     
-    if (self.isBalance) {
+    if (self.isBalance)
+    {
         [self getUserBalance];
     }
-    else {
+    else
+    {
         [self.wayArray removeLastObject];
         [self.imageArray removeLastObject];
         [self getCardData];
@@ -127,7 +129,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
-    switch (section) {
+    switch (section)
+    {
         case 0:
             return self.wayArray.count;
             break;
@@ -146,13 +149,15 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0)
+    {
         WPRechargeCell *cell = [tableView dequeueReusableCellWithIdentifier:WPRechargeCellID];
         cell.bankImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
         cell.bankNameLabel.text = self.wayArray[indexPath.row];
         return cell;
     }
-    else {
+    else
+    {
         WPRechargeCell *cell = [tableView dequeueReusableCellWithIdentifier:WPRechargeCellID];
         cell.model = self.cardArray[indexPath.row];
         return cell;
@@ -176,27 +181,34 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    switch (indexPath.section) {
-        case 0: {
-            if (((self.model.avl_balance < self.amount || self.model.avl_balance == 0) && indexPath.row == self.wayArray.count - 1) && self.isBalance) {
+    switch (indexPath.section)
+    {
+        case 0:
+        {
+            if (((self.model.avl_balance < self.amount || self.model.avl_balance == 0) && indexPath.row == self.wayArray.count - 1) && self.isBalance)  //判断余额是否够
+            {
             }
-            else {
-                if (self.userPayTypeBlock) {
+            else
+            {
+                if (self.userPayTypeBlock)
+                {
                     self.userPayTypeBlock(indexPath.row);
                     [self dismissViewControllerAnimated:NO completion:nil];
                 }
             }
-        }
             break;
-        case 1: {
+        }
+        case 1:
+        {
             WPBankCardModel *model = [[WPBankCardModel alloc] init];
             model = self.cardArray[indexPath.row];
-            if (self.userCardBlock) {
+            if (self.userCardBlock)
+            {
                 self.userCardBlock(model);
                 [self dismissViewControllerAnimated:NO completion:nil];
             }
-        }
             break;
+        }
 //            case 2: {
 //                if (self.userAddCardBlock) {
 //                    self.userAddCardBlock();
@@ -223,18 +235,21 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
                                  @"clitype" : @"4",
                                  };
     __weakSelf
-    [WPHelpTool getWithURL:WPUserBanCardURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPUserBanKCardURL parameters:parameters success:^(id success)
+    {
         [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.cardArray removeAllObjects];
             [weakSelf.cardArray addObjectsFromArray:[WPBankCardModel mj_objectArrayWithKeyValuesArray:result[@"cardList"]]];
             
             [weakSelf.tableView.mj_header endRefreshing];
             [weakSelf.tableView reloadData];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.indicatorView stopAnimating];
     }];
@@ -244,16 +259,19 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 - (void)getUserBalance
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPUserInforURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             weakSelf.model = [WPEditUserInfoModel mj_objectWithKeyValues:result];
             NSString *userMoney = [NSString stringWithFormat:@"%@(可用余额:%.2f元)", weakSelf.amount > weakSelf.model.avl_balance ? @"余额不足" : @"余额支付", weakSelf.model.avl_balance];
             [weakSelf.wayArray replaceObjectAtIndex:weakSelf.wayArray.count - 1 withObject:userMoney];
             [weakSelf getCardData];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.indicatorView stopAnimating];
     }];

@@ -18,7 +18,7 @@
 }
 
 - (void)setModel:(WPBankCardModel *)model {
-    self.bankImageView.image = [WPUserTool payBankImageCode:model.bankCode];
+    self.bankImageView.image = [WPUserTool payBankImageWithBankCode:model.bankCode];
     
     NSString *cardNumber = [WPPublicTool base64DecodeString:model.cardNumber];
     cardNumber = [cardNumber substringFromIndex:cardNumber.length - 4];

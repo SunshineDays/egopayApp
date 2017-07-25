@@ -22,22 +22,29 @@ NSString * const kAppDefaultsVersionKey = @"CFBundleShortVersionString";
     NSDictionary *infoDic = [NSBundle mainBundle].infoDictionary;
     NSString *newVersion = infoDic[kAppDefaultsVersionKey];
     
-    if ([oldVersion isEqualToString:newVersion]) {
+    if ([oldVersion isEqualToString:newVersion])
+    {
         NSString *clientId = [[NSUserDefaults standardUserDefaults] objectForKey:WPUserDefaultClientId];
-        if (clientId.length == 0) {
+        if (clientId.length == 0)
+        {
             WPRegisterController *vc = [[WPRegisterController alloc] init];
             WPNavigationController *navi = [[WPNavigationController alloc] initWithRootViewController:vc];
             return navi;
         }
-        else {
-            if ([WPAppTool isRegisterTouchID]) {
+        else
+        {
+            if ([WPJudgeTool isRegisterTouchID])
+            {
                 return [[WPTouchIDShowController alloc] init];
-            } else {
+            }
+            else
+            {
                 return [[WPTabBarController alloc] init];
             }
         }
     }
-    else {
+    else
+    {
         [[NSUserDefaults standardUserDefaults] setValue:newVersion forKey:kAppDefaultsVersionKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         return [[WPNewFeatureViewController alloc] init];

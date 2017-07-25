@@ -8,7 +8,6 @@
 
 #import "WPUserFeedBackController.h"
 #import "Header.h"
-#import "WPSelectButton.h"
 
 @interface WPUserFeedBackController () <UITextViewDelegate>
 
@@ -34,7 +33,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     
@@ -52,7 +52,8 @@
 
 #pragma mark - Init
 
-- (UITextField *)textField {
+- (UITextField *)textField
+{
     if (!_textField) {
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(4, WPTopMargin, kScreenWidth - 8, WPRowHeight)];
         _textField.backgroundColor = [UIColor whiteColor];
@@ -73,7 +74,8 @@
     return _textField;
 }
 
-- (UIView *)typeView {
+- (UIView *)typeView
+{
     if (!_typeView) {
         _typeView = [[UIView alloc] initWithFrame:CGRectMake(0, self.isFeedback ? WPTopMargin : CGRectGetMaxY(self.textField.frame), kScreenWidth, 80)];
         [self.view addSubview:_typeView];
@@ -81,15 +83,14 @@
     return _typeView;
 }
 
-- (void)createTypeButton {
+- (void)createTypeButton
+{
     
-    for (int i = 0; i < self.typeArray.count; i++) {
-        
+    for (int i = 0; i < self.typeArray.count; i++)
+    {
         UIButton *typeButton = [[WPSelectButton alloc] initWithFrame:CGRectMake(WPLeftMargin + kScreenWidth / 2 * (i % 2), 40 * (i / 2), 150, 40)];
         [typeButton setTitle:self.typeArray[i] forState:UIControlStateNormal];
         [typeButton setImage:[UIImage imageNamed:i == 0 ? self.imageArray[0] : self.imageArray[1]] forState:UIControlStateNormal];
-        [typeButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        typeButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         typeButton.tag = i;
         [typeButton addTarget:self action:@selector(typeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.typeView addSubview:typeButton];
@@ -97,7 +98,8 @@
 }
 
 
-- (UITextView *)textView {
+- (UITextView *)textView
+{
     if (!_textView) {
         _textView = [[UITextView alloc] initWithFrame:CGRectMake(4, CGRectGetMaxY(self.typeView.frame), kScreenWidth - 8, 150)];
         _textView.backgroundColor = [UIColor whiteColor];
@@ -117,7 +119,8 @@
     return _textView;
 }
 
-- (UILabel *)numberLabel {
+- (UILabel *)numberLabel
+{
     if (!_numberLabel) {
         _numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(kScreenWidth - 68, 130, 60, 20)];
         _numberLabel.text = @"0/500";
@@ -129,7 +132,8 @@
     return _numberLabel;
 }
 
-- (WPButton *)confrirmButton {
+- (WPButton *)confrirmButton
+{
     if (!_confrirmButton) {
         _confrirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.textView.frame) + 30, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
         [_confrirmButton setTitle:@"提交" forState:UIControlStateNormal];
@@ -142,21 +146,26 @@
 
 #pragma mark - UITextViewDelegate
 
-- (void)textViewDidBeginEditing:(UITextView *)textView {
-    if ([textView.text isEqualToString:self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)"]) {
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)"])
+    {
         textView.text = @"";
     }
     textView.textColor = [UIColor blackColor];
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    if (textView.text.length == 0) {
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if (textView.text.length == 0)
+    {
         textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)";
         textView.textColor = [UIColor placeholderColor];
     }
 }
 
-- (void)textViewDidChange:(UITextView *)textView {
+- (void)textViewDidChange:(UITextView *)textView
+{
     self.numberLabel.text = [NSString stringWithFormat:@"%ld/500", (unsigned long)textView.text.length];
     [WPPublicTool buttonWithButton:self.confrirmButton userInteractionEnabled:textView.text.length > 20 ? YES : NO];
 }
@@ -164,65 +173,81 @@
 #pragma mark - Action 
 
 
-- (void)typeButtonClick:(UIButton *)button {
-    for (int i = 0; i < self.typeArray.count; i++) {
+- (void)typeButtonClick:(WPSelectButton *)button
+{
+    for (int i = 0; i < self.typeArray.count; i++)
+    {
         WPSelectButton *typeButton = self.typeView.subviews[i];
-        if (button.tag == i) {
+        if (button.tag == i)
+        {
             [typeButton setImage:[UIImage imageNamed:self.imageArray[0]] forState:UIControlStateNormal];
             self.selectType = button.tag;
         }
-        else {
+        else
+        {
             [typeButton setImage:[UIImage imageNamed:self.imageArray[1]] forState:UIControlStateNormal];
         }
     }
 }
 
 
-- (void)confrirmButtonClick:(UIButton *)button {
-    if (self.textView.text.length < 20) {
+- (void)confrirmButtonClick:(UIButton *)button
+{
+    if (self.textView.text.length < 20)
+    {
         [WPProgressHUD showInfoWithStatus:self.isFeedback ? @"反馈内容至少需要20字" : @"举报内容至少需要20字"];
     }
-    else if (!([WPRegex validateMobile:self.textField.text] || self.textField.text.length == 6) && !self.isFeedback) {
+    else if (!([WPJudgeTool validateMobile:self.textField.text] || self.textField.text.length == 6) && !self.isFeedback)
+    {
         [WPProgressHUD showInfoWithStatus:@"手机号或商户号错误"];
     }
-    else {
+    else
+    {
         self.isFeedback ? [self postUserFeedBackData] : [self postUserToReportData];
     }
 }
 
 #pragma mark - Data
 
-- (void)postUserFeedBackData {
+- (void)postUserFeedBackData
+{
     NSDictionary *parameters = @{
                                  @"adviceType" : self.typeArray[self.selectType],
                                  @"adviceContent" : self.textView.text
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPUserFeedBackURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPUserFeedBackURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"提交成功，感谢您的反馈"];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
-- (void)postUserToReportData {
+- (void)postUserToReportData
+{
     NSDictionary *parameters = @{
                                  @"badMerNo" : [NSString stringWithFormat:@"%@", self.textField.text],
                                  @"reportType" : self.typeArray[self.selectType],
                                  @"reportContent" : self.textView.text
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPUserToReportURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPUserToReportURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"提交成功，感谢您的反馈"];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

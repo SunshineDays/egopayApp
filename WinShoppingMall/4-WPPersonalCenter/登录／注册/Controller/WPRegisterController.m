@@ -12,7 +12,8 @@
 #import "WPUserEnrollController.h"
 #import "Header.h"
 #import "WPTabBarController.h"
-#import "JPUSHService.h"
+#import <JPush/JPUSHService.h>
+#import "WPAPPInfo.h"
 
 @interface WPRegisterController ()<UITextFieldDelegate, UINavigationControllerDelegate>
 
@@ -130,7 +131,7 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 #pragma mark - Action
@@ -145,7 +146,8 @@
     WPUserEnrollController *vc = [[WPUserEnrollController alloc] init];
     
     __weakSelf
-    vc.userEnrollSuccessBlock = ^(NSDictionary *userEnrollDict) {
+    vc.userEnrollSuccessBlock = ^(NSDictionary *userEnrollDict)
+    {
         weakSelf.accountCell.textField.text = userEnrollDict[@"phone"];
         weakSelf.passwordCell.textField.text = userEnrollDict[@"password"];
     };
@@ -163,13 +165,16 @@
 {
     [[UIApplication sharedApplication].keyWindow endEditing:YES];
     
-    if ((![WPRegex validateMobile:self.accountCell.textField.text] && self.accountCell.textField.text.length == 11) || (self.accountCell.textField.text.length != 11 && self.accountCell.textField.text.length != 9)) {
+    if ((![WPJudgeTool validateMobile:self.accountCell.textField.text] && self.accountCell.textField.text.length == 11) || (self.accountCell.textField.text.length != 11 && self.accountCell.textField.text.length != 9))
+    {
         [WPProgressHUD showInfoWithStatus:@"账号格式错误"];
     }
-    else if (self.passwordCell.textField.text.length < 6) {
+    else if (self.passwordCell.textField.text.length < 6)
+    {
         [WPProgressHUD showInfoWithStatus:@"密码不能少于六位"];
     }
-    else {
+    else
+    {
         [self getData];
     }
 }
@@ -194,18 +199,25 @@
 {
     [WPProgressHUD showProgressIsLoading];
     NSDictionary *parameters = @{
+                                 @"mobildID" : [WPAPPInfo deviceId],
+                                 @"deviceOem" : @"iPhone",
+                                 @"deviceOS" : [NSString stringWithFormat:@"%f", [WPAPPInfo iOSVersion]],
+                                 @"appVersion" : [WPAPPInfo APPVersion],
                                  @"phone" : self.accountCell.textField.text,
                                  @"password" : [WPPublicTool base64EncodeString:self.passwordCell.textField.text],
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPRegisterURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPRegisterURL parameters:parameters success:^(id success)
+    {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPUserInfor sharedWPUserInfor].clientId = [NSString stringWithFormat:@"%@", result[@"clientId"]];
             //  如果不是当前账户，还原初始设置
-            if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:weakSelf.accountCell.textField.text]) {
+            if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:weakSelf.accountCell.textField.text])
+            {
                 [WPUserInfor sharedWPUserInfor].userPhone = weakSelf.accountCell.textField.text;
                 [WPUserInfor sharedWPUserInfor].approvePassType = nil;
                 [WPUserInfor sharedWPUserInfor].payPasswordType = nil;
@@ -213,26 +225,36 @@
                 [WPUserInfor sharedWPUserInfor].isSubAccount = nil;
                 [WPUserInfor sharedWPUserInfor].payTouchID = nil;
                 [WPUserInfor sharedWPUserInfor].registerTouchID = nil;
+                [WPUserInfor sharedWPUserInfor].isRemindTouchID = nil;
                 
                 [WPKeyChainTool keyChainDelete];
             }
-            if ([result[@"isClerk"] isEqualToString:@"yes"]) { //子账户
+            if ([result[@"isClerk"] isEqualToString:@"yes"]) //子账户
+            {
                 [WPUserInfor sharedWPUserInfor].isSubAccount = @"YES";
             }
-            else {
+            else
+            {
                 [WPUserInfor sharedWPUserInfor].isSubAccount = nil;
             }
             [[WPUserInfor sharedWPUserInfor] updateUserInfor];
             
+            // 注册激光推送别名
             NSString *userId = [NSString stringWithFormat:@"%@", result[@"mer_id"]];
-            [JPUSHService setTags:nil alias:userId fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
-                if (iResCode == 0) {//对应的状态码返回为0，代表成功
+
+            [JPUSHService setAlias:userId completion:^(NSInteger iResCode, NSString *iAlias, NSInteger seq)
+            {
+                if (iResCode == 0)//对应的状态码返回为0，代表成功
+                {
                     [[NSNotificationCenter defaultCenter] removeObserver:self name:kJPFNetworkDidLoginNotification object:nil];
                 }
-            }];
+                
+            } seq:1];
+            
             [weakSelf start];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

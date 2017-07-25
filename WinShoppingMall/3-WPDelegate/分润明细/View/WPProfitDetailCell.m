@@ -24,7 +24,7 @@
     
     self.merchantNumberLabel.text = [NSString stringWithFormat:@"商户编号：%@", profitModel.merchantno];
     
-    NSString *dateString = [WPPublicTool dateToLocalDate:[NSString stringWithFormat:@"%@", profitModel.createTime]];
+    NSString *dateString = [WPPublicTool stringToDateString:[NSString stringWithFormat:@"%@", profitModel.createTime]];
     self.profitDateLabel.text = [NSString stringWithFormat:@"分润时间：%@", dateString];
     
     self.orderNumberLabel.text = [NSString stringWithFormat:@"订单编号：%@", profitModel.orderno];

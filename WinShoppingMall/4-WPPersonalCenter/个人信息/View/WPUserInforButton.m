@@ -13,8 +13,6 @@
 
 @property (nonatomic, strong) UILabel *nameLabel;
 
-@property (nonatomic, strong) UILabel *vipLabel;
-
 @property (nonatomic, strong) UILabel *rateLabel;
 
 @property (nonatomic, strong) UIImageView *rowImageView;

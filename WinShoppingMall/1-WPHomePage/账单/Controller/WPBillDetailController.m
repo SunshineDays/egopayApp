@@ -24,7 +24,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"账单详情";
     [self titleLabel];
@@ -34,9 +35,10 @@
 
 #pragma mark - Init
 
-- (UILabel *)titleLabel {
+- (UILabel *)titleLabel
+{
     if (!_titleLabel) {
-        NSArray *titleArray = self.model.counterFee > 0 ? @[@"付款金额", @"手续费", @"可提现金额", @"当前状态", @"交易类型", @"支付方式", @"支付时间", @"账单编号", @"备        注"] : @[@"付款金额", @"当前状态", @"交易类型", @"支付方式", @"支付时间", @"账单编号", @"备        注"];
+        NSArray *titleArray = self.model.counterFee > 0 ? @[@"付款金额", @"手续费", @"可提现金额", @"当前状态", @"交易类型", @"支付方式", @"创建时间", @"账单编号", @"备        注"] : @[@"付款金额", @"当前状态", @"交易类型", @"支付方式", @"支付时间", @"账单编号", @"备        注"];
         for (int i = 0; i < titleArray.count; i++) {
             _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopMargin + 40 * i, 80, 40)];
             _titleLabel.text = titleArray[i];
@@ -48,7 +50,8 @@
     return _titleLabel;
 }
 
-- (UILabel *)contentLabel {
+- (UILabel *)contentLabel
+{
     if (!_contentLabel) {
         NSString *moneyString = [NSString stringWithFormat:@"%.2f", self.model.amount];
         
@@ -56,13 +59,13 @@
         
         NSString *trueMoneyString = [NSString stringWithFormat:@"%.2f", self.model.avl_amount];
 
-        NSString *stateString = [WPUserTool typeStateWith:self.model.payState];
+        NSString *stateString = [WPUserTool billTypeStateWithModel:self.model];
         
-        NSString *typeString = [WPUserTool typePurposeWith:self.model.tradeType];
+        NSString *typeString = [WPUserTool billTypePurposeWithModel:self.model];
         
-        NSString *wayString = [WPUserTool typeWayWith:self.model.paychannelid];
+        NSString *wayString = [WPUserTool billTypeWayWithModel:self.model];
 
-        NSString *dateString = [WPPublicTool dateToLocalDate:[NSString stringWithFormat:@"%@", self.model.createDate ? self.model.createDate : self.model.finishDate]];
+        NSString *dateString = [WPPublicTool stringToDateString:[NSString stringWithFormat:@"%@", self.model.createDate ? self.model.createDate : self.model.finishDate]];
         NSString *numberString = [NSString stringWithFormat:@"%@", self.model.orderno];
         NSString *remarkString = self.model.remark;
         
@@ -71,7 +74,8 @@
         //  动态设置备注高度
         float height = [WPPublicTool textHeightFromTextString:self.model.remark width:kScreenWidth - WPLeftMarginField - WPLeftMargin miniHeight:40 fontSize:15];
         
-        for (int i = 0; i < contentArray.count; i++) {
+        for (int i = 0; i < contentArray.count; i++)
+        {
             _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMarginField, WPTopMargin + 40 * i, kScreenWidth - WPLeftMarginField - WPLeftMargin, i == contentArray.count - 1 ? height : 40)];
             _contentLabel.text = contentArray[i];
             _contentLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
@@ -84,7 +88,8 @@
     return _contentLabel;
 }
 
-- (UIView *)lineView {
+- (UIView *)lineView
+{
     if (!_lineView) {
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.contentLabel.frame) + 10, kScreenWidth - WPLeftMargin, WPLineHeight)];
         _lineView.backgroundColor = [UIColor lineColor];

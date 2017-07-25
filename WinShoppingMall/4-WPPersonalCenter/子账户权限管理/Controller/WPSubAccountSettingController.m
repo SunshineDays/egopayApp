@@ -30,12 +30,14 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = self.isFirst ? @"设置子账户权限" : self.clerkName;
     self.titleArray = @[@"今日收入", @"收款码", @"收款账单", @"账单消息", @"商家", @"系统消息", @"推荐", @"余额", @"银行卡"];
-    if (self.isFirst) {
+    if (self.isFirst)
+    {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(popToViewController)];
@@ -44,7 +46,8 @@
         [self initSubAccountSettingView];
         [self confirmButton];
     }
-    else {
+    else
+    {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(settingSubAccount)];
         self.switchArray = [[NSMutableArray alloc] init];
         [self getSubAccountJurisdictionData];
@@ -104,8 +107,10 @@
 
 - (void)rowCellAction:(UISwitch *)sender
 {
-    for (int i = 0; i < self.titleArray.count; i++) {
-        if (sender.tag == i) {
+    for (int i = 0; i < self.titleArray.count; i++)
+    {
+        if (sender.tag == i)
+        {
             [self.switchArray replaceObjectAtIndex:i withObject:[self.switchArray[i] isEqualToString: @"0"] ? @"1" : @"0"];
         }
     }
@@ -119,8 +124,10 @@
 - (void)popToViewController
 {
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    for (UIViewController *controller in self.navigationController.viewControllers) {
-        if ([controller isKindOfClass:[WPSubAccountListController class]]) {
+    for (UIViewController *controller in self.navigationController.viewControllers)
+    {
+        if ([controller isKindOfClass:[WPSubAccountListController class]])
+        {
             WPSubAccountListController *vc = (WPSubAccountListController *)controller;
             [self.navigationController popToViewController:vc animated:YES];
         }
@@ -130,11 +137,14 @@
 - (void)settingSubAccount
 {
     __weakSelf
-    [WPHelpTool alertControllerTitle:nil rowOneTitle:@"删除子账户" rowTwoTitle:@"重置密码" rowOne:^(UIAlertAction *alertAction) {
-        [WPHelpTool alertControllerTitle:@"确定删除该子账户" confirmTitle:@"删除" confirm:^(UIAlertAction *alertAction) {
+    [WPHelpTool alertControllerTitle:nil rowOneTitle:@"删除子账户" rowTwoTitle:@"重置密码" rowOne:^(UIAlertAction *alertAction)
+    {
+        [WPHelpTool alertControllerTitle:@"确定删除该子账户" confirmTitle:@"删除" confirm:^(UIAlertAction *alertAction)
+        {
             [weakSelf postSubAccountDeleteData];
         } cancel:nil];
-    } rowTwo:^(UIAlertAction *alertAction) {
+    } rowTwo:^(UIAlertAction *alertAction)
+    {
         WPSubAccountChangePasswordController *vc = [[WPSubAccountChangePasswordController alloc] init];
         vc.clerkID = weakSelf.clerkID;
         [weakSelf.navigationController pushViewController:vc animated:YES];
@@ -147,10 +157,12 @@
 {
     NSDictionary *parameters = @{@"clerkId" : self.clerkID};
     __weakSelf
-    [WPHelpTool getWithURL:WPSubAccountJurisdictionURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPSubAccountJurisdictionURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             WPSubAccountSettingModel *model = [WPSubAccountSettingModel mj_objectWithKeyValues:result[@"resources"]];
             [weakSelf.switchArray addObjectsFromArray:@[model.today_income, model.qr_pic, model.qr_bill, model.bill_msgs, model.mer_shops, model.sys_msgs, model.refer_pps, model.balance, model.bankcards]];
             
@@ -158,34 +170,35 @@
             [weakSelf confirmButton];
         }
         
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
 - (void)postSubAccountSettingData
 {
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithObject:self.clerkID forKey:@"clerkId"];
+    
     //@[@"今日收入", @"收款码", @"收款账单", @"账单消息", @"商家", @"系统消息", @"推荐", @"余额", @"银行卡"]
-    NSDictionary *parameters = @{
-                                 @"clerkId" : self.clerkID,
-                                 @"today_income" : self.switchArray[0],
-                                 @"qr_pic" : self.switchArray[1],
-                                 @"qr_bill" : self.switchArray[2],
-                                 @"bill_msgs" : self.switchArray[3],
-                                 @"mer_shops" : self.switchArray[4],
-                                 @"sys_msgs" : self.switchArray[5],
-                                 @"refer_pps" : self.switchArray[6],
-                                 @"balance" : self.switchArray[7],
-                                 @"bankcards" : self.switchArray[8]
-                                 };
+    NSArray *keyArray = @[@"today_income", @"qr_pic", @"qr_bill", @"bill_msgs", @"mer_shops", @"sys_msgs", @"refer_pps", @"balance", @"bankcards"];
+    for (int i = 0; i < 9; i++)
+    {
+        [parameter addEntriesFromDictionary:@{keyArray[i] : self.switchArray[i]}];
+    }
+    
     __weakSelf
-    [WPHelpTool postWithURL:WPSubAccountSettingURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPSubAccountSettingURL parameters:parameter success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf popToViewController];
             [WPProgressHUD showSuccessWithStatus:@"设置成功"];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
@@ -194,16 +207,20 @@
 {
     NSDictionary *parameters = @{@"clerkId" : self.clerkID};
     __weakSelf
-    [WPHelpTool postWithURL:WPSubAccountDeleteURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPSubAccountDeleteURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
-            if (weakSelf.subAccountDeleteBlock) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (weakSelf.subAccountDeleteBlock)
+            {
                 weakSelf.subAccountDeleteBlock();
             }
             [weakSelf.navigationController popViewControllerAnimated:YES];
             [WPProgressHUD showSuccessWithStatus:@"删除成功"];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
     

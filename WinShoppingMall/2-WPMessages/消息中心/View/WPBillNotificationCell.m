@@ -11,7 +11,8 @@
 
 @implementation WPBillNotificationCell
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     [super awakeFromNib];
     self.layer.cornerRadius = 10;
     self.layer.borderColor = [UIColor lineColor].CGColor;
@@ -20,15 +21,15 @@
 
 - (void)setModel:(WPBillModel *)model
 {
-    self.payResultLabel.text = [NSString stringWithFormat:@"%@%@", [WPUserTool typePurposeWith:model.tradeType], model.payState == 1 ? @"成功" : @"失败"];
+    self.payResultLabel.text = [NSString stringWithFormat:@"%@%@", [WPUserTool billTypePurposeWithModel:model], model.payState == 1 ? @"成功" : @"失败"];
     
-    self.dateLabel.text = [[WPPublicTool dateToLocalDate:model.finishDate] substringToIndex:[WPPublicTool dateToLocalDate:model.finishDate].length - 6];
+    self.dateLabel.text = [[WPPublicTool stringToDateString:model.finishDate] substringToIndex:[WPPublicTool stringToDateString:model.finishDate].length - 6];
     
     self.moneyLabel.text = [NSString stringWithFormat:@"¥ %.2f",model.amount];
     
-    self.wayLabel.text = [WPUserTool typeWayWith:model.paychannelid];
+    self.wayLabel.text = [WPUserTool billTypeWayWithModel:model];
     
-    self.typeLabel.text = [WPUserTool typePurposeWith:model.tradeType];
+    self.typeLabel.text = [WPUserTool billTypePurposeWithModel:model];
     
     self.stateLabel.text = model.orderno;
 }

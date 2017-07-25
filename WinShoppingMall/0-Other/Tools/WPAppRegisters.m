@@ -9,12 +9,14 @@
 #import "WPAppRegisters.h"
 #import "WPUserInfor.h"
 #import <AdSupport/AdSupport.h>
-#import "WXApi.h"
-#import "JPUSHService.h"
-#import "UMSocialWechatHandler.h"
+#import <UMengSocial/WXApi.h>
+#import <JPush/JPUSHService.h>
+#import <UMengSocial/UMSocialWechatHandler.h>
 
 #import <TencentOpenAPI/QQApiInterfaceObject.h>
 #import <TencentOpenAPI/TencentOAuth.h>
+
+#import "WPJudgeTool.h"
 
 /** 友盟的apiKey */
 NSString * const kGetUMAppkey = @"591bc4f58630f57b330013c2";
@@ -35,7 +37,7 @@ static NSString * const channel = @"AppStore";
 static BOOL const isProduction = FALSE;
 
 
-@interface WPAppRegisters ()<TencentSessionDelegate>
+@interface WPAppRegisters ()<TencentSessionDelegate, TencentLoginDelegate>
 
 @end
 
@@ -54,16 +56,19 @@ static BOOL const isProduction = FALSE;
     
     // 更改老版本缓存
     [WPUserInfor sharedWPUserInfor].needTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPNeedTouchID];
-    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"]) {
+    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"])
+    {
         [WPUserInfor sharedWPUserInfor].registerTouchID = @"YES";
         [WPUserInfor sharedWPUserInfor].payTouchID = @"YES";
         [WPUserInfor sharedWPUserInfor].needTouchID = nil;
     }
-    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"]) {
+    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"])
+    {
         [WPUserInfor sharedWPUserInfor].registerTouchID = nil;
         [WPUserInfor sharedWPUserInfor].needTouchID = nil;
     }
-    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"]) {
+    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"])
+    {
         [WPUserInfor sharedWPUserInfor].payTouchID = @"YES";
         [WPUserInfor sharedWPUserInfor].needTouchID = nil;
     }
@@ -80,6 +85,20 @@ static BOOL const isProduction = FALSE;
     [[TencentOAuth alloc] initWithAppId:kQQ_AppID andDelegate:self];
 }
 
+- (void)tencentDidNotLogin:(BOOL)cancelled
+{
+    
+}
+
+- (void)tencentDidLogin
+{
+
+}
+
+- (void)tencentDidNotNetWork
+{
+
+}
 
 + (void)registJPushWithLaunchOption:(NSDictionary *)launchOptions
 {
@@ -96,10 +115,12 @@ static BOOL const isProduction = FALSE;
 
 + (void)regist3DTouch:(UIApplication *)application
 {
-    UIApplicationShortcutIcon *codeIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:@"icon_shoukuanma_content_n"];
-    UIApplicationShortcutItem *codeItem = [[UIApplicationShortcutItem alloc] initWithType:@"TWO" localizedTitle:@"我的收款码" localizedSubtitle:nil icon:codeIcon userInfo:nil];
-    
-    application.shortcutItems = @[codeItem];
+    if ([WPJudgeTool isShopApprove]) // 通过商家认证之后才有收款码
+    {
+        UIApplicationShortcutIcon *codeIcon = [UIApplicationShortcutIcon iconWithTemplateImageName:@"icon_shoukuanma_content_n"];
+        UIApplicationShortcutItem *codeItem = [[UIApplicationShortcutItem alloc] initWithType:@"TWO" localizedTitle:@"我的收款码" localizedSubtitle:nil icon:codeIcon userInfo:nil];
+        application.shortcutItems = @[codeItem];
+    }
 }
 
 

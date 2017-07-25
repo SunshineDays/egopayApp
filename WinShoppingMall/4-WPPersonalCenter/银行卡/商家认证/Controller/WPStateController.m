@@ -17,7 +17,8 @@
 
 @implementation WPStateController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     self.navigationItem.title = @"认证状态";
@@ -26,7 +27,8 @@
 }
 
 
--(UILabel *)stateLabel {
+-(UILabel *)stateLabel
+{
     if (!_stateLabel) {
         _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         _stateLabel.numberOfLines = 0;

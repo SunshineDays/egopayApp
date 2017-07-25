@@ -9,7 +9,6 @@
 #import "WPTouchIDController.h"
 #import "Header.h"
 #import <LocalAuthentication/LocalAuthentication.h>
-#import "WPPayPopupController.h"
 #import "WPUserEnrollController.h"
 #import "WPPublicWebViewController.h"
 
@@ -32,6 +31,8 @@
 
 @property (nonatomic, strong) UILabel *stateLabel;
 
+/**  记录开始的指纹支付开启状态 */
+@property (nonatomic, assign) BOOL isOpenPay;
 
 @end
 
@@ -39,7 +40,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.navigationItem.title = @"指纹";
     self.view.backgroundColor = [UIColor cellColor];
@@ -48,7 +50,8 @@
     [self protocolLabel];
     [self protocolButton];
     [self registerCell];
-    if (![WPAppTool isSubAccount]) {
+    if (![WPJudgeTool isSubAccount])
+    {
         [self payCell];
     }
 
@@ -58,7 +61,8 @@
 
 #pragma mark - Init
 
-- (UIImageView *)touchIdImageView {
+- (UIImageView *)touchIdImageView
+{
     if (!_touchIdImageView) {
         _touchIdImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 50, WPNavigationHeight + 30, 100, 103)];
         _touchIdImageView.image = [UIImage imageNamed:@"touchID"];
@@ -67,7 +71,8 @@
     return _touchIdImageView;
 }
 
-- (UILabel *)titleLabel {
+- (UILabel *)titleLabel
+{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.touchIdImageView.frame), kScreenWidth, 30)];
         _titleLabel.text = @"指纹密码只对本机有效";
@@ -79,7 +84,8 @@
     return _titleLabel;
 }
 
-- (UILabel *)protocolLabel {
+- (UILabel *)protocolLabel
+{
     if (!_protocolLabel) {
         _protocolLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth / 2, 30)];
         _protocolLabel.text = @"开通即视为同意";
@@ -91,7 +97,8 @@
     return _protocolLabel;
 }
 
-- (UIButton *)protocolButton {
+- (UIButton *)protocolButton
+{
     if (!_protocolButton) {
         _protocolButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth / 2, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth / 2, 30)];
         [_protocolButton setTitle:@"《易购付指纹相关协议》" forState:UIControlStateNormal];
@@ -104,34 +111,38 @@
     return _protocolButton;
 }
 
-- (WPRowTableViewCell *)registerCell {
+- (WPRowTableViewCell *)registerCell
+{
     if (!_registerCell) {
         _registerCell = [[WPRowTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.protocolLabel.frame) + 5, kScreenWidth, WPRowHeight);
         [_registerCell tableViewCellTitle:@"指纹登录" rectMake:rect];
-        _registerCell.switchs.on = [WPAppTool isRegisterTouchID];
+        _registerCell.switchs.on = [WPJudgeTool isRegisterTouchID];
         [_registerCell.switchs addTarget:self action:@selector(registerSwitchClick:) forControlEvents:UIControlEventValueChanged];
         [self.view addSubview:_registerCell];
     }
     return _registerCell;
 }
 
-- (WPRowTableViewCell *)payCell {
+- (WPRowTableViewCell *)payCell
+{
     if (!_payCell) {
         _payCell = [[WPRowTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.registerCell.frame), kScreenWidth, WPRowHeight);
         [_payCell tableViewCellTitle:@"指纹支付" rectMake:rect];
-        _payCell.switchs.on = [WPAppTool isPayTouchID];
+        _payCell.switchs.on = [WPJudgeTool isPayTouchID];
+        self.isOpenPay = _payCell.switchs.on;
         [_payCell.switchs addTarget:self action:@selector(paySwitchClick:) forControlEvents:UIControlEventTouchUpInside];
-        _payCell.hidden = [WPAppTool isSubAccount] ? YES : NO;
+        _payCell.hidden = [WPJudgeTool isSubAccount] ? YES : NO;
         [self.view addSubview:_payCell];
     }
     return _payCell;
 }
 
-- (UILabel *)stateLabel {
+- (UILabel *)stateLabel
+{
     if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [WPAppTool isSubAccount] ? CGRectGetMaxY(self.registerCell.frame) + 20 : CGRectGetMaxY(self.payCell.frame) + 20, kScreenWidth, 30)];
+        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [WPJudgeTool isSubAccount] ? CGRectGetMaxY(self.registerCell.frame) + 20 : CGRectGetMaxY(self.payCell.frame) + 20, kScreenWidth, 30)];
         _stateLabel.text = @"开通后，可使用Touch ID验证指纹快速完成登录或支付";
         _stateLabel.textColor = [UIColor grayColor];
         _stateLabel.font = [UIFont systemFontOfSize:13];
@@ -141,44 +152,42 @@
     return _stateLabel;
 }
 
-- (void)createPayPopupView {
-    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
-    vc.titleString = @"绑定/解绑指纹支付";
-    vc.modalPresentationStyle = UIModalPresentationCustom;
+- (void)createPayPopupView
+{
     __weakSelf
-    vc.payPasswordBlock = ^(NSString *payPassword) {
-        [weakSelf postAddTouchIDDataWithPassword:payPassword];
-    };
-    vc.forgetPasswordBlock = ^{
-        WPPasswordController *vc = [[WPPasswordController alloc] init];
-        vc.passwordType = @"2";
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    };
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
-    [self.payCell.switchs setOn:!self.payCell.switchs.on];
+    [WPHelpTool showPayPasswordViewWithTitle:@"绑定/解绑指纹支付" navigationController:self.navigationController success:^(id success)
+    {
+        [weakSelf postAddTouchIDDataWithPassword:success];        
+    }];
 }
 
 #pragma mark - Action
 
-- (void)protocolButtonClick:(UIButton *)button {
+- (void)protocolButtonClick:(UIButton *)button
+{
     WPPublicWebViewController *vc = [[WPPublicWebViewController alloc] init];
     vc.navigationItem.title = @"易购付指纹相关协议";
     vc.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPTouchIDWebURL];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)registerSwitchClick:(UISwitch *)click {
-    [self judgeTouchIDWithSwitchIsOn:[click isOn] type:1];
+- (void)registerSwitchClick:(UISwitch *)click
+{
+    [self judgeTouchIDWithType:1];
 }
 
-- (void)paySwitchClick:(UISwitch *)click {
-    
-    if ([WPAppTool isHavePayPassword]) {
-        [self createPayPopupView];
+- (void)paySwitchClick:(UISwitch *)click
+{
+    [self.payCell.switchs setOn:self.isOpenPay]; // 只有当通过密码验证以后才改变按钮状态
+    if ([WPJudgeTool isPayPassword])
+    {
+        [self judgeTouchIDWithType:2];
     }
-    else {
+    else
+    {
         __weakSelf
-        [WPHelpTool alertControllerTitle:@"您还没有设置支付密码" confirmTitle:@"设置支付密码" confirm:^(UIAlertAction *alertAction) {
+        [WPHelpTool alertControllerTitle:@"您还没有设置支付密码" confirmTitle:@"设置支付密码" confirm:^(UIAlertAction *alertAction)
+        {
             WPPasswordController *vc = [[WPPasswordController alloc] init];
             [weakSelf.navigationController pushViewController:vc animated:YES];
         } cancel:nil];
@@ -187,27 +196,34 @@
 
 #pragma mark - Data
 
-- (void)postAddTouchIDDataWithPassword:(NSString *)payPassword {
+- (void)postAddTouchIDDataWithPassword:(NSString *)payPassword
+{
     [WPProgressHUD showProgressIsLoading];
     NSDictionary *parameters = @{
                                  @"payPassword" : [WPPublicTool base64EncodeString:payPassword]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPAddTouchIDPayPasswordURL parameters:parameters success:^(id success) {
-        
-
+    [WPHelpTool postWithURL:WPAddTouchIDPayPasswordURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
-            [weakSelf judgeTouchIDWithSwitchIsOn:weakSelf.payCell.switchs.on type:2];
+        if ([type isEqualToString:@"1"])
+        {
+            [weakSelf.payCell.switchs setOn:!weakSelf.isOpenPay];
             [WPKeyChainTool keyChainSave:payPassword forKey:kUserPayPassword];
+            
+            [WPUserInfor sharedWPUserInfor].payTouchID = weakSelf.payCell.switchs.on ? @"YES" : @"NO";
+            [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+            
+            [WPProgressHUD showSuccessWithStatus:weakSelf.payCell.switchs.on ? @"开通成功" : @"已关闭"];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
 
-- (void)judgeTouchIDWithSwitchIsOn:(BOOL)switchIsOn type:(int)type
+- (void)judgeTouchIDWithType:(int)type
 {
     //初始化上下文对象
     LAContext* context = [[LAContext alloc] init];
@@ -215,27 +231,30 @@
     NSError *error = nil;
     
     //首先使用canEvaluatePolicy 判断设备支持状态
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        [WPProgressHUD showSuccessWithStatus:@"设置成功"];
-        switch (type) {
-            case 1: {
-                [WPUserInfor sharedWPUserInfor].registerTouchID = switchIsOn ? @"YES" : @"NO";
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error])
+    {
+        switch (type)
+        {
+            case 1:
+            {
+                [WPUserInfor sharedWPUserInfor].registerTouchID = self.registerCell.switchs.on ? @"YES" : @"NO";
                 [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-            }
+                [WPProgressHUD showSuccessWithStatus:self.registerCell.switchs.on ? @"开通成功" : @"已关闭"];
                 break;
+            }
                 
-            case 2: {
-                [self.payCell.switchs setOn:!switchIsOn];
-                [WPUserInfor sharedWPUserInfor].payTouchID = !switchIsOn ? @"YES" : @"NO";
-                [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-            }
+            case 2:
+            {
+                [self createPayPopupView];
                 break;
+            }
                 
             default:
                 break;
         }
     }
-    else {
+    else
+    {
         [WPProgressHUD showInfoWithStatus:@"您的设备不支持指纹识别"];
         [self.payCell.switchs setOn:NO];
         [self.registerCell.switchs setOn:NO];

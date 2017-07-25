@@ -79,13 +79,16 @@
 
 - (void)confirmButtonAction
 {
-    if (self.passwordCell.textField.text.length < 6) {
+    if (self.passwordCell.textField.text.length < 6)
+    {
         [WPProgressHUD showInfoWithStatus:@"密码不能少于六位"];
     }
-    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text]) {
+    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"两次输入的密码不一致"];
     }
-    else {
+    else
+    {
         [self postChangePasswordData];
     }
 }
@@ -99,13 +102,16 @@
                                  @"password" : [WPPublicTool base64EncodeString:self.passwordCell.textField.text]
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPSubAccountChangePasswordURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPSubAccountChangePasswordURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"修改成功"];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

@@ -20,15 +20,15 @@
 
 - (void)setModel:(WPBillModel *)model {
 
-    self.wayImageView.image = [WPUserTool typeImageWith:model.tradeType];
+    self.wayImageView.image = [WPUserTool billTypeImageWithModel:model];
     self.wayImageView.contentMode = UIViewContentModeScaleAspectFit;
 
-    self.wayLabel.text = [WPUserTool typePurposeWith:model.tradeType];
+    self.wayLabel.text = [WPUserTool billTypePurposeWithModel:model];
     
-    self.typeLabel.text = [WPUserTool typeStateWith:model.payState];
-    self.typeLabel.textColor = [UIColor colorWithRGBString:[WPUserTool typeStateColorWith:model.payState]];
+    self.typeLabel.text = [WPUserTool billTypeStateWithModel:model];
+    self.typeLabel.textColor = [WPUserTool billTypeStateColorWithModel:model];
     
-    self.dateLabel.text = [WPPublicTool dateToLocalDate:model.createDate];
+    self.dateLabel.text = [WPPublicTool stringToDateString:model.createDate];
     
     NSString *typeStr = model.inPaystate == 1 ? @"+" : @"-";
     self.moneyLabel.text = [NSString stringWithFormat:@"%@ %.2f",typeStr, model.amount];

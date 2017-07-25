@@ -12,7 +12,6 @@
 #import "WPUserEnrollController.h"
 #import "WPBankCardCell.h"
 #import "WPBankCardModel.h"
-#import "WPPayPopupController.h"
 #import "Header.h"
 #import "WPUserLoadPhotoDetailController.h"
 #import "WPUserEnrollController.h"
@@ -40,7 +39,8 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 {
     [super viewDidLoad];
     self.navigationItem.title = @"银行卡";
-    if (![WPAppTool isSubAccount]) {
+    if (![WPJudgeTool isSubAccount])
+    {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_jia_content_n"] style:UIBarButtonItemStylePlain target:self action:@selector(getUserInforTypeData)];
     }
     [self getUserCardData];
@@ -60,23 +60,6 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
         _cardArray = [NSMutableArray array];
     }
     return _cardArray;
-}
-
-- (void)initPayPopupView
-{
-    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
-    vc.titleString = @"解绑银行卡";
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    __weakSelf
-    vc.payPasswordBlock = ^(NSString *payPassword) {
-        [weakSelf postDeleteCardDataWithPassword:payPassword];
-    };
-    vc.forgetPasswordBlock = ^{
-        WPPasswordController *vc = [[WPPasswordController alloc] init];
-        vc.passwordType = @"2";
-        [weakSelf.navigationController pushViewController:vc animated:YES];
-    };
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 
 - (UITableView *)tableView
@@ -107,7 +90,8 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 {
     WPBankCardCell *cell = [tableView dequeueReusableCellWithIdentifier:WPBankCardCellID];
     cell.model = self.cardArray[indexPath.section];
-    if ([WPAppTool isSubAccount]) {
+    if ([WPJudgeTool isSubAccount])
+    {
         cell.userInteractionEnabled = NO;
     }
     return cell;
@@ -135,54 +119,76 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (![WPAppTool isSubAccount]) {
+    if (![WPJudgeTool isSubAccount])
+    {
         WPBankCardModel *model = [[WPBankCardModel alloc]init];
         model = self.cardArray[indexPath.section];
-        if ([self.showCardType isEqualToString:@"1"]) {
+        if ([self.showCardType isEqualToString:@"1"])
+        {
             //  未认证，认证失败
-            if (model.auditStatus == 0 || model.auditStatus == 2) {
+            if (model.auditStatus == 0 || model.auditStatus == 2)
+            {
                 WPUserLoadPhotoDetailController *vc = [[WPUserLoadPhotoDetailController alloc] init];
                 vc.navigationItem.title = @"认证银行卡信息";
                 vc.cardId = [NSString stringWithFormat:@"%ld", (long)model.id];
                 __weakSelf
-                vc.loadApproveBlock = ^(float approveState) {
+                vc.loadApproveBlock = ^(float approveState)
+                {
                     [weakSelf getUserCardData];
                 };
                 
                 [self.navigationController pushViewController:vc animated:YES];
             }
             //  认证中
-            else if (model.auditStatus == 4) {
+            else if (model.auditStatus == 4)
+            {
                 
             }
-            else {
+            else
+            {
                 __weakSelf
-                [WPHelpTool alertControllerTitle:nil rowOneTitle:@"解除绑定" rowTwoTitle:nil rowOne:^(UIAlertAction *alertAction) {
-                    [WPHelpTool alertControllerTitle:@"确定解绑该银行卡" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction) {
+                [WPHelpTool alertControllerTitle:nil rowOneTitle:@"解除绑定" rowTwoTitle:nil rowOne:^(UIAlertAction *alertAction)
+                {
+                    [WPHelpTool alertControllerTitle:@"确定解绑该银行卡" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction)
+                    {
                         weakSelf.deleteModel = weakSelf.cardArray[indexPath.row];
                         weakSelf.indexNumber = indexPath.row;
-                        if ([WPAppTool isPayTouchID]) {
-                            [WPHelpTool payWithTouchIDsuccess:^(id success) {
+                        if ([WPJudgeTool isPayTouchID])
+                        {
+                            [WPHelpTool payWithTouchIDsuccess:^(id success)
+                            {
                                 [weakSelf postDeleteCardDataWithPassword:success];
                                 
-                            } failure:^(NSError *error) {
+                            } failure:^(NSError *error)
+                            {
                                 [weakSelf initPayPopupView];
                             }];
                         }
-                        else {
+                        else
+                        {
                             [weakSelf initPayPopupView];
                         }
                     } cancel:nil];
                 } rowTwo:nil];
             }
         }
-        else {
-            if (self.cardInfoBlock) {
+        else
+        {
+            if (self.cardInfoBlock)
+            {
                 self.cardInfoBlock(model);
             }
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
+}
+
+- (void)initPayPopupView
+{
+    __weakSelf
+    [WPHelpTool showPayPasswordViewWithTitle:@"解绑银行卡" navigationController:self.navigationController success:^(id success) {
+        [weakSelf postDeleteCardDataWithPassword:success];
+    }];
 }
 
 #pragma mark - Data
@@ -194,17 +200,21 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
                                  };
     __weakSelf
 
-    [WPHelpTool getWithURL:WPUserBanCardURL parameters:parameters success:^(id success) {
+    [WPHelpTool getWithURL:WPUserBanKCardURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.cardArray removeAllObjects];
             [weakSelf.cardArray addObjectsFromArray:[WPBankCardModel mj_objectArrayWithKeyValuesArray:result[@"cardList"]]];
         }
 
-        [WPHelpTool wp_endRefreshWith:weakSelf.tableView array:result[@"cardList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的卡"];
+        [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"cardList"] noResultLabel:weakSelf.noResultLabel title:@"没有符合条件的卡"];
         
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
+        
     }];
 }
 
@@ -217,35 +227,41 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
                                  };
     
     __weakSelf
-    [WPHelpTool postWithURL:WPUserDeleteCardURL parameters:parameters success:^(id success) {
-        
+    [WPHelpTool postWithURL:WPUserDeleteCardURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.cardArray removeObjectAtIndex:weakSelf.indexNumber];
             [weakSelf.tableView reloadData];
             [WPProgressHUD showSuccessWithStatus:@"解除绑定成功"];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
 - (void)getUserInforTypeData
 {
-    if ([WPAppTool isPassIDCardApprove]) {
-        if ([WPAppTool isHavePayPassword]) {
+    if ([WPJudgeTool isIDCardApprove])
+    {
+        if ([WPJudgeTool isPayPassword])
+        {
             WPSelectController *vc = [[WPSelectController alloc] init];
             vc.selectType = 2;
             [self.navigationController pushViewController:vc animated:YES];
         }
-        else {
+        else
+        {
             WPPasswordController *vc = [[WPPasswordController alloc] init];
             vc.isFirstPassword = YES;
             vc.navigationItem.title = @"设置支付密码";
             [self.navigationController pushViewController:vc animated:YES];
         }
     }
-    else  {
+    else
+    {
         [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
     }
 }

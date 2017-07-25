@@ -135,7 +135,8 @@
 - (void)initPwdTextField
 {
     //生成分割线
-    for (int i = 0; i < kDotCount - 1; i++) {
+    for (int i = 0; i < kDotCount - 1; i++)
+    {
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.textField.frame) + (i + 1) * self.rowHeight, CGRectGetMinY(self.textField.frame), 1, self.rowHeight)];
         lineView.backgroundColor = [UIColor lineColor];
         [self.bottomView addSubview:lineView];
@@ -143,7 +144,8 @@
     
     self.dotArray = [[NSMutableArray alloc] init];
     //生成中间的点
-    for (int i = 0; i < kDotCount; i++) {
+    for (int i = 0; i < kDotCount; i++)
+    {
         UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.textField.frame) + (self.rowHeight - kDotCount) / 2 + i * self.rowHeight, CGRectGetMinY(self.textField.frame) + (self.rowHeight - kDotSize.height) / 2, kDotSize.width, kDotSize.height)];
         dotView.backgroundColor = [UIColor blackColor];
         dotView.layer.cornerRadius = kDotSize.width / 2.0f;
@@ -156,18 +158,24 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if([string isEqualToString:@"\n"]) {
+    if([string isEqualToString:@"\n"])
+    {
         //按回车关闭键盘
         [textField resignFirstResponder];
         return NO;
-    } else if(string.length == 0) {
+    }
+    else if(string.length == 0)
+    {
         //判断是不是删除键
         return YES;
     }
-    else if(textField.text.length >= kDotCount) {
+    else if(textField.text.length >= kDotCount)
+    {
         //输入的字符个数大于6，则无法继续输入，返回NO表示禁止输入
         return NO;
-    } else {
+    }
+    else
+    {
         return YES;
     }
 }
@@ -184,18 +192,24 @@
 //  重置显示的点
 - (void)textFieldDidChange:(UITextField *)textField
 {
-    for (UIView *dotView in self.dotArray) {
+    for (UIView *dotView in self.dotArray)
+    {
         dotView.hidden = YES;
     }
-    for (int i = 0; i < textField.text.length; i++) {
+    for (int i = 0; i < textField.text.length; i++)
+    {
         ((UIView *)[self.dotArray objectAtIndex:i]).hidden = NO;
     }
-    if (textField.text.length == kDotCount) {
-        if (self.payPasswordBlock) {
+    if (textField.text.length == kDotCount)
+    {
+        if (self.payPasswordBlock)
+        {
             self.payPasswordBlock(textField.text);
-            if ([WPAppTool isPayTouchID]) {
-            }
             [self dismissViewControllerAnimated:YES completion:nil];
+        }
+        if (![WPJudgeTool isPayTouchID])
+        {
+            [WPKeyChainTool keyChainSave:textField.text forKey:kUserPayPassword];
         }
     }
 }
@@ -210,7 +224,8 @@
 - (void)forgetButtonClick:(UIButton *)button
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    if (self.forgetPasswordBlock) {
+    if (self.forgetPasswordBlock)
+    {
         self.forgetPasswordBlock();
     }
 }

@@ -17,18 +17,18 @@
 {
     NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
     [tempDic setObject:string forKey:sKey];
-    [self save:kUserPayPassword_Phone data:tempDic];
+    [self save:kUserPayPassword_Infor data:tempDic];
 }
 
 + (NSString *)keyChainReadforKey:(NSString *)sKey
 {
-    NSMutableDictionary *tempDic = (NSMutableDictionary *)[self load:kUserPayPassword_Phone];
+    NSMutableDictionary *tempDic = (NSMutableDictionary *)[self load:kUserPayPassword_Infor];
     return [tempDic objectForKey:sKey];
 }
 
 + (void)keyChainDelete
 {
-    [self delete:kUserPayPassword_Phone];
+    [self delete:kUserPayPassword_Infor];
 }
 
 + (NSMutableDictionary *)getKeychainQuery:(NSString *)service
@@ -56,11 +56,19 @@
     [keychainQuery setObject:(id)kCFBooleanTrue forKey:(id)kSecReturnData];
     [keychainQuery setObject:(id)kSecMatchLimitOne forKey:(id)kSecMatchLimit];
     CFDataRef keyData = NULL;
-    if (SecItemCopyMatching((CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr) {
-        @try {
+    if (SecItemCopyMatching((CFDictionaryRef)keychainQuery, (CFTypeRef *)&keyData) == noErr)
+    {
+        @try
+        {
             ret = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
-        } @catch (NSException *e) {
-        } @finally {
+        }
+        @catch (NSException *e)
+        {
+            
+        }
+        @finally
+        {
+            
         }
     }
     if (keyData)

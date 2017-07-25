@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "WPSingleton.h"
 #import "WPAppConst.h"
-#import "WPUserInforModel.h"
 
 @interface WPUserInfor : NSObject
 
@@ -64,6 +63,11 @@ Single_Interface(WPUserInfor)
  *  支付是否需要Touch ID   YES NO
  */
 @property (nonatomic, copy) NSString *payTouchID;
+
+/**
+ *  是否提醒用户开通Touch ID
+ */
+@property (nonatomic, copy) NSString *isRemindTouchID;
 
 
 /**

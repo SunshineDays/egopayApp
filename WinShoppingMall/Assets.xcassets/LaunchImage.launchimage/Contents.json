@@ -50,16 +50,6 @@
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
       "scale" : "2x"
-    },
-    {
-      "extent" : "full-screen",
-      "idiom" : "iphone",
-      "subtype" : "736h",
-      "filename" : "default_667h@3x-1.png",
-      "minimum-system-version" : "8.0",
-      "orientation" : "landscape",
-      "unassigned" : true,
-      "scale" : "3x"
     }
   ],
   "info" : {

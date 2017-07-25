@@ -44,7 +44,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     self.navigationItem.title = @"注册";
@@ -55,7 +56,8 @@
 
 #pragma mark - Init
 
-- (NSTimer *)timer {
+- (NSTimer *)timer
+{
     if (_timer == nil) {
         _timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(timerClick) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
@@ -133,7 +135,8 @@
     return _passwordConfirmCell;
 }
 
-- (WPRowTableViewCell *)referrerCell {
+- (WPRowTableViewCell *)referrerCell
+{
     if (!_referrerCell) {
         _referrerCell = [[WPRowTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.passwordConfirmCell.frame), kScreenWidth, WPRowHeight);
@@ -171,7 +174,7 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    return [WPRegex validateReplacementString:string];
+    return [WPJudgeTool validateSpace:string];
 }
 
 #pragma mark - Action
@@ -181,33 +184,40 @@
     [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.phoneCell.textField.text.length > 6 && self.verificationCodeCell.textField.text.length == 6 && self.passwordCell.textField.text.length >= 6 && self.passwordConfirmCell.textField.text.length >= 6) ? YES : NO];
 }
 
-- (void)timerClick {
+- (void)timerClick
+{
     self.currentTime--;
-    if (self.currentTime == 0) {
+    if (self.currentTime == 0)
+    {
         [self.verificationCodeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = YES;
         [self.timer invalidate];
         self.timer = nil;
         self.currentTime = getVerificationCodeTime;
     }
-    else {
+    else
+    {
         [self.verificationCodeButton setTitle:[NSString stringWithFormat:@"%ld秒后重发",(long)self.currentTime] forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = NO;
     }
 }
 
-- (void)getVerificationCodeButtonClick {
+- (void)getVerificationCodeButtonClick
+{
     
-    if (![WPRegex validateMobile:self.phoneCell.textField.text]) {
+    if (![WPJudgeTool validateMobile:self.phoneCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号"];
     }
-    else {
+    else
+    {
         [self getMessageData];
     }
 }
 
 
-- (void)userProtocolClick:(UIButton *)button {
+- (void)userProtocolClick:(UIButton *)button
+{
     NSArray *imageArray = @[@"icon_sel_content_s", @"icon_sel_content_n"];
     self.isSelected = !self.isSelected;
     int index = self.isSelected ? 0 : 1;
@@ -215,7 +225,8 @@
 }
 
 
-- (void)userProtocolButtonClick {
+- (void)userProtocolButtonClick
+{
     WPPublicWebViewController *vc = [[WPPublicWebViewController alloc] init];
     vc.navigationItem.title = @"用户使用协议";
     vc.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPUserProtocolWebURL];
@@ -223,56 +234,70 @@
 }
 
 
-- (void)confirmEnrollButtonClick {
-    if (![WPRegex validateMobile:self.phoneCell.textField.text]) {
+- (void)confirmEnrollButtonClick
+{
+    if (![WPJudgeTool validateMobile:self.phoneCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号码"];
     }
-    else if (!self.isSelected) {
+    else if (!self.isSelected)
+    {
         [WPProgressHUD showInfoWithStatus:@"请阅读并同意《用户使用协议》"];
     }
-    else if (self.verificationCodeCell.textField.text.length != 6) {
+    else if (self.verificationCodeCell.textField.text.length != 6)
+    {
         [WPProgressHUD showInfoWithStatus:@"验证码格式错误"];
     }
-    else if (self.passwordCell.textField.text.length < 6) {
+    else if (self.passwordCell.textField.text.length < 6)
+    {
         [WPProgressHUD showInfoWithStatus:@"密码不能少于六位"];
     }
-    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text]) {
+    else if (![self.passwordCell.textField.text isEqualToString:self.passwordConfirmCell.textField.text])
+    {
         [WPProgressHUD showInfoWithStatus:@"两次输入的密码不一致"];
     }
-    else if (![WPRegex validateMobile:self.referrerCell.textField.text] && self.referrerCell.textField.text.length != 0) {
+    else if (![WPJudgeTool validateMobile:self.referrerCell.textField.text] && self.referrerCell.textField.text.length != 0)
+    {
         [WPProgressHUD showInfoWithStatus:@"推荐人手机号码格式不正确"];
     }
-    else {
-        [self pushEnrollData];
+    else
+    {
+        [self postEnrollData];
     }
 }
 
 #pragma mark - Data
 
 #pragma mark - 验证码
-- (void)getMessageData {
+- (void)getMessageData
+{
     NSDictionary *parameters = @{
                                  @"phone" : self.phoneCell.textField.text,
                                  @"verType" : @"1"
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPGetMessageURL parameters:parameters success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [WPProgressHUD showSuccessWithStatus:@"验证码发送成功"];
             [weakSelf timer];
         }
-        else {
+        else
+        {
             weakSelf.currentTime = 0;
             [weakSelf timerClick];
         }
         
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }
 
-- (void)pushEnrollData {
+- (void)postEnrollData
+{
     [WPProgressHUD showProgressIsLoading];
     NSDictionary *parameters = @{
                                  @"phone" : self.phoneCell.textField.text,
@@ -281,12 +306,15 @@
                                  @"tphone" : self.referrerCell.textField.text.length == 0 ? @"" : self.referrerCell.textField.text,
                                  };
     __weakSelf
-    [WPHelpTool postWithURL:WPConfirmEnrollURL parameters:parameters success:^(id success) {
+    [WPHelpTool postWithURL:WPConfirmEnrollURL parameters:parameters success:^(id success)
+    {
         
 
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
-            if (self.userEnrollSuccessBlock) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (self.userEnrollSuccessBlock)
+            {
                 self.userEnrollSuccessBlock(@{
                                               @"phone" : self.phoneCell.textField.text,
                                               @"password" : self.passwordCell.textField.text
@@ -295,7 +323,8 @@
             [WPProgressHUD showSuccessWithStatus:@"注册成功"];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

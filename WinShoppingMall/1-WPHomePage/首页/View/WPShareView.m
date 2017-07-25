@@ -9,8 +9,9 @@
 #import "WPShareView.h"
 #import "Header.h"
 #import <TencentOpenAPI/QQApiInterface.h>
-#import "UMSocialQQHandler.h"
-#import "WXApi.h"
+#import <UMengSocial/UMSocialQQHandler.h>
+#import <UMengSocial/WXApi.h>
+#import "UIView+WPExtension.h"
 
 @interface WPShareView ()
 
@@ -32,9 +33,22 @@
 
 @property (nonatomic, assign) float iconWidth;
 
+@property (nonatomic, strong) UIButton *shareButton;
+
 @end
 
 @implementation WPShareView
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.shareButton.imageView.xc_centerX = self.frame.size.width / 2;
+    self.shareButton.imageView.xc_y = 0;
+    
+    self.shareButton.titleLabel.xc_x = 0;
+    self.shareButton.titleLabel.xc_y = self.shareButton.frame.size.height - 15;
+    self.shareButton.titleLabel.xc_width = self.shareButton.frame.size.width;
+}
 
 - (instancetype)initShareToApp
 {
@@ -48,19 +62,19 @@
         
         _titleArray = [[NSMutableArray alloc] init];
         _imageArray = [[NSMutableArray alloc] init];
-        if ([WXApi isWXAppInstalled]) {
-            
-            [_titleArray addObjectsFromArray:@[[WPUserTool shareWayArray][0], [WPUserTool shareWayArray][1]]];
-            [_imageArray addObjectsFromArray:@[[WPUserTool shareImageArray][0], [WPUserTool shareImageArray][1]]];
+        if ([WXApi isWXAppInstalled])
+        {
+            [_titleArray addObjectsFromArray:@[@"微信好友", @"微信朋友圈"]];
+            [_imageArray addObjectsFromArray:@[@"share_wechat", @"share_weixin"]];
         }
-        if ([TencentOAuth iphoneQQInstalled]) {
-            
-            [_titleArray addObjectsFromArray:@[[WPUserTool shareWayArray][2], [WPUserTool shareWayArray][3]]];
-            [_imageArray addObjectsFromArray:@[[WPUserTool shareImageArray][2], [WPUserTool shareImageArray][3]]];
+        if ([TencentOAuth iphoneQQInstalled])
+        {
+            [_titleArray addObjectsFromArray:@[@"QQ好友", @"QQ空间"]];
+            [_imageArray addObjectsFromArray:@[@"share_qq", @"share_qqzone"]];
             
         }
-        [_titleArray addObjectsFromArray:@[[WPUserTool shareWayArray][4], [WPUserTool shareWayArray][5], [WPUserTool shareWayArray][6]]];
-        [_imageArray addObjectsFromArray:@[[WPUserTool shareImageArray][4], [WPUserTool shareImageArray][5], [WPUserTool shareImageArray][6]]];
+        [_titleArray addObjectsFromArray:@[@"Safari中打开", @"复制链接", @"二维码"]];
+        [_imageArray addObjectsFromArray:@[@"share_safari", @"share_copyurl", @"share_appCode"]];
         
         [self initShareView];
     }
@@ -74,26 +88,26 @@
     [self.shareView addSubview:self.lineView];
     [self.shareView addSubview:self.cancelButton];
     
-    for (int i = 0; i < self.titleArray.count; i++) {
-        UIButton *iconButton = [[UIButton alloc] initWithFrame:CGRectMake(15 + (i % 5) * (self.iconWidth + 15), 15 + i / 5 * (self.iconWidth + 30), self.iconWidth, self.iconWidth)];
+    for (int i = 0; i < self.titleArray.count; i++)
+    {
+        WPShareIconButton *iconButton = [WPShareIconButton buttonWithType:UIButtonTypeCustom];
+        [iconButton setFrame:CGRectMake(15 + (i % 5) * (self.iconWidth + 15), 15 + i / 5 * (self.iconWidth + 30), self.iconWidth, self.iconWidth + 20)];
         [iconButton setImage:[UIImage imageNamed:self.imageArray[i]] forState:UIControlStateNormal];
-        iconButton.layer.borderColor = [UIColor lineColor].CGColor;
-        iconButton.layer.borderWidth = WPLineHeight;
-        iconButton.layer.cornerRadius = WPCornerRadius;
+        
+        iconButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [iconButton setTitle:self.titleArray[i] forState:UIControlStateNormal];
+        iconButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [iconButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+
         iconButton.contentMode = UIViewContentModeScaleAspectFit;
         iconButton.tag = i;
         [iconButton addTarget:self action:@selector(shareToApp:) forControlEvents:UIControlEventTouchUpInside];
         [self.shareView addSubview:iconButton];
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(iconButton.frame) - 10, CGRectGetMaxY(iconButton.frame), self.iconWidth + 20, 20)];
-        titleLabel.text = self.titleArray[i];
-        titleLabel.textColor = [UIColor blackColor];
-        titleLabel.font = [UIFont systemFontOfSize:12];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        [self.shareView addSubview:titleLabel];
     }
     
-    [UIView animateWithDuration:0.2f animations:^{
+    [UIView animateWithDuration:0.2f animations:^
+    {
         self.shareView.frame = CGRectMake(0, kScreenHeight - CGRectGetHeight(self.shareView.frame), kScreenWidth, CGRectGetHeight(self.shareView.frame));
     }];
     
@@ -144,17 +158,20 @@
 - (void)shareToApp:(UIButton *)sender
 {
     [self cancelShare];
-    if (self.shareBlock) {
+    if (self.shareBlock)
+    {
         self.shareBlock(self.titleArray[sender.tag]);
     }
 }
 
 - (void)cancelShare
 {
-    [UIView animateWithDuration:0.3f animations:^{
+    [UIView animateWithDuration:0.3f animations:^
+    {
         [_shareView setFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 0)];
         self.alpha = 0;
-    } completion:^(BOOL finished) {
+    } completion:^(BOOL finished)
+    {
         [self removeFromSuperview];
     }];
 }

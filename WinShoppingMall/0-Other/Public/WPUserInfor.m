@@ -33,10 +33,14 @@ Single_Implementation(WPUserInfor)
     [WPUserInfor sharedWPUserInfor].registerTouchID = self.registerTouchID;
     
     [WPUserInfor sharedWPUserInfor].payTouchID = self.payTouchID;
+    
+    [WPUserInfor sharedWPUserInfor].isRemindTouchID = self.isRemindTouchID;
         
     [WPUserInfor sharedWPUserInfor].isSubAccount = self.isSubAccount;
+    
                 
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    
     
     [userDefault setObject:self.clientId forKey:WPUserDefaultClientId];
     
@@ -57,6 +61,8 @@ Single_Implementation(WPUserInfor)
     [userDefault setObject:self.registerTouchID forKey:WPRegisterTouchID];
     
     [userDefault setObject:self.payTouchID forKey:WPPayTouchID];
+    
+    [userDefault setObject:self.isRemindTouchID forKey:WPIsRemindTouchID];
             
     [userDefault setObject:self.isSubAccount forKey:WPIsSubAccount];
         

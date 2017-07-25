@@ -12,6 +12,8 @@
 
 @property (nonatomic, assign) float amount;
 
+@property (nonatomic, assign) NSInteger billid;
+
 @property (nonatomic, copy) NSString *createDate;
 
 @property (nonatomic, copy) NSString *finishDate;

@@ -7,12 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WPShareModel.h"
 
 @interface WPShareTool : NSObject
 
 @property (nonatomic, copy) void(^shareCodeBlock)(NSString *shareUrl);
 
-
-- (void)shareWithUrl:(NSString *)url title:(NSString *)title description:(NSString *)description appType:(NSString *)appType;
+/**
+ *  分享
+ */
++ (void)shareWithModel:(WPShareModel *)model appType:(NSString *)appType;
 
 @end

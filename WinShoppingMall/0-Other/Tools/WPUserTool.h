@@ -8,92 +8,78 @@
 
 #import <Foundation/Foundation.h>
 #import "UIImage+WPExtension.h"
+#import "WPBillModel.h"
 
 @interface WPUserTool : NSObject
 
 /**
- * 分享方式数组
- */
-+ (NSMutableArray *)shareWayArray;
-
-/**
- * 分享方式图片数组
- */
-+ (NSMutableArray *)shareImageArray;
-
-/**
- * 支付方式名数组
+ *  第三方／余额支付名称数组
+ *  微信支付, 支付宝支付, QQ钱包支付, 余额支付
  */
 + (NSMutableArray *)payTypeTitleArray;
 
+
 /**
- * 支付方式图片数组
+ *  第三方／余额支付ID数组
+ */
++ (NSMutableArray *)payTypeIDArray;
+
+
+/**
+ *  第三方／余额支付图片数组
  */
 + (NSMutableArray *)payTypeImageArray;
 
-/**
- * 支付银行图片
- */
-+ (UIImage *)payBankImageCode:(NSString *)imageCode;
 
 /**
- * 选择的第三方支付图片
+ *  支付银行图片
  */
-+ (UIImage *)payTypeImageWith:(NSInteger)row;
++ (UIImage *)payBankImageWithBankCode:(NSString *)imageCode;
 
-/**
- *  选择的支付类型ID
- */
-+ (NSString *)payTypeNumberWith:(NSInteger)row;
-
-/**
- *  选择的支付方式名
- */
-+ (NSString *)payTypeTitleWith:(NSInteger)row;
 
 /**
  *  会员等级
  */
-+ (NSString *)userMemberVipWith:(NSInteger)vipID;
++ (NSString *)userMemberVipWithMerchantlvID:(NSInteger)vipID;
+
 
 /**
  *  代理等级
  */
-+ (NSString *)userAgencyVipWith:(NSInteger)vipID;
++ (NSString *)userAgencyVipWithAgentGradeID:(NSInteger)vipID;
 
-/**
- * 账单支付方式图片
- */
-+ (UIImage *)typeImageWith:(NSInteger)typeID;
 
 /**
  *  支付状态
  *  失败, 成功, 取消, 待处理, 待确认, 待返回, 异常单
  */
-+ (NSString *)typeStateWith:(NSInteger)typeID;
++ (NSString *)billTypeStateWithModel:(WPBillModel *)model;
+
 
 /**
  *  支付状态字体颜色
  */
-+ (NSString *)typeStateColorWith:(NSInteger)typeID;
++ (UIColor *)billTypeStateColorWithModel:(WPBillModel *)model;
+
 
 /**
  *  支付目的
  *  充值, 转账, 还款, 提现到卡, 付款, 二维码收款, 退款, 提现到余额, 商户升级, 代理升级
  */
-+ (NSString *)typePurposeWith:(NSInteger)typeID;
++ (NSString *)billTypePurposeWithModel:(WPBillModel *)model;
+
+
+/**
+ * 支付目的图片
+ */
++ (UIImage *)billTypeImageWithModel:(WPBillModel *)model;
+
 
 /**
  *  支付方式
  *  银行卡, 微信, 支付宝, 余额, 国际信用卡, QQ钱包
  */
-+ (NSString *)typeWayWith:(NSInteger)typeID;
-
-/**
- * 获取日期数组
- * monthNumber : 需要几个月
- */
-+ (NSMutableArray *)dateArrayWithMonthNumber:(NSInteger)monthNumber;
++ (NSString *)billTypeWayWithModel:(WPBillModel *)model;
 
 
 @end

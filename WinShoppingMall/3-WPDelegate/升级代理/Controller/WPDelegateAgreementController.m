@@ -27,7 +27,8 @@
 
 #pragma mark - Life Cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     [self titleView];
@@ -48,7 +49,8 @@
     return _titleView;
 }
 
-- (UIScrollView *)scrollView {
+- (UIScrollView *)scrollView
+{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight - WPButtonHeight - 20)];
         [self.view addSubview:_scrollView];
@@ -56,7 +58,8 @@
     return _scrollView;
 }
 
-- (UILabel *)agreementLabel {
+- (UILabel *)agreementLabel
+{
     if (!_agreementLabel) {
         _agreementLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, 10, kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:self.agreementString width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
         _agreementLabel.text = self.agreementString;
@@ -69,7 +72,8 @@
     return _agreementLabel;
 }
 
-- (WPButton *)agreeButton {
+- (WPButton *)agreeButton
+{
     if (!_agreeButton) {
         _agreeButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, kScreenHeight - WPButtonHeight - 10, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
         [_agreeButton setTitle:@"我已阅读并同意该协议" forState:UIControlStateNormal];
@@ -101,16 +105,20 @@
                                 @"isAgreeAg" : @"1"
                                 };
     __weakSelf
-    [WPHelpTool postWithURL:WPAgencyURL parameters:parameter success:^(id success) {
+    [WPHelpTool postWithURL:WPAgencyURL parameters:parameter success:^(id success)
+    {
         
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        if ([type isEqualToString:@"1"]) {
-            if (weakSelf.agreeBlock) {
+        if ([type isEqualToString:@"1"])
+        {
+            if (weakSelf.agreeBlock)
+            {
                 weakSelf.agreeBlock();
                 [weakSelf cancelButtonAction];
             }
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         
     }];
 }

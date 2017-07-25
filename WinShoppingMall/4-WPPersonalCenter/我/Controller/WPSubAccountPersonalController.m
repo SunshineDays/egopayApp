@@ -18,9 +18,8 @@
 #import "WPBillController.h"
 #import "WPBankCardController.h"
 #import "WPMerchantController.h"
-#import "WPShareView.h"
-#import "WPShareTool.h"
 #import "WPSubAccountInforController.h"
+#import "WPShareModel.h"
 
 static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
@@ -36,22 +35,18 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
 @property (nonatomic, strong) WPSubAccountPersonalModel *model;
 
-@property (nonatomic, copy) NSString *shareTitle;
-
-@property (nonatomic, copy) NSString *shareDescription;
-
-@property (nonatomic, copy) NSString *shareUrl;
+@property (nonatomic, strong) WPShareModel *shareModel;
 
 @end
 
 @implementation WPSubAccountPersonalController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"我";
     
-    [self getSubAccountInforData];
     __weakSelf
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf getSubAccountInforData];
@@ -65,7 +60,9 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    if (self.shareUrl.length == 0) {
+    [self getSubAccountInforData];
+    if (self.shareModel.webpageUrl.length == 0)
+    {
         [self getShareData];
     }
 }
@@ -80,7 +77,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     return _imageArray;
 }
 
-- (NSMutableArray *)dataArray {
+- (NSMutableArray *)dataArray
+{
     if (!_dataArray) {
         _dataArray = [[NSMutableArray alloc] init];
     }
@@ -94,8 +92,9 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         _userInforButton.backgroundColor = [UIColor whiteColor];
         [_userInforButton addTarget:self action:@selector(userInfoButtonClick) forControlEvents:UIControlEventTouchUpInside];
         
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.model.headUrl]];
-        _userInforButton.userImageView.image = data ? [UIImage imageWithData:data] : _userInforButton.userImageView.image;
+        [_userInforButton.userImageView sd_setImageWithURL:[NSURL URLWithString:self.model.headUrl] placeholderImage:[UIImage imageNamed:@"titlePlaceholderImage"] options:SDWebImageRefreshCached];
+
+        
         [_userInforButton userInforWithName:[NSString stringWithFormat:@"商户号:  %@", self.model.merchant] vip:self.model.clerkName rate:nil arrowHidden:NO];
         self.tableView.tableHeaderView = _userInforButton;
     }
@@ -103,7 +102,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 }
 
 
-- (UITableView *)tableView {
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight - 49) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
@@ -118,26 +118,30 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     WPRechargeCell *cell = [tableView dequeueReusableCellWithIdentifier:WPRechargeCellID];
     cell.bankImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
     cell.bankImageView.contentMode = UIViewContentModeScaleAspectFit;
     cell.bankNameLabel.text = self.dataArray[indexPath.row];
-    if (!([self.imageArray[indexPath.row] isEqualToString:@"icon_yue_n"] || [self.imageArray[indexPath.row] isEqualToString:@"icon_duizhang_content_n"])) {
+    if (!([self.imageArray[indexPath.row] isEqualToString:@"icon_yue_n"] || [self.imageArray[indexPath.row] isEqualToString:@"icon_duizhang_content_n"] || [self.imageArray[indexPath.row] isEqualToString:@"today_income"])) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return 60;
 }
 
@@ -148,81 +152,71 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if ([self.dataArray[indexPath.row] isEqualToString:@"收款码"]) {
+    if ([self.dataArray[indexPath.row] isEqualToString:@"收款码"])
+    {
         WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
         vc.codeType = 2;
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([self.dataArray[indexPath.row] isEqualToString:@"收款账单"]) {
+    else if ([self.dataArray[indexPath.row] isEqualToString:@"收款账单"])
+    {
         WPBillController *vc = [[WPBillController alloc] init];
         vc.isCheck = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([self.dataArray[indexPath.row] isEqualToString:@"银行卡"]) {
+    else if ([self.dataArray[indexPath.row] isEqualToString:@"银行卡"])
+    {
         WPBankCardController *vc = [[WPBankCardController alloc] init];
         vc.showCardType = @"1";
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([self.dataArray[indexPath.row] isEqualToString:@"商家"]) {
+    else if ([self.dataArray[indexPath.row] isEqualToString:@"商家"])
+    {
         WPMerchantController *vc= [[WPMerchantController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([self.dataArray[indexPath.row] isEqualToString:@"系统消息"]) {
+    else if ([self.dataArray[indexPath.row] isEqualToString:@"系统消息"])
+    {
         WPMessagesCenterController *vc = [[WPMessagesCenterController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([self.dataArray[indexPath.row] isEqualToString:@"推荐"]) {
-        [self shareToApp];
+    else if ([self.dataArray[indexPath.row] isEqualToString:@"推荐"])
+    {
+        [WPHelpTool shareToAppWithModel:self.shareModel navigationController:self.navigationController];
     }
 }
 
 #pragma mark - Acition
 
-- (void)userInfoButtonClick {
+- (void)userInfoButtonClick
+{
     WPSubAccountInforController *vc = [[WPSubAccountInforController alloc] init];
     vc.subAccountModel = self.model;
     vc.avaterImage = self.userInforButton.userImageView.image;
     __weakSelf
-    vc.avaterImageBlcok = ^(UIImage *avaterImage) {
+    vc.avaterImageBlcok = ^(UIImage *avaterImage)
+    {
         weakSelf.userInforButton.userImageView.image = avaterImage;
     };
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)shareToApp
-{  //分享App
-    WPShareView *shareView = [[WPShareView alloc] initShareToApp];
-    __weakSelf
-    [shareView setShareBlock:^(NSString *appType){
-        WPShareTool *shareTool = [[WPShareTool alloc] init];
-        if ([appType isEqualToString:[[WPUserTool shareWayArray] lastObject]])
-        {
-            WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
-            vc.codeString = weakSelf.shareUrl;
-            vc.codeType = 3;
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-        }
-        else
-        {
-            [shareTool shareWithUrl:weakSelf.shareUrl title:weakSelf.shareTitle description:weakSelf.shareDescription appType:appType];
-        }
-    }];
-    [[UIApplication sharedApplication].keyWindow addSubview:shareView];
-}
-
 #pragma mark - Data
-- (void)getSubAccountInforData {
-    
+- (void)getSubAccountInforData
+{
     __weakSelf
-    [WPHelpTool getWithURL:WPSubAccountInforURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPSubAccountInforURL parameters:nil success:^(id success)
+    {
         [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         
-        if ([type isEqualToString:@"1"]) {
+        if ([type isEqualToString:@"1"])
+        {
             [weakSelf.dataArray removeAllObjects];
             [weakSelf.imageArray removeAllObjects];
             weakSelf.model = [WPSubAccountPersonalModel mj_objectWithKeyValues:result];
@@ -230,10 +224,12 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
             NSString *todayQrIncome = [NSString stringWithFormat:@"%.2f", weakSelf.model.todayQrIncome];
             
             NSArray *dictKeyArray = @[@"balance", @"today_income", @"qr_pic", @"qr_bill", @"bankcards", @"mer_shops", @"sys_msgs", @"refer_pps"];
-            NSArray *titleArray = @[[NSString stringWithFormat:@"余额：%@", balance], [NSString stringWithFormat:@"今日收入：%@", todayQrIncome], @"收款码", @"收款账单", @"银行卡", @"商家", @"系统消息", @"推荐"];
+            NSArray *titleArray = @[[NSString stringWithFormat:@"主账户余额：%@(元)", balance], [NSString stringWithFormat:@"今日收入：%@(元)", todayQrIncome], @"收款码", @"收款账单", @"银行卡", @"商家", @"系统消息", @"推荐"];
             NSArray *imageArray = @[@"icon_yue_n", @"icon_duizhang_content_n", @"icon_shoukuanma_content_n",@"icon_zhangdan_content_n", @"icon_yinhang_n", @"icon_shangjiai_content_n", @"icon_xiaoxi_content_n", @"icon_tuijian_content_n"];
-            for (int i = 0; i < dictKeyArray.count; i++) {
-                if ([[NSString stringWithFormat:@"%@", weakSelf.model.resources[dictKeyArray[i]]] isEqualToString:@"1"]) {
+            for (int i = 0; i < dictKeyArray.count; i++)
+            {
+                if ([[NSString stringWithFormat:@"%@", weakSelf.model.resources[dictKeyArray[i]]] isEqualToString:@"1"])
+                {
                     [weakSelf.dataArray addObject:titleArray[i]];
                     [weakSelf.imageArray addObject:imageArray[i]];
                 }
@@ -242,7 +238,8 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
             [weakSelf.tableView.mj_header endRefreshing];
             [weakSelf.tableView reloadData];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
         [weakSelf.indicatorView stopAnimating];
         [weakSelf.tableView.mj_header endRefreshing];
     }];
@@ -251,15 +248,16 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 - (void)getShareData
 {
     __weakSelf
-    [WPHelpTool getWithURL:WPShareToAppURL parameters:nil success:^(id success) {
+    [WPHelpTool getWithURL:WPShareToAppURL parameters:nil success:^(id success)
+    {
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"]) {
-            weakSelf.shareTitle = result[@"title"];
-            weakSelf.shareDescription = result[@"description"];
-            weakSelf.shareUrl = result[@"webpageUrl"];
+        if ([type isEqualToString:@"1"])
+        {
+            weakSelf.shareModel = [WPShareModel mj_objectWithKeyValues:result];
         }
-    } failure:^(NSError *error) {
+    } failure:^(NSError *error)
+    {
     }];
 }
 
