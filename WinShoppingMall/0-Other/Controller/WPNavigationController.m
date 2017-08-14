@@ -21,15 +21,17 @@
 + (void)initialize
 {
     UINavigationBar *navigationBar = [UINavigationBar appearance];
-    [navigationBar setBackgroundImage:[UIImage imageToColor:[UIColor colorWithRGBString:@"#1B82E3" alpha:1]]
+    [navigationBar setBackgroundImage:[UIImage imageToColor:[UIColor themeColor]]
                        forBarPosition:UIBarPositionAny
                            barMetrics:UIBarMetricsDefault];
     [navigationBar setShadowImage:[UIImage new]];
     NSMutableDictionary *dictM = [NSMutableDictionary dictionary];
-    dictM[NSForegroundColorAttributeName] = [UIColor blackColor];
+    dictM[NSForegroundColorAttributeName] = [UIColor whiteColor];
     dictM[NSFontAttributeName] = [UIFont systemFontOfSize:19 weight:2];
     [navigationBar setTitleTextAttributes:dictM];
-    navigationBar.tintColor = [UIColor blackColor];
+    navigationBar.tintColor = [UIColor whiteColor];
+    navigationBar.translucent = NO;
+    
 }
 
 - (void)viewDidLoad
@@ -47,6 +49,7 @@
 
     [super pushViewController:viewController animated:animated];
 }
+
 
 
 #pragma mark - <UIGestureRecognizerDelegate>

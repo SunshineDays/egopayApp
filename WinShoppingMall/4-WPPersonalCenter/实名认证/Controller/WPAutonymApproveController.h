@@ -7,7 +7,11 @@
 //
 
 #import "WPBaseViewController.h"
+#import "WPAutonymApproveModel.h"
 
 @interface WPAutonymApproveController : WPBaseViewController
+
+
+@property (nonatomic, strong) WPAutonymApproveModel *approveModel;
 
 @end

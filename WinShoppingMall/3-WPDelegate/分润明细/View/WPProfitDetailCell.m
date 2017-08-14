@@ -14,21 +14,24 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.lineLabel.backgroundColor = [UIColor tableViewColor];
+
 }
 
 - (void)setProfitModel:(WPProfitDetailModel *)profitModel {
     
-    self.withdrawMoneyLabel.text = [NSString stringWithFormat:@"提现金额：%.2f", profitModel.txAmount];
+    self.withdrawMoneyLabel.text = [NSString stringWithFormat:@"%.2f", profitModel.txAmount];
     
-    self.profitMoneyLabel.text = [NSString stringWithFormat:@"分润金额：%.2f元", profitModel.benefit];
+    self.profitMoneyLabel.text = [NSString stringWithFormat:@"%.2f元", profitModel.benefit];
     
-    self.merchantNumberLabel.text = [NSString stringWithFormat:@"商户编号：%@", profitModel.merchantno];
+    self.merchantNumberLabel.text = [NSString stringWithFormat:@"%@", profitModel.merchantno];
     
     NSString *dateString = [WPPublicTool stringToDateString:[NSString stringWithFormat:@"%@", profitModel.createTime]];
-    self.profitDateLabel.text = [NSString stringWithFormat:@"分润时间：%@", dateString];
+    self.profitDateLabel.text = [NSString stringWithFormat:@"%@", dateString];
     
-    self.orderNumberLabel.text = [NSString stringWithFormat:@"订单编号：%@", profitModel.orderno];
+    self.orderNumberLabel.text = [NSString stringWithFormat:@"%@", profitModel.orderno];
 }
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

@@ -28,7 +28,7 @@
 {
     if (!_cycleScrollView) {
         _cycleScrollView = [[SDCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenWidth / 2)];
-        _cycleScrollView.placeholderImage = [UIImage imageNamed:@""];
+        _cycleScrollView.placeholderImage = [UIImage imageNamed:@"bannerImage"];
         _cycleScrollView.bannerImageViewContentMode = UIViewContentModeScaleToFill;
         _cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
         _cycleScrollView.delegate = self;
@@ -41,7 +41,8 @@
 - (UIView *)classView
 {
     if (!_classView) {
-        _classView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cycleScrollView.frame), kScreenWidth, 180)];
+        _classView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cycleScrollView.frame), kScreenWidth, 200)];
+        _classView.backgroundColor = [UIColor whiteColor];
         _classView.userInteractionEnabled = YES;
         [self addSubview:_classView];
     }
@@ -71,7 +72,7 @@
 {
     if (!_creditButton) {
         _creditButton = [WPHomePageCreditButton buttonWithType:UIButtonTypeCustom];
-        [_creditButton setFrame:CGRectMake(0, CGRectGetMaxY(self.classView.frame) + 20, kScreenWidth, 80)];
+        [_creditButton setFrame:CGRectMake(0, CGRectGetMaxY(self.classView.frame), kScreenWidth, 80)];
         [_creditButton setBackgroundColor:[UIColor themeColor]];
         [_creditButton setTitle:@"Credit Card Payment\n\n国际信用卡" forState:UIControlStateNormal];
         _creditButton.titleLabel.numberOfLines = 0;

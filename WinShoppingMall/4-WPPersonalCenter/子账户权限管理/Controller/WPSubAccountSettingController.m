@@ -33,6 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+        
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = self.isFirst ? @"设置子账户权限" : self.clerkName;
     self.titleArray = @[@"今日收入", @"收款码", @"收款账单", @"账单消息", @"商家", @"系统消息", @"推荐", @"余额", @"银行卡"];
@@ -59,7 +60,7 @@
 - (UIScrollView *)scrollView
 {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight - WPButtonHeight - 10)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight - WPButtonHeight - 10)];
         [self.view addSubview:_scrollView];
     }
     return _scrollView;
@@ -80,9 +81,9 @@
 - (void)initSubAccountSettingView
 {
     for (int i = 0; i < self.titleArray.count; i++) {
-        WPRowTableViewCell *rowCell = [[WPRowTableViewCell alloc] init];
+        WPCustomRowCell *rowCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.stateLabel.frame) + (WPRowHeight + 10) * i, kScreenWidth, WPRowHeight);
-        [rowCell tableViewCellTitle:self.titleArray[i] rectMake:rect];
+        [rowCell rowCellTitle:self.titleArray[i] rectMake:rect];
         [rowCell.switchs setOn:[self.switchArray[i] isEqualToString:@"1"] ? YES : NO animated:YES];
         [rowCell.switchs addTarget:self action:@selector(rowCellAction:) forControlEvents:UIControlEventValueChanged];
         rowCell.switchs.tag = i;
@@ -94,7 +95,7 @@
 - (WPButton *)confirmButton
 {
     if (!_confirmButton) {
-        _confirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, kScreenHeight - WPButtonHeight - 10, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
+        _confirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, kScreenHeight - WPNavigationHeight - WPButtonHeight - 10, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
         [_confirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [WPPublicTool buttonWithButton:_confirmButton userInteractionEnabled:YES];
         [_confirmButton addTarget:self action:@selector(confirmButtonAtion) forControlEvents:UIControlEventTouchUpInside];

@@ -32,7 +32,7 @@
 {
     if (!_cardCell) {
         _cardCell = [[WPCardTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, WPNavigationHeight + 20, kScreenWidth, 80);
+        CGRect rect = CGRectMake(0, WPTopY + 20, kScreenWidth, 80);
         [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择充值方式" rectMake:rect];
         [self addSubview:_cardCell];
     }
@@ -56,7 +56,7 @@
     if (!_moneyCell) {
         _moneyCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.poundageLabel.frame), kScreenWidth, WPRowHeight);
-        [_moneyCell tableViewCellTitle:@"金额" placeholder:@"请输入充值金额" rectMake:rect];
+        [_moneyCell rowCellTitle:@"金额" placeholder:@"请输入充值金额" rectMake:rect];
         _moneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         _moneyCell.textField.delegate = self;
         [self addSubview:_moneyCell];
@@ -70,9 +70,10 @@
     if (!_cvvCell) {
         _cvvCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.moneyCell.frame) + 20, kScreenWidth, WPRowHeight);
-        [_cvvCell tableViewCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
+        [_cvvCell rowCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
         _cvvCell.hidden = YES;
         _cvvCell.textField.keyboardType = UIKeyboardTypeNumberPad;
+        _cvvCell.textField.delegate = self;
         [self addSubview:_cvvCell];
     }
     return _cvvCell;
@@ -94,5 +95,7 @@
 {
     return [WPJudgeTool validatePrice:textField.text range:range replacementString:string];
 }
+
+
 
 @end

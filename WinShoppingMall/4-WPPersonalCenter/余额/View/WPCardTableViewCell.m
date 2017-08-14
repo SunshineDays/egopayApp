@@ -42,7 +42,7 @@
 }
 
 
-- (void)tableViewCellTitle:(NSString *)title placeholder:(NSString *)placeholder rectMake:(CGRect)rect
+- (void)rowCellTitle:(NSString *)title placeholder:(NSString *)placeholder rectMake:(CGRect)rect
 {
     self.frame = rect;
     self.backgroundColor = [UIColor whiteColor];

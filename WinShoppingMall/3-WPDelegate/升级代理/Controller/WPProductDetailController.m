@@ -24,9 +24,9 @@
 
 @property (nonatomic, strong) WPButton *submitButton;
 
-@property (nonatomic, strong) WPUpGradeProductModel *delegateModel;
+@property (nonatomic, strong) WPAgencyProductModel *delegateModel;
 
-@property (nonatomic, strong) WPMerchantGradeProuctModel *merModel;
+@property (nonatomic, strong) WPMemberProuctModel *merModel;
 
 @property (nonatomic, strong) UIImage *titleImage;
 
@@ -68,7 +68,7 @@
 - (UIScrollView *)scrollView
 {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self.view addSubview:_scrollView];
     }
     return _scrollView;
@@ -101,10 +101,19 @@
 - (UILabel *)priceLabel
 {
     if (!_priceLabel) {
-        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, 30)];
-        _priceLabel.text = [NSString stringWithFormat:@"¥ %.2f", self.isAgency ? self.delegateModel.price : self.merModel.price];
+        _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame) + 10, kScreenWidth - 2 * WPLeftMargin, 30)];
         _priceLabel.textColor = [UIColor redColor];
         _priceLabel.font = [UIFont systemFontOfSize:17];
+        
+        NSString *moneyString;
+        if (self.isAgency) {
+            moneyString = [NSString stringWithFormat:@"¥ %.2f(另需保证金 %.2f元)", self.delegateModel.price, self.delegateModel.depositAmt];
+            [_priceLabel setAttributedText:[WPPublicTool stringColorWithString:moneyString replaceColor:[UIColor blackColor] replaceFontSize:13 index:[NSString stringWithFormat:@"¥ %.2f", self.delegateModel.price].length]];
+        }
+        else {
+            moneyString = [NSString stringWithFormat:@"¥ %.2f", self.merModel.price];
+            _priceLabel.text = moneyString;
+        }
         [self.scrollView addSubview:_priceLabel];
     }
     return _priceLabel;
@@ -113,9 +122,11 @@
 - (UILabel *)descriptionLabel
 {
     if (!_descriptionLabel) {
-        float height = [WPPublicTool textHeightFromTextString:self.isAgency ? self.delegateModel.adesp : self.merModel.mdesp width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15];
-        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.priceLabel.frame), kScreenWidth - 2 * WPLeftMargin, height)];
-        _descriptionLabel.text = self.isAgency ? self.delegateModel.adesp : self.merModel.mdesp;
+        NSString * contentString = [(self.isAgency ? self.delegateModel.adesp : self.merModel.mdesp) stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
+
+        float height = [WPPublicTool textHeightFromTextString:contentString width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15];
+        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.priceLabel.frame) + 10, kScreenWidth - 2 * WPLeftMargin, height)];
+        _descriptionLabel.text = contentString;
         _descriptionLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _descriptionLabel.numberOfLines = 0;
         [self.scrollView addSubview:_descriptionLabel];
@@ -146,7 +157,7 @@
     vc.navigationItem.title = self.isAgency ? @"代理升级" : @"商户升级";
     [vc initWithTitle:self.isAgency ? @"代理升级" : @"商户升级"
                userLv:self.isAgency ? [NSString stringWithFormat:@"%ld", (long)self.delegateModel.id] : [NSString stringWithFormat:@"%ld", (long)self.merModel.id]
-           gradeMoney:self.isAgency ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price] : [NSString stringWithFormat:@"%.2f", self.merModel.price]
+           gradeMoney:self.isAgency ? [NSString stringWithFormat:@"%.2f", self.delegateModel.price + self.delegateModel.depositAmt] : [NSString stringWithFormat:@"%.2f", self.merModel.price]
              isAgency:self.isAgency];
     [self.navigationController pushViewController:vc animated:YES];
 }

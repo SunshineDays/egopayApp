@@ -109,7 +109,7 @@
         _textView.layer.borderWidth = 1.0f;
         _textView.layer.cornerRadius = WPCornerRadius;
         _textView.font = [UIFont systemFontOfSize:WPFontDefaultSize];
-        _textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)";
+        _textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于10字)" : @"请输入您的举报内容(不少于10字)";
         _textView.textColor = [UIColor placeholderColor];
         
         _textView.scrollEnabled = YES;
@@ -123,7 +123,7 @@
 {
     if (!_numberLabel) {
         _numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(kScreenWidth - 68, 130, 60, 20)];
-        _numberLabel.text = @"0/500";
+        _numberLabel.text = @"0/200";
         _numberLabel.textColor = [UIColor grayColor];
         _numberLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _numberLabel.textAlignment = NSTextAlignmentRight;
@@ -148,7 +148,7 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([textView.text isEqualToString:self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)"])
+    if ([textView.text isEqualToString:self.isFeedback ? @"请输入您的反馈内容(不少于10字)" : @"请输入您的举报内容(不少于10字)"])
     {
         textView.text = @"";
     }
@@ -159,15 +159,15 @@
 {
     if (textView.text.length == 0)
     {
-        textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于20字)" : @"请输入您的举报内容(不少于20字)";
+        textView.text = self.isFeedback ? @"请输入您的反馈内容(不少于10字)" : @"请输入您的举报内容(不少于10字)";
         textView.textColor = [UIColor placeholderColor];
     }
 }
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    self.numberLabel.text = [NSString stringWithFormat:@"%ld/500", (unsigned long)textView.text.length];
-    [WPPublicTool buttonWithButton:self.confrirmButton userInteractionEnabled:textView.text.length > 20 ? YES : NO];
+    self.numberLabel.text = [NSString stringWithFormat:@"%ld/200", (unsigned long)textView.text.length];
+    [WPPublicTool buttonWithButton:self.confrirmButton userInteractionEnabled:textView.text.length > 6 ? YES : NO];
 }
 
 #pragma mark - Action 
@@ -193,9 +193,9 @@
 
 - (void)confrirmButtonClick:(UIButton *)button
 {
-    if (self.textView.text.length < 20)
+    if (self.textView.text.length < 10)
     {
-        [WPProgressHUD showInfoWithStatus:self.isFeedback ? @"反馈内容至少需要20字" : @"举报内容至少需要20字"];
+        [WPProgressHUD showInfoWithStatus:self.isFeedback ? @"反馈内容至少需要10字" : @"举报内容至少需要10字"];
     }
     else if (!([WPJudgeTool validateMobile:self.textField.text] || self.textField.text.length == 6) && !self.isFeedback)
     {

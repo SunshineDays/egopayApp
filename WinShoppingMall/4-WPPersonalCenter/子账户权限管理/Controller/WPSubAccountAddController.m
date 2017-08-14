@@ -9,18 +9,18 @@
 #import "WPSubAccountAddController.h"
 #import "Header.h"
 #import "WPSubAccountSettingController.h"
+#import "WPSubAccountStateController.h"
 
 @interface WPSubAccountAddController () <UITextFieldDelegate>
 
-@property (nonatomic, strong) WPRowTableViewCell *nameCell;
+@property (nonatomic, strong) WPCustomRowCell *nameCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordConfirmCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordConfirmCell;
 
 @property (nonatomic, strong) WPButton *confirmButton;
 
-@property (nonatomic, strong) UILabel *stateLabel;
 
 @end
 
@@ -30,28 +30,30 @@
 {
     [super viewDidLoad];
     self.navigationItem.title = @"创建子账户";
-    [self stateLabel];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"说明" style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonItemAction)];
+    [self confirmButton];
 }
 
-- (WPRowTableViewCell *)nameCell
+- (WPCustomRowCell *)nameCell
 {
     if (!_nameCell) {
-        _nameCell = [[WPRowTableViewCell alloc] init];
+        _nameCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, WPTopMargin, kScreenWidth, WPRowHeight);
-        [_nameCell tableViewCellTitle:@"账户名" placeholder:@"请输入账户名" rectMake:rect];
+        [_nameCell rowCellTitle:@"账户名" placeholder:@"请输入账户名" rectMake:rect];
         [_nameCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         _nameCell.textField.delegate = self;
+        [_nameCell.textField becomeFirstResponder];
         [self.view addSubview:_nameCell];
     }
     return _nameCell;
 }
 
-- (WPRowTableViewCell *)passwordCell
+- (WPCustomRowCell *)passwordCell
 {
     if (!_passwordCell) {
-        _passwordCell = [[WPRowTableViewCell alloc] init];
+        _passwordCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.nameCell.frame), kScreenWidth, WPRowHeight);
-        [_passwordCell tableViewCellTitle:@"密        码" placeholder:@"请输入密码" rectMake:rect];
+        [_passwordCell rowCellTitle:@"密码" placeholder:@"请输入密码(不少于六位)" rectMake:rect];
         _passwordCell.textField.secureTextEntry = YES;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         _passwordCell.textField.delegate = self;
@@ -60,12 +62,12 @@
     return _passwordCell;
 }
 
-- (WPRowTableViewCell *)passwordConfirmCell
+- (WPCustomRowCell *)passwordConfirmCell
 {
     if (!_passwordConfirmCell) {
-        _passwordConfirmCell = [[WPRowTableViewCell alloc] init];
+        _passwordConfirmCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.passwordCell.frame), kScreenWidth, WPRowHeight);
-        [_passwordConfirmCell tableViewCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
+        [_passwordConfirmCell rowCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
         _passwordConfirmCell.textField.secureTextEntry = YES;
         [_passwordConfirmCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         _passwordConfirmCell.textField.delegate = self;
@@ -85,20 +87,6 @@
     return _confirmButton;
 }
 
-- (UILabel *)stateLabel
-{
-    if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.confirmButton.frame) + 30, kScreenWidth - 2 * WPLeftMargin, 50)];
-        _stateLabel.textColor = [UIColor grayColor];
-        _stateLabel.numberOfLines = 0;
-        
-        NSString *stateString = @"添加子账户，您可以在多个设备上收款，方便、快捷";
-        _stateLabel.text = stateString;
-        
-    }
-    return _stateLabel;
-}
-
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -107,6 +95,12 @@
 }
 
 #pragma mark - Actin
+
+- (void)rightBarButtonItemAction
+{
+    WPSubAccountStateController *vc = [[WPSubAccountStateController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 - (void)changeButtonSurface
 {

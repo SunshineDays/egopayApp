@@ -11,25 +11,29 @@
 #import "WPProfitDetailCell.h"
 #import "WPProfitDetailModel.h"
 #import "WPBillTitleView.h"
-#import "WPSelectListController.h"
+#import "WPSelectListPopupController.h"
 
 static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 @interface WPProfitDetailController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) WPBillTitleView *titleView;
-
 @property (nonatomic, strong) UITableView *tableView;
-
-@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @property (nonatomic, assign) NSInteger page;
 
 @property (nonatomic, copy) NSString *dateString;
-@property (nonatomic, copy) NSString *year;
-@property (nonatomic, copy) NSString *month;
 
-@property (nonatomic, copy) NSString *benefitStr;
+/**  记录请求到的数据的数组 */
+@property (nonatomic, strong) NSMutableArray *billArray;
+
+/**  不一样日期(月份)的数组 */
+@property (nonatomic, strong) NSMutableArray *dateArray;
+
+/**  最终的结果 */
+@property (nonatomic, strong) NSMutableArray *contentArray;
+
+/**  日期字符串 */
+@property (nonatomic, copy) NSString *lastDate;
 
 @end
 
@@ -41,6 +45,9 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 {
     [super viewDidLoad];
     self.navigationItem.title = @"分润明细";
+    self.view.backgroundColor = [UIColor cellColor];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ixon_zhangdan_content_n"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAction)];
 
     self.page = 1;
     self.dateString = @"";
@@ -61,36 +68,39 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 #pragma mark - Init
 
-- (NSMutableArray *)dataArray
+- (NSMutableArray *)billArray
 {
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
+    if (!_billArray) {
+        _billArray = [[NSMutableArray alloc] init];
     }
-    return _dataArray;
+    return _billArray;
 }
 
-- (WPBillTitleView *)titleView
+- (NSMutableArray *)dateArray
 {
-    if (!_titleView) {
-        _titleView = [[WPBillTitleView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, 50)];
-        [_titleView.titleButton setTitle:self.benefitStr forState:UIControlStateNormal];
-        [_titleView.titleButton addTarget:self action:@selector(titleButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_titleView.imageButton addTarget:self action:@selector(imageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:_titleView];
+    if (!_dateArray) {
+        _dateArray = [NSMutableArray array];
     }
-    return _titleView;
+    return _dateArray;
+}
+
+- (NSMutableArray *)contentArray
+{
+    if (!_contentArray) {
+        _contentArray = [NSMutableArray array];
+    }
+    return _contentArray;
 }
 
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 50, kScreenWidth, kScreenHeight - WPNavigationHeight - 50) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor cellColor];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
-        _tableView.layer.borderColor = [UIColor lineColor].CGColor;
-        _tableView.layer.borderWidth = 1.0f;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPProfitDetailCell class]) bundle:nil] forCellReuseIdentifier:WPProfitDetailCellID];
         [self.view addSubview:_tableView];
     }
@@ -99,21 +109,76 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 #pragma mark - UITableViewDataSource
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.contentArray.count;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.dataArray.count;
+    return [self.contentArray[section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     WPProfitDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:WPProfitDetailCellID];
-    cell.profitModel = self.dataArray[indexPath.row];
+    cell.profitModel = self.contentArray[indexPath.section][indexPath.row];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 150;
+    return 160;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 35;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc] init];
+    headerView.backgroundColor = [UIColor tableViewColor];
+    headerView.layer.borderColor = [UIColor lineColor].CGColor;
+    headerView.layer.borderWidth = WPLineHeight;
+    headerView.userInteractionEnabled = YES;
+    
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy"];
+    NSInteger nowYear = [[formatter stringFromDate:date] integerValue];
+    [formatter setDateFormat:@"MM"];
+    NSInteger nowMonth = [[formatter stringFromDate:date] integerValue];
+    
+    NSInteger year =  [[self.dateArray[section] substringToIndex:4] floatValue];
+    NSInteger month = [[self.dateArray[section] substringWithRange:NSMakeRange(5, 2)] integerValue];
+    
+    NSString *dateString;
+    if (nowYear == year) {
+        if (nowMonth == month)
+        {
+            dateString = @"本月";
+        }
+        else
+        {
+            dateString = [NSString stringWithFormat:@"%ld月", month];
+        }
+    }
+    else
+    {
+        dateString = [NSString stringWithFormat:@"%@月", [self.dateArray[section] stringByReplacingOccurrencesOfString:@"-" withString:@"年"]];
+    }
+    
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, 0, 200, 35)];
+    headerLabel.text = dateString;
+    [headerView addSubview:headerLabel];
+    
+    UIButton *headerButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - WPLeftMargin - 20, 7.5, 20, 20)];
+    [headerButton setImage:[UIImage imageNamed:@"icon_fanhui_n"] forState:UIControlStateNormal];
+    [headerView addSubview:headerButton];
+    
+    return headerView;
 }
 
 #pragma mark - UITableViewDelegate
@@ -126,25 +191,19 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 #pragma mark - Action
 
-- (void)titleButtonClick:(UIButton *)sender
-{
-    self.dateString = @"";
-    
-    [self.tableView.mj_header beginRefreshing];
-}
 
-- (void)imageButtonClick:(UIButton *)sender
+- (void)rightItemAction
 {
-    WPSelectListController *vc = [[WPSelectListController alloc] init];
+    WPSelectListPopupController *vc = [[WPSelectListPopupController alloc] init];
     vc.modalPresentationStyle = UIModalPresentationCustom;
     vc.type = 4;
     
     __weakSelf
     vc.selecteNameBlock = ^(NSString *nameStr)
     {
-        self.year = [nameStr substringToIndex:4];
-        self.month = [nameStr substringWithRange:NSMakeRange(nameStr.length - 3, 2)];
-        weakSelf.dateString = [NSString stringWithFormat:@"%@%@", self.year, self.month];
+        NSString *year = [nameStr substringToIndex:4];
+        NSString *month = [nameStr substringWithRange:NSMakeRange(nameStr.length - 3, 2)];
+        weakSelf.dateString = [NSString stringWithFormat:@"%@%@", year, month];
         [weakSelf.tableView.mj_header beginRefreshing];
     };
     
@@ -170,14 +229,55 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
         {
             if (weakSelf.page == 1)
             {
-                [weakSelf.dataArray removeAllObjects];
+                [weakSelf.billArray removeAllObjects];
+                [weakSelf.contentArray removeAllObjects];
+                [weakSelf.dateArray removeAllObjects];
             }
-            [weakSelf.dataArray addObjectsFromArray:[WPProfitDetailModel mj_objectArrayWithKeyValuesArray:result[@"benefitDetails"]]];
 
-            weakSelf.benefitStr = weakSelf.dateString.length > 0 ? [NSString stringWithFormat:@"%@\n总分润 ¥%.2f，佣金 ¥%.2f", [NSString stringWithFormat:@"%@年%@月", self.year, self.month], [result[@"benefit"] floatValue], [result[@"commission"] floatValue]] : [NSString stringWithFormat:@"全部账单\n总分润 ¥%.2f，佣金 ¥%.2f", [result[@"benefit"] floatValue], [result[@"commission"] floatValue]];
-            [_titleView.titleButton setTitle:weakSelf.benefitStr forState:UIControlStateNormal];
+            // 网络获取的数组
+            NSMutableArray *resultArray = [NSMutableArray arrayWithArray:[WPProfitDetailModel mj_objectArrayWithKeyValuesArray:result[@"benefitDetails"]]];
             
-            [weakSelf titleView];
+            for (int i = 0; i < resultArray.count; i++)
+            {
+                WPProfitDetailModel *detailModel = resultArray[i];
+                
+                NSString *date =  [[WPPublicTool stringToDateString:[NSString stringWithFormat:@"%@", detailModel.createTime]] substringToIndex:7];
+                
+                // 提取不一样的日期(月份)数组
+                [weakSelf.dateArray addObject:date];
+                NSSet *set = [NSSet setWithArray:weakSelf.dateArray];
+                weakSelf.dateArray = [NSMutableArray arrayWithArray:[set allObjects]];
+                
+                // 日期数组从大到小排序
+                [weakSelf.dateArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+                 {
+                     return [obj2 compare:obj1];
+                 }];
+                
+                // 账单数组长度 = 日期数组长度
+                weakSelf.contentArray[weakSelf.dateArray.count - 1] = @[];
+                
+                // 判断日期是否变化
+                if ([weakSelf.lastDate isEqualToString:date] && weakSelf.lastDate.length > 0)
+                {
+                    // 相同日期的账单数组
+                    [weakSelf.billArray addObject:detailModel];
+                }
+                else
+                {
+                    // 日期改变，移除数据，重新添加
+                    [weakSelf.billArray removeAllObjects];
+                    [weakSelf.billArray addObject:detailModel];
+                }
+                
+                // 记录日期
+                weakSelf.lastDate = date;
+                
+                // 把账单数组按照日期加入数组中
+                [weakSelf.contentArray replaceObjectAtIndex:weakSelf.dateArray.count - 1 withObject:[weakSelf.billArray mutableCopy]];
+            }
+            
+            
         }
         [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"benefitDetails"] noResultLabel:weakSelf.noResultLabel title:@"暂无记录"];
     } failure:^(NSError *error)

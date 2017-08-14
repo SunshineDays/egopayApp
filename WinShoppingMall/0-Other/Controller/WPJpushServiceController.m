@@ -105,7 +105,7 @@
     
     NSString *numberString = [NSString stringWithFormat:@"%@", self.billModel.orderno];
 
-    NSString *remarkString = self.billModel.remark;
+    NSString *remarkString = self.billModel.remark ? self.billModel.remark : @"无";
     
     NSArray *contentArray = self.billModel.counterFee > 0 ? @[moneyString, poundageString, trueMoneyString, stateString, typeString, wayString, dateString, numberString, remarkString] : @[moneyString, stateString, typeString, wayString, dateString, numberString, remarkString];
     

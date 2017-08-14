@@ -8,7 +8,6 @@
 
 #import "WPProgressHUD.h"
 
-#import "WPUserInforController.h"
 #import "WPRegisterController.h"
 
 @implementation WPProgressHUD

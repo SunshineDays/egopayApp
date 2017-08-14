@@ -13,17 +13,17 @@
 
 @property (nonatomic, strong) UILabel *stateLabel;
 
-@property (nonatomic, strong) WPRowTableViewCell *nameCell;
+@property (nonatomic, strong) WPCustomRowCell *nameCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *sexCell;
+@property (nonatomic, strong) WPCustomRowCell *sexCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *phoneCell;
+@property (nonatomic, strong) WPCustomRowCell *phoneCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *shopNameCell;
+@property (nonatomic, strong) WPCustomRowCell *shopNameCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *shopAddressCell;
+@property (nonatomic, strong) WPCustomRowCell *shopAddressCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *shopAddressDetailCell;
+@property (nonatomic, strong) WPCustomRowCell *shopAddressDetailCell;
 
 @property (nonatomic, strong) WPButton *nextButton;
 

@@ -8,7 +8,6 @@
 
 #import "WPMerchantDetailController.h"
 #import "Header.h"
-#import "WPMerchantDetailModel.h"
 #import "UIView+WPExtension.h"
 
 @interface WPMerchantDetailController () <UIScrollViewDelegate>
@@ -19,7 +18,7 @@
 
 @property (nonatomic, strong) UILabel *titleLabel;
 
-@property (nonatomic, strong) WPRowTableViewCell *telCell;
+@property (nonatomic, strong) WPCustomRowCell *telCell;
 
 @property (nonatomic, strong) UILabel *shopNameLabel;
 
@@ -29,7 +28,7 @@
 
 @property (nonatomic, strong) UIImageView *descripImageView;
 
-@property (nonatomic, strong) WPMerchantDetailModel *model;
+//@property (nonatomic, strong) WPMerchantDetailModel *model;
 
 @end
 
@@ -40,8 +39,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (self.model) {
+        [self titleLabel];
+        [self descripImageView];
+    }
+    else {
+        [self getMerchantDetailData];
+    }
 
-    [self getMerchantDetailData];
 }
 
 #pragma mark - Init
@@ -49,7 +54,7 @@
 - (UIScrollView *)scrollView
 {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self.view addSubview:_scrollView];
     }
     return _scrollView;
@@ -68,7 +73,11 @@
 - (UILabel *)titleLabel
 {
     if (!_titleLabel) {
-        NSArray *array = @[self.model.shopName, self.model.detailAddr];
+        NSString *province = self.model.province ? self.model.province : @"";
+        NSString *city = self.model.city ? self.model.city : @"";
+        NSString *area = self.model.area ? self.model.area : @"";
+        NSString *province_city = [province isEqualToString:city] ? city : [NSString stringWithFormat:@"%@%@", province, city];
+        NSArray *array = @[self.model.shopName, [NSString stringWithFormat:@"%@%@%@", province_city, area, self.model.detailAddr]];
         for (int i = 0; i < array.count; i++) {
             UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.titleImageView.frame) + 10, 10 + 40 * i, kScreenWidth - (CGRectGetMaxX(self.titleImageView.frame) + 10) - WPLeftMargin, 40)];
             titleLabel.text = array[i];
@@ -127,11 +136,11 @@
 {
     if (!_descripImageView) {
         float imageWidth = (kScreenWidth - 3 * WPLeftMargin) / 2;
-        NSArray *array = @[@"123"];
+        NSArray *array = self.model.inside_imgUrls;
         for (int i = 0; i < array.count; i++)
         {
             _descripImageView = [[UIImageView alloc] initWithFrame:CGRectMake(WPLeftMargin + (imageWidth + WPLeftMargin) * (i % 2), CGRectGetMaxY(self.descripLabel.frame) + 10 + (imageWidth + 10) * (i / 2), imageWidth, imageWidth)];
-            [_descripImageView sd_setImageWithURL:[NSURL URLWithString:self.model.cover_url] placeholderImage:[UIImage imageNamed:@"123"] options:SDWebImageRefreshCached];
+            [_descripImageView sd_setImageWithURL:[NSURL URLWithString:array[i]] placeholderImage:[UIImage imageNamed:@"123"] options:SDWebImageRefreshCached];
             
             [self.scrollView addSubview:_descripImageView];
             self.scrollView.contentSize = CGSizeMake(kScreenWidth, CGRectGetMaxY(_descripImageView.frame) + 10);
@@ -153,7 +162,7 @@
 {
     NSDictionary *parameters = @{
                                  @"shop_id" : self.merID
-                                 };
+                                 }; 
     __weakSelf
     [WPHelpTool getWithURL:WPMerShopDetailURL parameters:parameters success:^(id success)
     {

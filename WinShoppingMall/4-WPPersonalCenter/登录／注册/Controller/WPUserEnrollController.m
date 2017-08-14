@@ -14,17 +14,17 @@
 
 @interface WPUserEnrollController ()<UITextFieldDelegate>
 
-@property (nonatomic, strong) WPRowTableViewCell *phoneCell;
+@property (nonatomic, strong) WPCustomRowCell *phoneCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *verificationCodeCell;
+@property (nonatomic, strong) WPCustomRowCell *verificationCodeCell;
 
 @property (nonatomic, strong) UIButton *verificationCodeButton;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordConfirmCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordConfirmCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *referrerCell;
+@property (nonatomic, strong) WPCustomRowCell *referrerCell;
 
 @property (nonatomic, strong) WPChoseAgreeView *agreeView;
 
@@ -65,12 +65,12 @@
     return _timer;
 }
 
-- (WPRowTableViewCell *)phoneCell
+- (WPCustomRowCell *)phoneCell
 {
     if (!_phoneCell) {
-        _phoneCell = [[WPRowTableViewCell alloc] init];
+        _phoneCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, WPTopMargin, kScreenWidth, WPRowHeight);
-        [_phoneCell tableViewCellTitle:@"手机号码" placeholder:@"请输入手机号码" rectMake:rect];
+        [_phoneCell rowCellTitle:@"手机号码" placeholder:@"请输入手机号码" rectMake:rect];
         _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [_phoneCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         [_phoneCell.textField becomeFirstResponder];
@@ -79,12 +79,12 @@
     return _phoneCell;
 }
 
-- (WPRowTableViewCell *)verificationCodeCell
+- (WPCustomRowCell *)verificationCodeCell
 {
     if (!_verificationCodeCell) {
-        _verificationCodeCell = [[WPRowTableViewCell alloc] init];
+        _verificationCodeCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.phoneCell.frame), kScreenWidth, WPRowHeight);
-        [_verificationCodeCell tableViewCellTitle:@"验证码" placeholder:@"六位数字验证码" rectMake:rect];
+        [_verificationCodeCell rowCellTitle:@"验证码" placeholder:@"六位数字验证码" rectMake:rect];
         _verificationCodeCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [_verificationCodeCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
 
@@ -107,12 +107,12 @@
     return _verificationCodeButton;
 }
 
-- (WPRowTableViewCell *)passwordCell
+- (WPCustomRowCell *)passwordCell
 {
     if (!_passwordCell) {
-        _passwordCell = [[WPRowTableViewCell alloc] init];
+        _passwordCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.verificationCodeCell.frame), kScreenWidth, WPRowHeight);
-        [_passwordCell tableViewCellTitle:@"密        码" placeholder:@"请输入密码" rectMake:rect];
+        [_passwordCell rowCellTitle:@"密码" placeholder:@"请输入密码" rectMake:rect];
         _passwordCell.textField.secureTextEntry = YES;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         _passwordCell.textField.delegate = self;
@@ -121,12 +121,12 @@
     return _passwordCell;
 }
 
-- (WPRowTableViewCell *)passwordConfirmCell
+- (WPCustomRowCell *)passwordConfirmCell
 {
     if (!_passwordConfirmCell) {
-        _passwordConfirmCell = [[WPRowTableViewCell alloc] init];
+        _passwordConfirmCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.passwordCell.frame), kScreenWidth, WPRowHeight);
-        [_passwordConfirmCell tableViewCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
+        [_passwordConfirmCell rowCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
         _passwordConfirmCell.textField.secureTextEntry = YES;
         [_passwordConfirmCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         _passwordConfirmCell.textField.delegate = self;
@@ -135,12 +135,12 @@
     return _passwordConfirmCell;
 }
 
-- (WPRowTableViewCell *)referrerCell
+- (WPCustomRowCell *)referrerCell
 {
     if (!_referrerCell) {
-        _referrerCell = [[WPRowTableViewCell alloc] init];
+        _referrerCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.passwordConfirmCell.frame), kScreenWidth, WPRowHeight);
-        [_referrerCell tableViewCellTitle:@"推荐人" placeholder:@"推荐人手机号码（选填）" rectMake:rect];
+        [_referrerCell rowCellTitle:@"推荐人" placeholder:@"推荐人手机号码（选填）" rectMake:rect];
         _referrerCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [self.view addSubview:_referrerCell];
     }
@@ -186,7 +186,6 @@
 
 - (void)timerClick
 {
-    self.currentTime--;
     if (self.currentTime == 0)
     {
         [self.verificationCodeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
@@ -199,6 +198,7 @@
     {
         [self.verificationCodeButton setTitle:[NSString stringWithFormat:@"%ld秒后重发",(long)self.currentTime] forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = NO;
+        self.currentTime--;
     }
 }
 

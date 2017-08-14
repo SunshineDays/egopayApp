@@ -17,7 +17,7 @@
 
 @property (nonatomic, strong) UILabel *moneyLabel;
 
-@property (nonatomic, strong) WPRowTableViewCell *moneyCell;
+@property (nonatomic, strong) WPCustomRowCell *moneyCell;
 
 @property (nonatomic, strong) WPButton *confirmButton;
 
@@ -64,14 +64,15 @@
     return _moneyLabel;
 }
 
-- (WPRowTableViewCell *)moneyCell
+- (WPCustomRowCell *)moneyCell
 {
     if (!_moneyCell) {
-        _moneyCell = [[WPRowTableViewCell alloc] init];
+        _moneyCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.moneyLabel.frame) + 10, kScreenWidth, WPRowHeight);
-        [_moneyCell tableViewCellTitle:@"转出金额" placeholder:[NSString stringWithFormat:@"最多可提取%@元", self.moneyString] rectMake:rect];
+        [_moneyCell rowCellTitle:@"转出金额" placeholder:[NSString stringWithFormat:@"最多可提取%@元", self.moneyString] rectMake:rect];
         _moneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         _moneyCell.textField.delegate = self;
+        [_moneyCell.textField becomeFirstResponder];
         [_moneyCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_moneyCell];
     }
@@ -119,34 +120,11 @@
     }
     else
     {
-        if ([WPJudgeTool isPayTouchID])
-        {
-            __weakSelf
-            [WPHelpTool payWithTouchIDsuccess:^(id success)
-            {
-                [weakSelf pushWithdrawDataWithPassword:success];
-                
-            } failure:^(NSError *error)
-            {
-                [weakSelf initPayPopupView];
-            }];
-        }
-        else
-        {
-            [self initPayPopupView];
-        }
+        __weakSelf
+        [WPPayTool payWithTitle:[NSString stringWithFormat:@"提现金额:%@元", self.moneyCell.textField.text] password:^(id password) {
+            [weakSelf pushWithdrawDataWithPassword:password];
+        }];
     }
-}
-
-
-- (void)initPayPopupView
-{
-    __weakSelf
-    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"提现金额:%@元", self.moneyCell.textField.text] navigationController:self.navigationController success:^(id success)
-    {
-        [weakSelf pushWithdrawDataWithPassword:success];
-        
-    }];
 }
 
 #pragma mark - Data

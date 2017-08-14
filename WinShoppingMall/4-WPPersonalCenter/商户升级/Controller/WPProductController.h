@@ -7,12 +7,12 @@
 //
 
 #import "WPBaseViewController.h"
-#import "WPEditUserInfoModel.h"
+#import "WPUserInforModel.h"
 
 
 @interface WPProductController : WPBaseViewController
 
-//@property (nonatomic, strong) WPEditUserInfoModel *userInforModel;
+//@property (nonatomic, strong) WPUserInforModel *userInforModel;
 
 /**
  *  YES:升级代理 NO:商户升级界面

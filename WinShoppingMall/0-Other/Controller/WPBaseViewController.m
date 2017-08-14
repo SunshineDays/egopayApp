@@ -13,10 +13,11 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <AVFoundation/AVMediaFormat.h>
 #import <CoreLocation/CoreLocation.h>
-#import "WPGatheringCodeController.h"
+#import "WPPayCodeController.h"
 #import "WPJpushServiceController.h"
 #import "WPNavigationController.h"
 #import <JPush/JPUSHService.h>
+#import "WPMyCodeController.h"
 
 @interface WPBaseViewController () <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -34,7 +35,7 @@
     self.noResultLabel = [[WPNoResultLabel alloc] init];
     //  防止UITableView下拉不回弹
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationController.navigationBar.translucent = YES;
+//    self.navigationController.navigationBar.translucent = YES;
     
     self.tabBarController.tabBar.hidden = YES;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -46,6 +47,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+//    self.navigationController.navigationBar.translucent = YES;
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     
@@ -73,8 +75,8 @@
     //  我的收款码
     if ([notification.object isEqualToString:@"gatheringCode"])
     {
-        WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
-        vc.codeType = 2;
+        WPMyCodeController *vc = [[WPMyCodeController alloc] init];
+//        vc.codeType = 2;
         [self.navigationController pushViewController:vc animated:YES];
     }
     //  推送消息
@@ -171,6 +173,7 @@
 }
 
 #pragma mark - 判断用户实名认证状态以及是否设置支付密码
+//  用这个方法，我也很无奈。其他接口没有返回实名认证信息
 - (void)getBaseUserInforTypeData
 {
     if ([WPUserInfor sharedWPUserInfor].clientId.length != 0) // 判断是否登录

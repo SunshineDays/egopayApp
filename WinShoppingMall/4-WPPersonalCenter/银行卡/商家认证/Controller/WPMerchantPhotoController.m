@@ -8,7 +8,7 @@
 
 #import "WPMerchantPhotoController.h"
 #import "Header.h"
-#import "WPSelectListController.h"
+#import "WPSelectListPopupController.h"
 #import "WPMerchantPhotoView.h"
 
 @interface WPMerchantPhotoController ()<UIScrollViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UITextViewDelegate>
@@ -99,7 +99,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    self.photoView.numberLabel.text = [NSString stringWithFormat:@"%ld/500", (unsigned long)textView.text.length];
+    self.photoView.numberLabel.text = [NSString stringWithFormat:@"%ld/200", (unsigned long)textView.text.length];
     [self changeButtonSurface];
 }
 
@@ -109,7 +109,7 @@
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     
     for (int i = 0; i < 5; i++)
     {
@@ -117,8 +117,13 @@
         if (self.selectedPic == i)
         {
             [imageButton setImage:image forState:UIControlStateNormal];
-//            self.imageArray[i] = [WPPublicTool imageToString:image];
-            [self.imageArray replaceObjectAtIndex:i withObject:[WPPublicTool imageToString:image]];
+            if (i > 1) {
+                NSString *imageString = [WPPublicTool imageToString:image];
+                [self.imageArray replaceObjectAtIndex:i withObject:imageString];
+            }
+            else {
+                [self.imageArray replaceObjectAtIndex:i withObject:[WPPublicTool imageToString:image]];
+            }
         }
     }
 }
@@ -138,12 +143,12 @@
 
 - (void)changeButtonSurface
 {
-    [WPPublicTool buttonWithButton:self.photoView.postButton userInteractionEnabled:(self.photoView.busilicenceCell.textField.text.length > 10 && self.photoView.shopDescripTextView.text.length >= 20) ? YES : NO];
+    [WPPublicTool buttonWithButton:self.photoView.postButton userInteractionEnabled:(self.photoView.busilicenceCell.textField.text.length > 6 && self.photoView.shopDescripTextView.text.length >= 3) ? YES : NO];
 }
 
 - (void)shopTypeButtonClick:(UIButton *)button
 {
-    WPSelectListController *vc = [[WPSelectListController alloc] init];
+    WPSelectListPopupController *vc = [[WPSelectListPopupController alloc] init];
     vc.modalPresentationStyle = UIModalPresentationCustom;
     vc.type = 2;
     vc.navigationItem.title = @"选择类别";
@@ -159,7 +164,7 @@
 
 - (void)postButtonClick
 {
-    if (self.photoView.busilicenceCell.textField.text.length < 13 || self.photoView.busilicenceCell.textField.text.length > 30)
+    if (self.photoView.busilicenceCell.textField.text.length < 6)
     {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的营业执照编号"];
     }

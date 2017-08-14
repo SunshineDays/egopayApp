@@ -14,9 +14,9 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
-@property (nonatomic, strong) WPRowTableViewCell *busilicenceCell;
+@property (nonatomic, strong) WPCustomRowCell *busilicenceCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *classifyCell;
+@property (nonatomic, strong) WPCustomRowCell *classifyCell;
 
 @property (nonatomic, strong) UITextView *shopDescripTextView;
 

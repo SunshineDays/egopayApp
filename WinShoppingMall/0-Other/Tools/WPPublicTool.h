@@ -66,10 +66,9 @@
 
 
 /**
- * 改变字符串部分颜色
+ * 改变字符串部分颜色/字体大小
  */
-+ (NSAttributedString *)stringColorWithString:(NSString *)string replaceColor:(UIColor *)replaceColor index:(NSInteger)index;
-
++ (NSAttributedString *)stringColorWithString:(NSString *)string replaceColor:(UIColor *)replaceColor replaceFontSize:(float)replaceFontSize index:(NSInteger)index;
 
 /**
  * 动态计算文本高度（可设置最小高度）
@@ -93,5 +92,17 @@
  * 选择第三方、余额支付
  */
 + (NSString *)payThirdWithView:(WPCardTableViewCell *)cardView rowType:(NSString *)rowType;
+
+/**
+ *  清除WebView缓存
+ */
++ (void)cleanCacheAndCookie;
+
+/**
+ *  显示日期
+ */
++ (NSString *)dateStringWith:(NSString *)dateString;
+
+
 
 @end

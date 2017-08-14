@@ -36,19 +36,18 @@
 - (UIScrollView *)scrollView
 {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self addSubview:_scrollView];
     }
     return _scrollView;
 }
 
-- (WPRowTableViewCell *)busilicenceCell
+- (WPCustomRowCell *)busilicenceCell
 {
     if (!_busilicenceCell) {
-        _busilicenceCell = [[WPRowTableViewCell alloc] init];
+        _busilicenceCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, 10, kScreenWidth, WPRowHeight);
-        [_busilicenceCell tableViewCellTitle:@"营业执照编号" placeholder:@"请输入营业执照编号" rectMake:rect];
-        [_busilicenceCell.titleLabel setFrame:CGRectMake(WPLeftMargin, 0, 100, WPRowHeight)];
+        [_busilicenceCell rowCellTitle:@"营业执照编号" placeholder:@"请输入营业执照编号" rectMake:rect];
         [_busilicenceCell.textField setFrame:CGRectMake(CGRectGetMaxX(_busilicenceCell.titleLabel.frame) + 10, 0, kScreenWidth - CGRectGetMaxX(_busilicenceCell.titleLabel.frame) - WPLeftMargin, WPRowHeight)];
         [_busilicenceCell.textField becomeFirstResponder];
         [self.scrollView addSubview:_busilicenceCell];
@@ -56,11 +55,11 @@
     return _busilicenceCell;
 }
 
-- (WPRowTableViewCell *)classifyCell {
+- (WPCustomRowCell *)classifyCell {
     if (!_classifyCell) {
-        _classifyCell = [[WPRowTableViewCell alloc] init];
+        _classifyCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.busilicenceCell.frame), kScreenWidth, WPRowHeight);
-        [_classifyCell tableViewCellTitle:@"店铺分类" buttonTitle:@"请选择店铺分类" rectMake:rect];
+        [_classifyCell rowCellTitle:@"店铺分类" buttonTitle:@"请选择店铺分类" rectMake:rect];
         [self.scrollView addSubview:_classifyCell];
     }
     return _classifyCell;
@@ -96,7 +95,7 @@
 {
     if (!_numberLabel) {
         _numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(kScreenWidth - WPLeftMargin - 100, CGRectGetMaxY(self.shopDescripTextView.frame), 100, 20)];
-        _numberLabel.text = @"0/500";
+        _numberLabel.text = @"0/200";
         _numberLabel.textColor = [UIColor grayColor];
         _numberLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _numberLabel.textAlignment = NSTextAlignmentRight;

@@ -8,8 +8,8 @@
 
 #import "WPBaseViewController.h"
 
-#import "WPUpGradeProductModel.h"
-#import "WPMerchantGradeProuctModel.h"
+#import "WPAgencyProductModel.h"
+#import "WPMemberProuctModel.h"
 
 @interface WPProductDetailController : WPBaseViewController
 

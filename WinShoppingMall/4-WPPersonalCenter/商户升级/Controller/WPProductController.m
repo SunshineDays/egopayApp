@@ -9,10 +9,10 @@
 #import "WPProductController.h"
 #import "Header.h"
 #import "WPProductSubmitController.h"
-#import "WPMerchantGradeProuctModel.h"
+#import "WPMemberProuctModel.h"
 #import "WPMerchantGradeProductCell.h"
 #import "WPProductDetailController.h"
-#import "WPUpGradeProductModel.h"
+#import "WPAgencyProductModel.h"
 #import "WPUserInforButton.h"
 
 static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductCellID";
@@ -26,7 +26,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSArray *imageArray;
 
-@property (nonatomic, strong) WPEditUserInfoModel *userInforModel;
+@property (nonatomic, strong) WPUserInforModel *userInforModel;
 
 @property (nonatomic, copy) NSString *benefitRate;
 
@@ -63,7 +63,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 
         NSString *vipStr = self.isAgencyView ? [WPUserTool userAgencyVipWithAgentGradeID:self.userInforModel.agentGradeId] : [WPUserTool userMemberVipWithMerchantlvID:self.userInforModel.merchantlvid];
         NSString *rateString = self.isAgencyView ? [NSString stringWithFormat:@"分润费率:%@,佣金比例:%@", self.benefitRate, self.commissionRate] : [NSString stringWithFormat:@"充值费率:%.2f%@", self.userInforModel.rate * 100, @"%"];
-        [_userInforButton userInforWithName:self.userInforModel.phone vip:vipStr rate:rateString arrowHidden:YES];
+        [_userInforButton userInforWithName:self.userInforModel.phone vip:vipStr rate:rateString];
     }
     return _userInforButton;
 }
@@ -73,8 +73,8 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableHeaderView = self.userInforButton;
@@ -98,17 +98,13 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
     {
         self.imageArray = @[@"icon_yin_content_n", @"icon_jin_content_n", @"icon_zuanshi_n", @"icon_heizuan_n"];
         cell.lvImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
-        cell.lvImageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.delegateLvModel = self.dataArray[indexPath.row];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else {
         
         self.imageArray = @[@"icon_huangjin_content_n", @"icon_bojin_content_n", @"icon_zuanshijin_content_n"];
         cell.lvImageView.image = [UIImage imageNamed:self.imageArray[indexPath.row]];
-        cell.lvImageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.merchantLvModel = self.dataArray[indexPath.row];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
 }
@@ -120,24 +116,38 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 20;
+    return 15;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc] init];
+    headerView.backgroundColor = [UIColor clearColor];
+    return headerView;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (self.isAgencyView)
+    if ([[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"])
     {
-        WPUpGradeProductModel *model = self.dataArray[indexPath.row];
-        WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-        [vc initWithTitle:@"代理升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.agentGradeId ? YES : NO];
-        [self.navigationController pushViewController:vc animated:YES];
+        [WPProgressHUD showInfoWithStatus:@"请先完成实名认证"];
     }
-    else {
-        WPMerchantGradeProuctModel *model = self.dataArray[indexPath.row];
-        WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-        [vc initWithTitle:@"商户升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.merchantlvid ? YES : NO];
-        [self.navigationController pushViewController:vc animated:YES];
+    else
+    {
+        if (self.isAgencyView)
+        {
+            WPAgencyProductModel *model = self.dataArray[indexPath.row];
+            WPProductDetailController *vc = [[WPProductDetailController alloc] init];
+            [vc initWithTitle:@"代理升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.agentGradeId ? YES : NO];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        else {
+            WPMemberProuctModel *model = self.dataArray[indexPath.row];
+            WPProductDetailController *vc = [[WPProductDetailController alloc] init];
+            [vc initWithTitle:@"商户升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.merchantlvid ? YES : NO];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
 }
 
@@ -156,7 +166,7 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
         {
             [weakSelf.dataArray removeAllObjects];
 
-            weakSelf.userInforModel = [WPEditUserInfoModel mj_objectWithKeyValues:result];
+            weakSelf.userInforModel = [WPUserInforModel mj_objectWithKeyValues:result];
             
             if (weakSelf.isAgencyView)
             {
@@ -184,11 +194,11 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
         {
             if (weakSelf.isAgencyView)
             {
-                [weakSelf.dataArray addObjectsFromArray:[WPUpGradeProductModel mj_objectArrayWithKeyValuesArray:result[@"agUpList"]]];
+                [weakSelf.dataArray addObjectsFromArray:[WPAgencyProductModel mj_objectArrayWithKeyValuesArray:result[@"agUpList"]]];
             }
             else
             {
-                [weakSelf.dataArray addObjectsFromArray:[WPMerchantGradeProuctModel mj_objectArrayWithKeyValuesArray:result[@"merLvList"]]];
+                [weakSelf.dataArray addObjectsFromArray:[WPMemberProuctModel mj_objectArrayWithKeyValuesArray:result[@"merLvList"]]];
                 [weakSelf.dataArray removeObjectAtIndex:0];
             }
             [weakSelf.tableView reloadData];

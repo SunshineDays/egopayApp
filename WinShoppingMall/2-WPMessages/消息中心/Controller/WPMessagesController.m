@@ -12,8 +12,9 @@
 #import "WPBillDetailController.h"
 #import "WPBillDetailController.h"
 #import "WPBillModel.h"
-#import "WPGatheringCodeController.h"
+#import "WPPayCodeController.h"
 #import "WPJpushServiceController.h"
+#import "WPMyCodeController.h"
 
 static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
@@ -46,8 +47,8 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
             __weakSelf
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^{
-                WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
-                vc.codeType = 2;
+                WPMyCodeController *vc = [[WPMyCodeController alloc] init];
+//                vc.codeType = 2;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                 [WPUserInfor sharedWPUserInfor].userInfoDict = nil;
             });
@@ -65,9 +66,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
             });
         }
     }
-    
-    self.page = 1;
-    [self getBillData];
+
     __weakSelf
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         weakSelf.page = 1;
@@ -85,6 +84,8 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    self.page = 1;
+    [self getBillData];
 }
 
 #pragma mark - Init
@@ -100,7 +101,8 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(6, WPNavigationHeight, kScreenWidth - 12, kScreenHeight - WPNavigationHeight - 49) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(6, WPTopY, kScreenWidth - 12, kScreenHeight - WPNavigationHeight - 49) style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor cellColor];
@@ -136,26 +138,33 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 230;
+    return 245;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 30;
+    return 37;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    WPBillModel *model = self.dataArray[section];
-    NSString *dateStr = [[WPPublicTool stringToDateString:model.finishDate] substringFromIndex:[WPPublicTool stringToDateString:model.finishDate].length - 6];
-    UILabel *titleLabel = [[UILabel alloc] init];
-    titleLabel.text = dateStr;
-    titleLabel.textColor = [UIColor grayColor];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor colorWithRGBString:@"#f3f3f3" alpha:0.6];
-    titleLabel.font = [UIFont systemFontOfSize:13];
+    UIView *headerView = [[UIView alloc] init];
+    headerView.backgroundColor = [UIColor clearColor];
     
-    return titleLabel;
+    WPBillModel *model = self.dataArray[section];
+    NSString *dateStr = [WPPublicTool dateStringWith:[WPPublicTool stringToDateString:model.finishDate]];
+    float width = dateStr.length * 10;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(tableView.frame) / 2 - width / 2, 7, width, 20)];
+    titleLabel.backgroundColor = [UIColor placeholderColor];
+    titleLabel.text = dateStr;
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont systemFontOfSize:13];
+    titleLabel.layer.cornerRadius = WPCornerRadius;
+    titleLabel.layer.masksToBounds = YES;
+    [headerView addSubview:titleLabel];
+    
+    return headerView;
 }
 
 #pragma mark - UITableViewDelegate
@@ -168,6 +177,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     vc.model = model;
     [self.navigationController pushViewController:vc animated:YES];
 }
+
 
 #pragma mark - Data
 
@@ -192,6 +202,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
             [weakSelf.dataArray addObjectsFromArray:[WPBillModel mj_objectArrayWithKeyValuesArray:result[@"infoList"]]];
         }
         [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"infoList"] noResultLabel:weakSelf.noResultLabel title:@"暂无账单记录"];
+        
     } failure:^(NSError *error)
     {
         [weakSelf.indicatorView stopAnimating];

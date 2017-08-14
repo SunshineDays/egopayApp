@@ -24,12 +24,14 @@
 #import "WPJudgeTool.h"
 #import "MJRefresh.h"
 #import "WPKeyChainTool.h"
-#import "WPRowTableViewCell.h"
 #import "WPCustomButton.h"
 #import "WPPasswordController.h"
 #import "WPJudgeTool.h"
 #import "WPUserTool.h"
 #import "WPCustomButton.h"
+#import "WPPayTool.h"
+#import "WPCustomRowCell.h"
+
 
 //#import "UIBarButtonItem+WPExtention.h"
 

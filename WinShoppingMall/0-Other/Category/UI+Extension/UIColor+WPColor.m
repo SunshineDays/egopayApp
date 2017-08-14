@@ -24,12 +24,17 @@
 
 + (UIColor *)cellColor
 {
-    return [UIColor colorWithRGBString:@"#f3f3f3" alpha:1];
+    return [UIColor colorWithRGBString:@"#EFEFF4" alpha:1];
+}
+
++ (UIColor *)tableViewColor
+{
+    return [UIColor colorWithRGBString:@"#EFEFF4" alpha:1];
 }
 
 + (UIColor *)placeholderColor
 {
-    return [UIColor grayColor];
+    return [UIColor colorWithRGBString:@"#C7C7CD" alpha:1];
 }
 
 + (UIColor *)buttonTitleColor

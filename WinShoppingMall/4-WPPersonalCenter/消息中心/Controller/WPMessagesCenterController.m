@@ -55,7 +55,8 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.tableFooterView = [UIView new];

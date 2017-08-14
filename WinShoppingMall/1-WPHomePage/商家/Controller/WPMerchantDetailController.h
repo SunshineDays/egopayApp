@@ -7,6 +7,7 @@
 //
 
 #import "WPBaseViewController.h"
+#import "WPMerchantDetailModel.h"
 
 @interface WPMerchantDetailController : WPBaseViewController
 
@@ -14,5 +15,9 @@
  *  商户ID
  */
 @property (nonatomic, copy) NSString *merID;
+
+
+
+@property (nonatomic, strong) WPMerchantDetailModel *model;
 
 @end

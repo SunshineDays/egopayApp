@@ -8,12 +8,12 @@
 #import "WPTabBarController.h"
 #import "WPHomePageController.h"
 #import "WPMessagesController.h"
-#import "WPPersonalCenterController.h"
 #import "WPAgencyController.h"
 #import "WPUserInfor.h"
 #import "WPNavigationController.h"
 #import "WPSubAccountPersonalController.h"
 #import "WPJudgeTool.h"
+#import "WPPersonalController.h"
 
 @interface WPTabBarController () <UITabBarDelegate>
 
@@ -58,7 +58,7 @@
     {
         _titleArray = @[@"主页", @"消息", @"代理", @"我"];
         _imageArray = @[@"icon_shouye_tab", @"icon_xiaoxi_tab", @"icon_me_tab", @"icon_daili_tab"];
-        _ctrlsArray = @[[[WPHomePageController alloc] init], [[WPMessagesController alloc] init],[[WPAgencyController alloc] init], [[WPPersonalCenterController alloc] init]];
+        _ctrlsArray = @[[[WPHomePageController alloc] init], [[WPMessagesController alloc] init],[[WPAgencyController alloc] init], [[WPPersonalController alloc] init]];
     }
     for (NSInteger i = 0 ; i < _titleArray.count; i++)
     {

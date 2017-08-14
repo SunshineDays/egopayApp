@@ -27,9 +27,7 @@ Single_Implementation(WPUserInfor)
     [WPUserInfor sharedWPUserInfor].threeTouch = self.threeTouch;
     
     [WPUserInfor sharedWPUserInfor].userInfoDict = self.userInfoDict;
-    
-    [WPUserInfor sharedWPUserInfor].needTouchID = self.needTouchID;
-        
+            
     [WPUserInfor sharedWPUserInfor].registerTouchID = self.registerTouchID;
     
     [WPUserInfor sharedWPUserInfor].payTouchID = self.payTouchID;
@@ -55,8 +53,6 @@ Single_Implementation(WPUserInfor)
     [userDefault setObject:self.threeTouch forKey:@"threeTouch"];
     
     [userDefault setObject:self.userInfoDict forKey:@"userInfoDict"];
-    
-    [userDefault setObject:self.needTouchID forKey:WPNeedTouchID];
     
     [userDefault setObject:self.registerTouchID forKey:WPRegisterTouchID];
     

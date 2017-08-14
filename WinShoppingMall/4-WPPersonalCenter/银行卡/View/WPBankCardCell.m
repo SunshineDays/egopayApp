@@ -15,7 +15,7 @@
     [super awakeFromNib];
     self.cardImageView.contentMode = UIViewContentModeScaleAspectFit;
 
-    self.layer.cornerRadius = WPCornerRadius;
+    self.layer.cornerRadius = 3;
     self.layer.borderColor = [UIColor lineColor].CGColor;
     self.layer.borderWidth = WPLineHeight;
 }

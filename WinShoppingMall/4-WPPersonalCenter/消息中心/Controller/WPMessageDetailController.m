@@ -40,7 +40,7 @@
 - (UIScrollView *)scrollView
 {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         [self.view addSubview:_scrollView];
     }
     return _scrollView;
@@ -54,6 +54,7 @@
         _titleLabel.textColor = [UIColor blackColor];
         _titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _contentLabel.numberOfLines = 0;
         [self.scrollView addSubview:_titleLabel];
     }
     return _titleLabel;
@@ -62,8 +63,10 @@
 - (UILabel *)contentLabel
 {
     if (!_contentLabel) {
-        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:self.model.content width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
-        _contentLabel.text = self.model.content;
+        
+        NSString * contentString = [self.model.content stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
+        _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:contentString width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
+        _contentLabel.text = contentString;
         _contentLabel.textColor = [UIColor blackColor];
         _contentLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
         _contentLabel.numberOfLines = 0;

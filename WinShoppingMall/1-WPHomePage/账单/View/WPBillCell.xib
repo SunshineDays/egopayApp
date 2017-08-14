@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,57 +18,55 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G9E-mV-ng7">
-                        <rect key="frame" x="18" y="16" width="48" height="48"/>
+                        <rect key="frame" x="15" y="16" width="48" height="48"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="G9E-mV-ng7" secondAttribute="height" multiplier="1:1" id="V10-aG-kx6"/>
+                            <constraint firstAttribute="width" constant="48" id="Gxr-EL-d7T"/>
+                            <constraint firstAttribute="height" constant="48" id="rPK-j2-0jy"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3月21日 12:14" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zW9-4s-awc">
-                        <rect key="frame" x="215" y="57.5" width="78" height="14.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+200.00RMB" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9zn-43-eXW">
-                        <rect key="frame" x="76" y="8" width="124" height="24"/>
-                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+200.00RMB" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9zn-43-eXW">
+                        <rect key="frame" x="149" y="16" width="154" height="30"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                         <size key="shadowOffset" width="1" height="-1"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="状态" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsB-xo-VDg">
-                        <rect key="frame" x="262" y="13" width="31" height="18"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <rect key="frame" x="276" y="53" width="27" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="支付宝充值" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsz-3V-AW2">
-                        <rect key="frame" x="76" y="56" width="66.5" height="16"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <rect key="frame" x="73" y="16" width="82" height="19.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geu-Jx-jW9">
-                        <rect key="frame" x="96" y="32.5" width="7" height="14.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="geu-Jx-jW9">
+                        <rect key="frame" x="93" y="32.5" width="7" height="14.5"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3月21日 12:14" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zW9-4s-awc">
+                        <rect key="frame" x="73" y="49" width="78" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="dsB-xo-VDg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="08e-v0-qhz"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="dsz-3V-AW2" secondAttribute="bottom" id="5BA-Jr-tPN"/>
-                    <constraint firstItem="G9E-mV-ng7" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7.5" id="5ag-WI-OpJ"/>
-                    <constraint firstItem="geu-Jx-jW9" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="6Fz-IN-BeM"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="G9E-mV-ng7" secondAttribute="bottom" constant="7.5" id="6QP-d7-LSK"/>
-                    <constraint firstItem="9zn-43-eXW" firstAttribute="leading" secondItem="G9E-mV-ng7" secondAttribute="trailing" constant="10" id="GMa-ar-AiP"/>
-                    <constraint firstItem="dsz-3V-AW2" firstAttribute="leading" secondItem="9zn-43-eXW" secondAttribute="leading" id="GWM-9Z-xyt"/>
-                    <constraint firstItem="G9E-mV-ng7" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="Hgo-fM-3c1"/>
-                    <constraint firstItem="dsB-xo-VDg" firstAttribute="trailing" secondItem="zW9-4s-awc" secondAttribute="trailing" id="fLH-4u-T6Y"/>
-                    <constraint firstItem="geu-Jx-jW9" firstAttribute="leading" secondItem="G9E-mV-ng7" secondAttribute="trailing" constant="30" id="fP3-1N-6Sz"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="zW9-4s-awc" secondAttribute="trailing" constant="17.5" id="h2s-Yv-cQT"/>
-                    <constraint firstItem="9zn-43-eXW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="ub4-da-YUR"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="zW9-4s-awc" secondAttribute="bottom" id="wjq-Vl-ugx"/>
+                    <constraint firstItem="dsB-xo-VDg" firstAttribute="trailing" secondItem="9zn-43-eXW" secondAttribute="trailing" id="KUe-FG-Hka"/>
+                    <constraint firstItem="9zn-43-eXW" firstAttribute="top" secondItem="G9E-mV-ng7" secondAttribute="top" id="Mn5-Ll-aFl"/>
+                    <constraint firstItem="G9E-mV-ng7" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="S61-1A-lZX"/>
+                    <constraint firstItem="zW9-4s-awc" firstAttribute="leading" secondItem="G9E-mV-ng7" secondAttribute="trailing" constant="10" id="Vn3-Dh-mFL"/>
+                    <constraint firstItem="G9E-mV-ng7" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="aoJ-7S-pHv"/>
+                    <constraint firstItem="dsz-3V-AW2" firstAttribute="leading" secondItem="G9E-mV-ng7" secondAttribute="trailing" constant="10" id="ezP-wp-VnL"/>
+                    <constraint firstAttribute="bottom" secondItem="dsB-xo-VDg" secondAttribute="bottom" constant="10" id="gdt-fo-2My"/>
+                    <constraint firstItem="zW9-4s-awc" firstAttribute="bottom" secondItem="G9E-mV-ng7" secondAttribute="bottom" id="l25-qg-DFl"/>
+                    <constraint firstItem="dsz-3V-AW2" firstAttribute="top" secondItem="G9E-mV-ng7" secondAttribute="top" id="mhK-j7-jXL"/>
+                    <constraint firstAttribute="trailing" secondItem="9zn-43-eXW" secondAttribute="trailing" constant="15" id="ox2-X1-6IM"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

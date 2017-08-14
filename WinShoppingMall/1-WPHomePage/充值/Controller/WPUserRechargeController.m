@@ -10,18 +10,18 @@
 #import "WPCardTableViewCell.h"
 #import "Header.h"
 #import "WPSuccessOrfailedController.h"
-#import "WPGatheringCodeController.h"
-#import "WPRechargeStateController.h"
+#import "WPPayCodeController.h"
 #import "WPUserRateModel.h"
 #import "WPUserRechargeView.h"
 #import "WPQRCodeModel.h"
+#import "WPPublicWebViewController.h"
 
 @interface WPUserRechargeController () <UITextFieldDelegate>
 
 //  支付方式
 @property (nonatomic, copy) NSString *payType;
 
-@property (nonatomic, strong) WPBankCardModel *model;
+@property (nonatomic, strong) WPBankCardModel *cardModel;
 
 @property (nonatomic, strong) WPUserRateModel *rateModel;
 
@@ -37,15 +37,10 @@
 
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"充值";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"限额说明" style:UIBarButtonItemStylePlain target:self action:@selector(rechargeStateAction)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"userHelp"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAction)];
     
     [self getPoundageData];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.rechargeView.moneyCell.textField becomeFirstResponder];
 }
 
 #pragma mark - Init
@@ -71,9 +66,11 @@
 
 #pragma mark - Action
 
-- (void)rechargeStateAction
+- (void)rightItemAction
 {
-    WPRechargeStateController *vc = [[WPRechargeStateController alloc] init];
+    WPPublicWebViewController *vc = [[WPPublicWebViewController alloc] init];
+    vc.navigationItem.title = @"用户帮助";
+    vc.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPUserHelpWebURL];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -87,29 +84,25 @@
 //  动态设置按钮的外观以及是否可以点击
 - (void)changeButtonSurface
 {
-    if (self.rechargeView.cvvCell.hidden)
-    {
-        [WPPublicTool buttonWithButton:self.rechargeView.confirmButton userInteractionEnabled:[self.rechargeView.moneyCell.textField.text floatValue] > 0 ? YES : NO];
-    }
-    else
-    {
-        [WPPublicTool buttonWithButton:self.rechargeView.confirmButton userInteractionEnabled:([self.rechargeView.moneyCell.textField.text floatValue] > 0 && self.rechargeView.cvvCell.textField.text.length == 3) ? YES : NO];
-    }
+    BOOL isEdabled = self.rechargeView.cvvCell.hidden ? ([self.rechargeView.moneyCell.textField.text floatValue] > 0 ? YES : NO) : (([self.rechargeView.moneyCell.textField.text floatValue] > 0 && self.rechargeView.cvvCell.textField.text.length == 3) ? YES : NO);
+    [WPPublicTool buttonWithButton:self.rechargeView.confirmButton userInteractionEnabled:isEdabled];
 }
 
 - (void)selectWayAction
 {
     __weakSelf
-    [WPHelpTool showPayTypeWithAmount:nil navigationController:self.navigationController Card:^(WPBankCardModel *model)
+    [WPHelpTool showPayTypeWithAmount:nil card:^(WPBankCardModel *model)
     {
         weakSelf.rechargeView.cvvCell.hidden = [[NSString stringWithFormat:@"%d", model.cardType] isEqualToString:@"1"] ? NO : YES;
         //  获取payType以及改变weakSelf.rechargeView.cardCell内容
         weakSelf.payType = [WPPublicTool payCardWithView:weakSelf.rechargeView.cardCell model:model];
+        weakSelf.cardModel = model;
     } other:^(id rowType)
     {
         weakSelf.rechargeView.cvvCell.hidden = YES;
         //  获取payType以及改变weakSelf.rechargeView.cardCell内容
         weakSelf.payType = [WPPublicTool payThirdWithView:weakSelf.rechargeView.cardCell rowType:rowType];
+        weakSelf.cardModel = nil;
     }];
     
 }
@@ -141,37 +134,19 @@
     {
         if ([self.payType isEqualToString:@"1"])
         {
-            if ([WPJudgeTool isPayTouchID])
-            {
-                __weakSelf
-                [WPHelpTool payWithTouchIDsuccess:^(id success)
-                {
-                    [weakSelf pushWithChargeDataWithPassword:success];
-                } failure:^(NSError *error)
-                {
-                    [weakSelf showPayPopupView];
-                }];
-            }
-            else
-            {
-                [self showPayPopupView];
-            }
+            __weakSelf
+            [WPPayTool payWithTitle:[NSString stringWithFormat:@"充值金额:%@元", self.rechargeView.moneyCell.textField.text] password:^(id password) {
+                [weakSelf pushWithChargeDataWithPassword:password];
+            }];
         }
         else
         {
             [self pushWithChargeDataWithPassword:@""];
         }
+        
     }
 }
 
-- (void)showPayPopupView
-{
-    __weakSelf
-    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"充值金额:%@元", self.rechargeView.moneyCell.textField.text] navigationController:self.navigationController success:^(id success)
-    {
-        [weakSelf pushWithChargeDataWithPassword:success];
-    }];
-}
 
 #pragma mark - Data
 
@@ -201,15 +176,13 @@
     NSDictionary *parameters = @{
                                  @"rechargeAmount" : self.rechargeView.moneyCell.textField.text,
                                  @"payMethod" : self.payType,
-                                 @"cardId" : [NSString stringWithFormat:@"%ld", (long)self.model.id] ? [NSString stringWithFormat:@"%ld", (long)self.model.id] : @"",
+                                 @"cardId" : self.cardModel.id ? [NSString stringWithFormat:@"%ld", (long)self.cardModel.id] : @"",
                                  @"cnv" : [WPPublicTool base64EncodeString:self.rechargeView.cvvCell.textField.text],
                                  @"payPassword" : [WPPublicTool base64EncodeString:payPassword]
                                  };
-    __weakSelf
     [WPHelpTool postWithURL:WPRechargeURL parameters:parameters success:^(id success)
     {
-        
-        [WPHelpTool payResultControllerWithTitle:@"充值结果" successResult:success navigationController:weakSelf.navigationController];
+        [WPHelpTool payResultControllerWithTitle:@"充值结果" successResult:success];
 
     } failure:^(NSError *error)
     {

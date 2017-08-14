@@ -50,11 +50,6 @@ Single_Interface(WPUserInfor)
 @property (nonatomic, strong) NSDictionary *userInfoDict;
 
 /**
- * 1:登录/支付都需要 2:登录需要 3:支付需要
- */
-@property (nonatomic, copy) NSString *needTouchID;
-
-/**
  *  登录是否需要Touch ID   YES NO
  */
 @property (nonatomic, copy) NSString *registerTouchID;

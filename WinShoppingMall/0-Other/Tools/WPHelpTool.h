@@ -49,25 +49,13 @@
 /**
  * 选择支付方式弹窗
  */
-+ (void)showPayTypeWithAmount:(NSString *)amount navigationController:(UINavigationController *)navigationController Card:(void (^)(WPBankCardModel *model))card other:(void (^)(id rowType))other;
-
-
-/**
- * 输入支付密码弹窗
- */
-+ (void)showPayPasswordViewWithTitle:(NSString *)title navigationController:(UINavigationController *)navigationController success:(void (^)(id success))success;
-
-
-/**
- * Touch ID
- */
-+ (void)payWithTouchIDsuccess:(void (^)(id success))touchIDSuccess failure:(void (^)(NSError *error))touchIDFailure;
++ (void)showPayTypeWithAmount:(NSString *)amount card:(void (^)(WPBankCardModel *model))card other:(void (^)(id rowType))other;
 
 
 /**
  *  返回指定界面
  */
-+ (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController;
++ (void)popToViewController:(UIViewController *)controller;
 
 
 /**
@@ -93,14 +81,15 @@
 /**
  * 分享
  */
-+ (void)shareToAppWithModel:(WPShareModel *)model navigationController:(UINavigationController *)navigationController;
++ (void)shareToAppWithModel:(WPShareModel *)model;
 
 
 /**
  *  支付结果界面
  */
-+ (void)payResultControllerWithTitle:(NSString *)title successResult:(id)successResult navigationController:(UINavigationController *)navigationControlle;
++ (void)payResultControllerWithTitle:(NSString *)title successResult:(id)successResultnavigationControlle;
 
++ (id)rootViewController;
 
 
 @end

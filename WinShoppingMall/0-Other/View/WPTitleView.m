@@ -29,6 +29,7 @@
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, kScreenWidth, 44)];
         _titleLabel.font = [UIFont systemFontOfSize:19 weight:2];
+        _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_titleLabel];
     }
@@ -40,8 +41,8 @@
     if (!_cancelButton) {
         _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - 60 - 17.5, 20, 60, 44)];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
-        [_cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
+        [_cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:16];
         _cancelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [self addSubview:_cancelButton];
     }

@@ -19,9 +19,9 @@
 
 @property (nonatomic, strong) UIImageView *imageView;
 
-@property (nonatomic, strong) WPRowTableViewCell *accountCell;
+@property (nonatomic, strong) WPCustomRowCell *accountCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordCell;
 
 @property (nonatomic, strong) WPButton *registerButton;
 
@@ -53,49 +53,50 @@
 - (UIImageView *)imageView
 {
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 40, WPNavigationHeight + 30, 80, 80)];
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 40, WPTopY + 30, 80, 80)];
         _imageView.image = [UIImage imageNamed:@"share_wintopay"];
         _imageView.layer.borderColor = [UIColor lineColor].CGColor;
         _imageView.layer.borderWidth = WPLineHeight;
-        _imageView.layer.cornerRadius = 40;
+        _imageView.layer.cornerRadius = 15;
         _imageView.layer.masksToBounds = YES;
         [self.view addSubview:_imageView];
     }
     return _imageView;
 }
 
-- (WPRowTableViewCell *)accountCell
+- (WPCustomRowCell *)accountCell
 {
     if (!_accountCell) {
-        _accountCell = [[WPRowTableViewCell alloc] init];
+        _accountCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.imageView.frame) + 20, kScreenWidth, 60);
-        [_accountCell tableViewCellTitle:nil placeholder:@"请输入手机号／子账户ID" rectMake:rect];
+        [_accountCell rowCellTitle:nil placeholder:@"请输入手机号／子账户ID" rectMake:rect];
         _accountCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [_accountCell.lineView setFrame:CGRectMake(WPLeftMargin, WPRowHeight - WPLineHeight, kScreenWidth - WPLeftMargin, WPLineHeight)];
-        if ([WPUserInfor sharedWPUserInfor].userPhone.length > 0) {
-            self.accountCell.textField.text = [WPUserInfor sharedWPUserInfor].userPhone;
-        }
-        else {
-            [self.accountCell.textField becomeFirstResponder];
-        }
+        self.accountCell.textField.text = [WPUserInfor sharedWPUserInfor].userPhone;
+        
         [_accountCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_accountCell];
     }
     return _accountCell;
 }
 
-- (WPRowTableViewCell *)passwordCell
+- (WPCustomRowCell *)passwordCell
 {
     if (!_passwordCell) {
-        _passwordCell = [[WPRowTableViewCell alloc] init];
+        _passwordCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.accountCell.frame), kScreenWidth, 60);
-        [_passwordCell tableViewCellTitle:nil placeholder:@"请输入密码" rectMake:rect];
+        [_passwordCell rowCellTitle:nil placeholder:@"请输入密码" rectMake:rect];
         [_passwordCell.lineView setFrame:CGRectMake(WPLeftMargin, WPRowHeight - WPLineHeight, kScreenWidth - WPLeftMargin, WPLineHeight)];
         _passwordCell.textField.secureTextEntry = YES;
         _passwordCell.textField.delegate = self;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
-        if ([WPUserInfor sharedWPUserInfor].userPhone > 0) {
+        
+        if (self.accountCell.textField.text.length > 0) {
             [_passwordCell.textField becomeFirstResponder];
+        }
+        else
+        {
+            [self.accountCell.textField becomeFirstResponder];
         }
         _passwordCell.textField.delegate = self;
         [self.view addSubview:_passwordCell];
@@ -199,12 +200,12 @@
 {
     [WPProgressHUD showProgressIsLoading];
     NSDictionary *parameters = @{
-                                 @"mobildID" : [WPAPPInfo deviceId],
-                                 @"deviceOem" : @"iPhone",
-                                 @"deviceOS" : [NSString stringWithFormat:@"%f", [WPAPPInfo iOSVersion]],
-                                 @"appVersion" : [WPAPPInfo APPVersion],
-                                 @"phone" : self.accountCell.textField.text,
                                  @"password" : [WPPublicTool base64EncodeString:self.passwordCell.textField.text],
+                                 @"phone" : self.accountCell.textField.text,
+                                 @"mobileID" : [WPAPPInfo deviceId],
+                                 @"deviceOem" : @"iPhone",
+                                 @"deviceOS" : [NSString stringWithFormat:@"iOS%f", [WPAPPInfo iOSVersion]],
+                                 @"appVersion" : [WPAPPInfo APPVersion]
                                  };
     __weakSelf
     [WPHelpTool postWithURL:WPRegisterURL parameters:parameters success:^(id success)

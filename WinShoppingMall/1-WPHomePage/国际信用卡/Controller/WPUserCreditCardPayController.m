@@ -15,7 +15,7 @@
 
 @interface WPUserCreditCardPayController () <UITextFieldDelegate>
 
-@property (nonatomic, strong) WPRowTableViewCell *typeCell;
+@property (nonatomic, strong) WPCustomRowCell *typeCell;
 
 @property (nonatomic, strong) WPCardTableViewCell *cardCell;
 
@@ -45,19 +45,13 @@
     [self getPoundageData];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.moneyCell.textField becomeFirstResponder];
-}
-
-- (WPRowTableViewCell *)typeCell
+- (WPCustomRowCell *)typeCell
 {
     if (!_typeCell) {
-        _typeCell = [[WPRowTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, WPNavigationHeight, kScreenWidth, WPRowHeight);
+        _typeCell = [[WPCustomRowCell alloc] init];
+        CGRect rect = CGRectMake(0, WPTopY, kScreenWidth, WPRowHeight);
         NSArray *imageArray = @[@"icon_jcb_content_n", @"icon_visa_content_n", @"icon_mc_content_n"];
-        [_typeCell tableViewCellTitle:@"支持类型" imageArray:imageArray rectMake:rect];
+        [_typeCell rowCellTitle:@"支持类型" imageArray:imageArray rectMake:rect];
         [self.view addSubview:_typeCell];
     }
     return _typeCell;
@@ -68,7 +62,7 @@
     if (!_cardCell) {
         _cardCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.typeCell.frame), kScreenWidth, 80);
-        [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择审核过的信用卡" rectMake:rect];
+        [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择审核通过的卡" rectMake:rect];
         [_cardCell.backgroundButton addTarget:self action:@selector(selectCardButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_cardCell];
     }
@@ -92,7 +86,7 @@
     if (!_moneyCell) {
         _moneyCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.poundageLabel.frame), kScreenWidth, WPRowHeight);
-        [_moneyCell tableViewCellTitle:@"金额" placeholder:@"请输入充值金额(元)" rectMake:rect];
+        [_moneyCell rowCellTitle:@"金额" placeholder:@"请输入充值金额(元)" rectMake:rect];
         [_moneyCell.textField addTarget:self action:@selector(moneyCellTextField) forControlEvents:UIControlEventEditingChanged];
         _moneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         _moneyCell.textField.delegate = self;
@@ -107,7 +101,7 @@
     if (!_cvvCell) {
         _cvvCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.moneyCell.frame) + 20, kScreenWidth, WPRowHeight);
-        [_cvvCell tableViewCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
+        [_cvvCell rowCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
         _cvvCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [_cvvCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_cvvCell];

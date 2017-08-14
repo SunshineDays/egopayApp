@@ -42,23 +42,3 @@
 
 @end
 
-
-
-//result =     {
-//    myRefers =         (
-//                        {
-//                            deviceOs = Android;
-//                            email = "11@qq.com";
-//                            fullName = "\U9a6c\U5316\U817e";
-//                            id = 2;
-//                            isAuth = 1;
-//                            isEffect = 1;
-//                            lastIp = "101.81.181.168";
-//                            merchantlvid = 2;
-//                            merchantno = 600002;
-//                            phone = 18501753970;
-//                            pid = 14;
-//                            registerDate = "Mar 20, 2017 12:59:00 PM";
-//                            sex = 1;
-//                            userName = 18501753970;
-//                        },

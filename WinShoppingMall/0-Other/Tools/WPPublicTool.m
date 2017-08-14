@@ -80,7 +80,28 @@
 // UIImage -> NSStirng
 + (NSString *)imageToString:(UIImage *)image
 {
-    NSData *data = UIImageJPEGRepresentation(image, 0.2f);
+    NSData *data = UIImageJPEGRepresentation(image, 1.0f);
+    if (data.length > 2048 * 1024)
+    {
+        data = UIImageJPEGRepresentation(image, 0.08f);
+    }
+    else if (data.length > 1024 * 1024)
+    {
+        data = UIImageJPEGRepresentation(image, 0.11f);
+    }
+    else if (data.length > 800 * 1024)
+    {
+        data = UIImageJPEGRepresentation(image, 0.16f);
+    }
+    else if (data.length > 512 * 1024)
+    {
+        data = UIImageJPEGRepresentation(image, 0.18f);
+    }
+    else if (data.length > 180 * 1024)
+    {
+        data = UIImageJPEGRepresentation(image, 0.35f);
+    }
+    
     NSString *imageString = [data base64EncodedStringWithOptions:0];
     return imageString;
 }
@@ -116,11 +137,11 @@
 
 
 // 改变字符串部分颜色
-+ (NSAttributedString *)stringColorWithString:(NSString *)string replaceColor:(UIColor *)replaceColor index:(NSInteger)index
++ (NSAttributedString *)stringColorWithString:(NSString *)string replaceColor:(UIColor *)replaceColor replaceFontSize:(float)replaceFontSize index:(NSInteger)index
 {
     NSMutableAttributedString *colorString = [[NSMutableAttributedString alloc] initWithString:string];
     NSRange range = [[colorString string] rangeOfString:[string substringFromIndex:index]];
-    [colorString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:WPFontDefaultSize] range:range];
+    [colorString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:replaceFontSize] range:range];
     [colorString addAttribute:NSForegroundColorAttributeName value:replaceColor range:range];
     return colorString;
 }
@@ -139,7 +160,7 @@
 
 
 //动态计算文本高度(可设置最小高度)
-+ (CGFloat)textHeightFromTextString:(NSString *)text width:(CGFloat) textWidth miniHeight:(CGFloat)miniHeight fontSize:(CGFloat)size
++ (CGFloat)textHeightFromTextString:(NSString *)text width:(CGFloat)textWidth miniHeight:(CGFloat)miniHeight fontSize:(CGFloat)size
 {
     NSDictionary *dict = @{NSFontAttributeName:[UIFont systemFontOfSize:size]};
     CGRect rect = [text boundingRectWithSize:CGSizeMake(textWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine attributes:dict context:nil];
@@ -175,7 +196,7 @@
 // 选择银行卡支付
 + (NSString *)payCardWithView:(WPCardTableViewCell *)cardView model:(WPBankCardModel *)model
 {
-    [cardView.contentLabel setAttributedText:[self stringColorWithString:[self stringCardNameWithModel:model] replaceColor:[UIColor placeholderColor] index:model.bankName.length]];
+    [cardView.contentLabel setAttributedText:[self stringColorWithString:[self stringCardNameWithModel:model] replaceColor:[UIColor placeholderColor] replaceFontSize:WPFontDefaultSize index:model.bankName.length]];
 
     cardView.cardImageView.image = [WPUserTool payBankImageWithBankCode:model.bankCode];
     
@@ -194,5 +215,75 @@
     return [WPUserTool payTypeIDArray][row];
 }
 
+
+//  清除WebView缓存
++ (void)cleanCacheAndCookie{
+    //清除cookies
+    NSHTTPCookie *cookie;
+    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (cookie in [storage cookies]){
+        [storage deleteCookie:cookie];
+    }
+    //清除UIWebView的缓存
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+    NSURLCache * cache = [NSURLCache sharedURLCache];
+    [cache removeAllCachedResponses];
+    [cache setDiskCapacity:0];
+    [cache setMemoryCapacity:0];
+}
+
+// 显示日期
++ (NSString *)dateStringWith:(NSString *)dateString
+{
+    NSString *resultString;
+    
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setDateFormat:@"yyyy"];
+    NSInteger nowYear = [[formatter stringFromDate:date] integerValue];
+    
+    [formatter setDateFormat:@"MM"];
+    NSInteger nowMonth = [[formatter stringFromDate:date] integerValue];
+    
+    [formatter setDateFormat:@"dd"];
+    NSInteger nowDay = [[formatter stringFromDate:date] integerValue];
+    
+    NSInteger year = [[dateString substringToIndex:4] integerValue];
+    
+    NSInteger month = [[dateString substringWithRange:NSMakeRange(5, 2)] integerValue];
+    
+    NSInteger day = [[dateString substringWithRange:NSMakeRange(8, 2)] integerValue];
+    
+    if (nowYear == year)
+    {
+        if (nowMonth == month)
+        {
+            if (nowDay == day) {
+                resultString = [NSString stringWithFormat:@"今天 %@", [dateString substringFromIndex:11]];
+            }
+            else if (nowDay - day == 1)
+            {
+                resultString = [NSString stringWithFormat:@"昨天 %@", [dateString substringFromIndex:11]];
+            }
+            else
+            {
+                resultString = [dateString substringFromIndex:5];
+            }
+        }
+        else
+        {
+            resultString = [dateString substringFromIndex:5];
+        }
+    }
+    else
+    {
+        resultString = dateString;
+    }
+    
+    
+    
+    return resultString;
+}
 
 @end

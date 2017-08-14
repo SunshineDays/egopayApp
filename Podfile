@@ -1,6 +1,6 @@
 platform :ios, '9.0'
 
-source 'https://github.com/CocoaPods/Specs.git'
+#source 'https://github.com/CocoaPods/Specs.git'
 
 target ‘WinShoppingMall’ do
     pod 'SDCycleScrollView', '~> 1.65'
@@ -17,9 +17,8 @@ target ‘WinShoppingMall’ do
 #    pod 'Toast', '~> 3.0'
 #    pod 'Masonry' , '~> 1.0.0'
 #    pod 'AMapLocation','~> 1.1.1'
-#    platform :ios, '8.0' #手机的系统
 #    pod 'AMap3DMap' , '~> 3.3.2' #3D地图SDK
-#    pod 'AMap2DMap' #2D地图SDK (2D和3D不能同时使⽤用)
+#    pod 'AMap2DMap' #2D地图SDK (2D和3D不能同时使用)
 #    pod 'AMapSearch','~> 3.2.0'
 
 end

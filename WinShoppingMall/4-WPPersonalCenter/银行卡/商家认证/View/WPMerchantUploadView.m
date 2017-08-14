@@ -24,7 +24,7 @@
 
 -(UILabel *)stateLabel {
     if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPNavigationHeight, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
+        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, WPTopY, kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
         _stateLabel.text = @"请填写您的真实信息";
         _stateLabel.textColor = [UIColor themeColor];
         _stateLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
@@ -34,69 +34,70 @@
     return _stateLabel;
 }
 
-- (WPRowTableViewCell *)nameCell
+- (WPCustomRowCell *)nameCell
 {
     if (!_nameCell) {
-        _nameCell = [[WPRowTableViewCell alloc] init];
+        _nameCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.stateLabel.frame), kScreenWidth, WPRowHeight);
-        [_nameCell tableViewCellTitle:@"联系人" placeholder:@"请输入您的姓名" rectMake:rect];
+        [_nameCell rowCellTitle:@"联系人" placeholder:@"请输入您的姓名" rectMake:rect];
         _nameCell.textField.delegate = self;
+        [_nameCell.textField becomeFirstResponder];
         [self addSubview:_nameCell];
     }
     return _nameCell;
 }
 
-- (WPRowTableViewCell *)sexCell {
+- (WPCustomRowCell *)sexCell {
     if (!_sexCell) {
-        _sexCell = [[WPRowTableViewCell alloc] init];
+        _sexCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.nameCell.frame), kScreenWidth, WPRowHeight);
-        [_sexCell tableViewCellTitle:@"性别" buttonTitle:@"男" rectMake:rect];
+        [_sexCell rowCellTitle:@"性别" buttonTitle:@"男" rectMake:rect];
         [self addSubview:_sexCell];
     }
     return _sexCell;
 }
 
-- (WPRowTableViewCell *)phoneCell
+- (WPCustomRowCell *)phoneCell
 {
     if (!_phoneCell) {
-        _phoneCell = [[WPRowTableViewCell alloc] init];
+        _phoneCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.sexCell.frame), kScreenWidth, WPRowHeight);
-        [_phoneCell tableViewCellTitle:@"联系电话" placeholder:@"请输入电话号码" rectMake:rect];
+        [_phoneCell rowCellTitle:@"联系电话" placeholder:@"请输入电话号码" rectMake:rect];
         _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [self addSubview:_phoneCell];
     }
     return _phoneCell;
 }
 
-- (WPRowTableViewCell *)shopNameCell
+- (WPCustomRowCell *)shopNameCell
 {
     if (!_shopNameCell) {
-        _shopNameCell = [[WPRowTableViewCell alloc] init];
+        _shopNameCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.phoneCell.frame), kScreenWidth, WPRowHeight);
-        [_shopNameCell tableViewCellTitle:@"店铺名称" placeholder:@"请输入店铺名称" rectMake:rect];
+        [_shopNameCell rowCellTitle:@"店铺名称" placeholder:@"请输入店铺名称" rectMake:rect];
         _shopNameCell.textField.delegate = self;
         [self addSubview:_shopNameCell];
     }
     return _shopNameCell;
 }
 
-- (WPRowTableViewCell *)shopAddressCell
+- (WPCustomRowCell *)shopAddressCell
 {
     if (!_shopAddressCell) {
-        _shopAddressCell = [[WPRowTableViewCell alloc] init];
+        _shopAddressCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.shopNameCell.frame), kScreenWidth, WPRowHeight);
-        [_shopAddressCell tableViewCellTitle:@"店铺地址" buttonTitle:@"请选择店铺地址" rectMake:rect];
+        [_shopAddressCell rowCellTitle:@"店铺地址" buttonTitle:@"请选择店铺地址" rectMake:rect];
         [self addSubview:_shopAddressCell];
     }
     return _shopAddressCell;
 }
 
-- (WPRowTableViewCell *)shopAddressDetailCell
+- (WPCustomRowCell *)shopAddressDetailCell
 {
     if (!_shopAddressDetailCell) {
-        _shopAddressDetailCell = [[WPRowTableViewCell alloc] init];
+        _shopAddressDetailCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.shopAddressCell.frame), kScreenWidth, WPRowHeight);
-        [_shopAddressDetailCell tableViewCellTitle:@"详细地址" placeholder:@"请输入店铺详细地址" rectMake:rect];
+        [_shopAddressDetailCell rowCellTitle:@"详细地址" placeholder:@"请输入店铺详细地址" rectMake:rect];
         [self addSubview:_shopAddressDetailCell];
     }
     return _shopAddressDetailCell;

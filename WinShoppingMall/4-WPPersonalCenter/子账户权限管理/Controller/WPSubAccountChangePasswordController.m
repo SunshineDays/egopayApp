@@ -11,9 +11,9 @@
 
 @interface WPSubAccountChangePasswordController ()
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordConfirmCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordConfirmCell;
 
 @property (nonatomic, strong) WPButton *confirmButton;
 
@@ -33,12 +33,12 @@
 
 #pragma mark - Init
 
-- (WPRowTableViewCell *)passwordCell
+- (WPCustomRowCell *)passwordCell
 {
     if (!_passwordCell) {
-        _passwordCell = [[WPRowTableViewCell alloc] init];
+        _passwordCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, WPTopMargin, kScreenWidth, WPRowHeight);
-        [_passwordCell tableViewCellTitle:@"密        码" placeholder:@"请输入密码" rectMake:rect];
+        [_passwordCell rowCellTitle:@"密码" placeholder:@"请输入密码" rectMake:rect];
         _passwordCell.textField.secureTextEntry = YES;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_passwordCell];
@@ -46,12 +46,12 @@
     return _passwordCell;
 }
 
-- (WPRowTableViewCell *)passwordConfirmCell
+- (WPCustomRowCell *)passwordConfirmCell
 {
     if (!_passwordConfirmCell) {
-        _passwordConfirmCell = [[WPRowTableViewCell alloc] init];
+        _passwordConfirmCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.passwordCell.frame), kScreenWidth, WPRowHeight);
-        [_passwordConfirmCell tableViewCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
+        [_passwordConfirmCell rowCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
         _passwordConfirmCell.textField.secureTextEntry = YES;
         [_passwordConfirmCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         [self.view addSubview:_passwordConfirmCell];

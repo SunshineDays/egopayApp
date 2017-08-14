@@ -37,7 +37,7 @@
 - (UIImageView *)imageView
 {
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 50, WPNavigationHeight + 100, 100, 100)];
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 50, WPTopY + 100, 100, 100)];
         _imageView.image = [UIImage imageNamed: self.showType == 2 ? @"icon_failure" : @"icon_selected_content1_n"];
         [self.view addSubview:_imageView];
     }

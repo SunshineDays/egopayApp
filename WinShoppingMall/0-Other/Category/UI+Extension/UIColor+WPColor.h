@@ -29,6 +29,12 @@
 
 
 /**
+ *  #EFEFF4
+ */
++ (UIColor *)tableViewColor;
+
+
+/**
  *  C7C7CD
  **/
 + (UIColor *)placeholderColor;

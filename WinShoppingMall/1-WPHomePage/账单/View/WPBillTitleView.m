@@ -14,6 +14,7 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor whiteColor];
         self.userInteractionEnabled = YES;
         [self titleButton];
         [self imageButton];
@@ -39,7 +40,7 @@
 {
     if (!_imageButton) {
         _imageButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - 60 - WPLeftMargin, 5, 60 + WPLeftMargin, 40)];
-        [_imageButton setImage:[UIImage imageNamed:@"ixon_zhangdan_content_n"] forState:UIControlStateNormal];
+//        [_imageButton setImage:[UIImage imageNamed:@"ixon_zhangdan_content_n"] forState:UIControlStateNormal];
         [self addSubview:_imageButton];
     }
     return _imageButton;

@@ -131,7 +131,7 @@
     {
         [WPProgressHUD showInfoWithStatus:@"请选择性别"];
     }
-    else if (![WPJudgeTool validateMobile:self.uploadView.phoneCell.textField.text])
+    else if (![WPJudgeTool validateMobile:self.uploadView.phoneCell.textField.text] && ![WPJudgeTool validateTel:self.uploadView.phoneCell.textField.text])
     {
         [WPProgressHUD showInfoWithStatus:@"请输入正确的手机号码"];
     }
@@ -139,7 +139,7 @@
     {
         [WPProgressHUD showInfoWithStatus:@"请输入店铺名称"];
     }
-    else if ([self.uploadView.shopAddressCell.textField.text isEqualToString:@"请选择店铺地址"])
+    else if ([self.uploadView.shopAddressCell.button.titleLabel.text isEqualToString:@"请选择店铺地址"])
     {
         [WPProgressHUD showInfoWithStatus:@"请选择店铺地址"];
     }

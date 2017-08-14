@@ -54,7 +54,8 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
@@ -73,8 +74,8 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     WPMessagesCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPMessageCellID];
-    WPInvitingPeopleModel *model = self.dataArray[indexPath.row];
-    cell.titleLabel.text = [WPPublicTool stringStarWithString:[NSString stringWithFormat:@"%@", model.phone] headerIndex:3 footerIndex:4];
+    cell.invitingModel = self.dataArray[indexPath.row];
+    
     return cell;
 }
 

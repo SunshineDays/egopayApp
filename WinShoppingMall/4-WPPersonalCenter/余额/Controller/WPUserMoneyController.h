@@ -7,11 +7,11 @@
 //
 
 #import "WPBaseViewController.h"
-#import "WPEditUserInfoModel.h"
+#import "WPUserInforModel.h"
 
 
 @interface WPUserMoneyController : WPBaseViewController
 
-@property (nonatomic, strong) WPEditUserInfoModel *model;
+@property (nonatomic, strong) WPUserInforModel *model;
 
 @end

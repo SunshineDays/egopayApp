@@ -10,10 +10,17 @@
 
 @interface WPMerchantDetailModel : NSObject
 
+@property (nonatomic, strong) NSArray *inside_imgUrls;
 
 @property (nonatomic, copy) NSString *cover_url;
 
 @property (nonatomic, copy) NSString *descp;
+
+@property (nonatomic, copy) NSString *province;
+
+@property (nonatomic, copy) NSString *city;
+
+@property (nonatomic, copy) NSString *area;
 
 @property (nonatomic, copy) NSString *detailAddr;
 

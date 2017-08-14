@@ -11,14 +11,6 @@
 @interface WPAddCardController :WPBaseViewController
 
 /**
- *  是否需要返回传值
- */
-//@property (nonatomic, assign) BOOL isNeedCallBack;
-
-//@property (nonatomic, strong) void(^userAddCardSuccessBlock)(NSDictionary *addCardSuccess);
-
-
-/**
  *  选择银行卡类型
  *  1:信用卡 2:储蓄卡
  */

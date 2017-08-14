@@ -8,18 +8,19 @@
 
 #import "WPSubAccountPersonalController.h"
 #import "WPRechargeCell.h"
-#import "WPUserInforController.h"
 #import "WPSubAccountPersonalModel.h"
 #import "Header.h"
 #import "WPRegisterController.h"
 #import "WPUserInforButton.h"
 #import "WPMessagesCenterController.h"
-#import "WPGatheringCodeController.h"
+#import "WPPayCodeController.h"
 #import "WPBillController.h"
 #import "WPBankCardController.h"
 #import "WPMerchantController.h"
-#import "WPSubAccountInforController.h"
 #import "WPShareModel.h"
+#import "WPMyCodeController.h"
+#import "WPPersonalButton.h"
+#import "WPPersonalSettingController.h"
 
 static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
@@ -27,7 +28,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) WPUserInforButton *userInforButton;
+@property (nonatomic, strong) WPPersonalButton *headerButton;
 
 @property (nonatomic, strong) NSMutableArray *imageArray;
 
@@ -46,6 +47,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"我";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAction)];
     
     __weakSelf
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -85,28 +87,23 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     return _dataArray;
 }
 
-- (WPUserInforButton *)userInforButton
-{
-    if (!_userInforButton) {
-        _userInforButton = [[WPUserInforButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 100)];
-        _userInforButton.backgroundColor = [UIColor whiteColor];
-        [_userInforButton addTarget:self action:@selector(userInfoButtonClick) forControlEvents:UIControlEventTouchUpInside];
-        
-        [_userInforButton.userImageView sd_setImageWithURL:[NSURL URLWithString:self.model.headUrl] placeholderImage:[UIImage imageNamed:@"titlePlaceholderImage"] options:SDWebImageRefreshCached];
 
-        
-        [_userInforButton userInforWithName:[NSString stringWithFormat:@"商户号:  %@", self.model.merchant] vip:self.model.clerkName rate:nil arrowHidden:NO];
-        self.tableView.tableHeaderView = _userInforButton;
+- (WPPersonalButton *)headerButton
+{
+    if (!_headerButton) {
+        _headerButton = [[WPPersonalButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 95) avaterUrl:self.model.headUrl phone:[NSString stringWithFormat:@"商户号:  %@", self.model.merchant] vip:self.model.clerkName];
+        [_headerButton addTarget:self action:@selector(changeAvater) forControlEvents:UIControlEventTouchUpInside];
+        self.tableView.tableHeaderView = _headerButton;
     }
-    return _userInforButton;
+    return _headerButton;
 }
 
 
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight - 49) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight - 49) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
@@ -145,10 +142,6 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     return 60;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 20;
-}
 
 #pragma mark - UITableViewDelegate
 
@@ -158,8 +151,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 
     if ([self.dataArray[indexPath.row] isEqualToString:@"收款码"])
     {
-        WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
-        vc.codeType = 2;
+        WPMyCodeController *vc = [[WPMyCodeController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else if ([self.dataArray[indexPath.row] isEqualToString:@"收款账单"])
@@ -184,25 +176,37 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         WPMessagesCenterController *vc = [[WPMessagesCenterController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([self.dataArray[indexPath.row] isEqualToString:@"推荐"])
+    else if ([self.dataArray[indexPath.row] isEqualToString:@"分享易购付"])
     {
-        [WPHelpTool shareToAppWithModel:self.shareModel navigationController:self.navigationController];
+        [WPHelpTool shareToAppWithModel:self.shareModel];
     }
 }
 
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    [self postAvatarData:image];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 #pragma mark - Acition
 
-- (void)userInfoButtonClick
+- (void)rightItemAction
 {
-    WPSubAccountInforController *vc = [[WPSubAccountInforController alloc] init];
-    vc.subAccountModel = self.model;
-    vc.avaterImage = self.userInforButton.userImageView.image;
-    __weakSelf
-    vc.avaterImageBlcok = ^(UIImage *avaterImage)
-    {
-        weakSelf.userInforButton.userImageView.image = avaterImage;
-    };
+    WPPersonalSettingController *vc = [[WPPersonalSettingController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)changeAvater
+{
+    [self alertControllerWithPhoto:YES];
 }
 
 #pragma mark - Data
@@ -234,7 +238,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
                     [weakSelf.imageArray addObject:imageArray[i]];
                 }
             }
-            [weakSelf userInforButton];
+            [weakSelf headerButton];
             [weakSelf.tableView.mj_header endRefreshing];
             [weakSelf.tableView reloadData];
         }
@@ -243,6 +247,24 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         [weakSelf.indicatorView stopAnimating];
         [weakSelf.tableView.mj_header endRefreshing];
     }];
+}
+
+- (void)postAvatarData:(UIImage *)image
+{
+    __weakSelf
+    
+    NSDictionary *parameters = @{@"headImg" : [WPPublicTool imageToString:image]};
+    [WPHelpTool postWithURL:WPSubAccountAvatarURL parameters:parameters success:^(id success)
+     {
+         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
+         if ([type isEqualToString:@"1"])
+         {
+             weakSelf.headerButton.avaterImageView.image = image;
+         }
+     } failure:^(NSError *error)
+     {
+         
+     }];
 }
 
 - (void)getShareData
@@ -260,6 +282,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
     {
     }];
 }
+
 
 
 @end

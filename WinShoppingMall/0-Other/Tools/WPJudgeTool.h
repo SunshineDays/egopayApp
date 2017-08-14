@@ -46,6 +46,11 @@
  */
 + (BOOL)validateMobile:(NSString *)mobile;
 
+/** 
+ *  验证固定电话
+ */
++ (BOOL)validateTel:(NSString *)tel;
+
 /**
  *  验证邮箱
  */

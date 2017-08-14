@@ -9,12 +9,11 @@
 #import "WPHomePageController.h"
 #import "WPBillController.h"
 #import "WPMerchantController.h"
-#import "WPGatheringController.h"
 #import "WPQRCodeController.h"
 #import "WPRegisterController.h"
 #import "Header.h"
 #import <SDCycleScrollView.h>
-#import "WPGatheringCodeController.h"
+#import "WPPayCodeController.h"
 #import "WPJpushServiceController.h"
 #import "WPMessagesCell.h"
 #import "WPMessageDetailController.h"
@@ -24,6 +23,7 @@
 #import "WPUserCreditCardPayController.h"
 #import "WPShareModel.h"
 #import "WPHomePageView.h"
+#import "WPMyCodeController.h"
 
 static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
@@ -48,6 +48,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor tableViewColor];
     
     //  3DTouch跳转到我的收款码
     if ([[WPUserInfor sharedWPUserInfor].threeTouch isEqualToString:@"gatheringCode"])
@@ -55,8 +56,8 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
         __weakSelf
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
-            vc.codeType = 2;
+            WPMyCodeController *vc = [[WPMyCodeController alloc] init];
+//            vc.codeType = 2;
             [weakSelf.navigationController pushViewController:vc animated:YES];
             [WPUserInfor sharedWPUserInfor].userInfoDict = nil;
             [WPUserInfor sharedWPUserInfor].threeTouch = nil;
@@ -79,7 +80,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
     [self headerView];
     [self getmessgaesData];
     [self getCycleScrollData];
-    
+
     __weakSelf
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf getmessgaesData];
@@ -116,14 +117,12 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 {
     if (!_headerView) {
         _headerView = [[WPHomePageView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenWidth / 2 + 200 + 80)];
-        
         for (int i = 0; i < 8; i++)
         {
             WPHomePageClassButton *homeButton = _headerView.classView.subviews[i];
             homeButton.tag = i;
             [homeButton addTarget:self action:@selector(topClassButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
         [_headerView.creditButton addTarget:self action:@selector(creditCardButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _headerView;
@@ -133,6 +132,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight - 49) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.tableHeaderView = self.headerView;
@@ -221,7 +221,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
         {
             if ([WPJudgeTool isIDCardApprove])
             {
-                WPGatheringController *vc = [[WPGatheringController alloc] init];
+                WPMyCodeController *vc = [[WPMyCodeController alloc] init];
                 [self.navigationController pushViewController:vc animated:YES];
             }
             else
@@ -245,7 +245,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
         }
         case 7:// 推荐
         {
-            [WPHelpTool shareToAppWithModel:self.shareModel navigationController:self.navigationController];
+            [WPHelpTool shareToAppWithModel:self.shareModel];
             break;
         }
         default:
@@ -255,14 +255,17 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
 - (void)creditCardButtonClick
 {
-    if ([WPJudgeTool isIDCardApprove])
+    if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"])
     {
-        WPUserCreditCardPayController *vc = [[WPUserCreditCardPayController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else
-    {
-        [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
+        if ([WPJudgeTool isIDCardApprove])
+        {
+            WPUserCreditCardPayController *vc = [[WPUserCreditCardPayController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        else
+        {
+            [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
+        }
     }
 }
 
@@ -298,7 +301,6 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
     __weakSelf
     [WPHelpTool getWithURL:WPMessageURL parameters:parameters success:^(id success)
     {
-        
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"])

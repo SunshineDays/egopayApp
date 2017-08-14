@@ -12,17 +12,17 @@
 
 #import "WPAddCardController.h"
 #import "WPSuccessOrfailedController.h"
-#import "WPGatheringCodeController.h"
+#import "WPPayCodeController.h"
 #import "WPUserEnrollController.h"
 #import "WPCardTableViewCell.h"
 
 @interface WPProductSubmitController ()<UIPopoverPresentationControllerDelegate>
 
-@property (nonatomic, strong) WPRowTableViewCell *moneyCell;
+@property (nonatomic, strong) WPCustomRowCell *moneyCell;
 
 @property (nonatomic, strong) WPCardTableViewCell *cardCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *cvvCell;
+@property (nonatomic, strong) WPCustomRowCell *cvvCell;
 
 @property (nonatomic, strong) WPButton *confirmButton;
 
@@ -70,7 +70,7 @@
 {
     if (!_cardCell) {
         _cardCell = [[WPCardTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, WPNavigationHeight + 20, kScreenWidth, 80);
+        CGRect rect = CGRectMake(0, WPTopY + 20, kScreenWidth, 80);
         [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择支付方式" rectMake:rect];
         [_cardCell.backgroundButton addTarget:self action:@selector(wayButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_cardCell];
@@ -78,24 +78,24 @@
     return _cardCell;
 }
 
-- (WPRowTableViewCell *)moneyCell
+- (WPCustomRowCell *)moneyCell
 {
     if (!_moneyCell) {
-        _moneyCell = [[WPRowTableViewCell alloc] init];
+        _moneyCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.cardCell.frame) + 20, kScreenWidth, WPRowHeight);
-        [_moneyCell tableViewCellTitle:@"升级金额" contentTitle:self.gradeMoney rectMake:rect];
+        [_moneyCell rowCellTitle:@"升级金额" contentTitle:[NSString stringWithFormat:@"¥%@", self.gradeMoney] rectMake:rect];
         _moneyCell.backgroundColor = [UIColor whiteColor];
         [self.view addSubview:_moneyCell];
     }
     return _moneyCell;
 }
 
-- (WPRowTableViewCell *)cvvCell
+- (WPCustomRowCell *)cvvCell
 {
     if (!_cvvCell) {
-        _cvvCell = [[WPRowTableViewCell alloc] init];
+        _cvvCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.moneyCell.frame) + 20, kScreenWidth, WPRowHeight);
-        [_cvvCell tableViewCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
+        [_cvvCell rowCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
         _cvvCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         _cvvCell.backgroundColor = [UIColor whiteColor];
         _cvvCell.hidden = YES;
@@ -121,15 +121,17 @@
 - (void)wayButtonClick:(UIButton *)button
 {
     __weakSelf
-    [WPHelpTool showPayTypeWithAmount:self.gradeMoney navigationController:self.navigationController Card:^(WPBankCardModel *model)
+    [WPHelpTool showPayTypeWithAmount:self.gradeMoney card:^(WPBankCardModel *model)
     {
         weakSelf.model = model;
         weakSelf.cvvCell.hidden = [[NSString stringWithFormat:@"%d", model.cardType] isEqualToString:@"1"] ? NO : YES;
         weakSelf.payType = [WPPublicTool payCardWithView:self.cardCell model:model];
+        weakSelf.model = model;
     } other:^(id rowType)
     {
         weakSelf.cvvCell.hidden = YES;
         weakSelf.payType = [WPPublicTool payThirdWithView:self.cardCell rowType:rowType];
+        weakSelf.model = nil;
     }];
 }
 
@@ -148,22 +150,11 @@
     {
         if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"])
         {
-            if ([WPJudgeTool isPayTouchID])
-            {
-                __weakSelf
-                [WPHelpTool payWithTouchIDsuccess:^(id success)
-                {
-                    [weakSelf pushMerchantGradeDataWithPayPassword:success];
-                    
-                } failure:^(NSError *error)
-                {
-                    [weakSelf initPayPopupView];
-                }];
-            }
-            else
-            {
-                [self initPayPopupView];
-            }
+            __weakSelf
+            [WPPayTool payWithTitle:[NSString stringWithFormat:@"支付金额:%@元", self.gradeMoney] password:^(id password) {
+                [weakSelf pushMerchantGradeDataWithPayPassword:password];
+
+            }];
         }
         else
         {
@@ -172,14 +163,6 @@
     }
 }
 
-- (void)initPayPopupView
-{
-    __weakSelf
-    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"支付金额:%@元", self.gradeMoney] navigationController:self.navigationController success:^(id success)
-    {
-        [weakSelf pushMerchantGradeDataWithPayPassword:success];
-    }];
-}
 
 #pragma mark - Data
 
@@ -195,7 +178,7 @@
     __weakSelf
     [WPHelpTool postWithURL:self.isAgency ? WPAgencyGradeURL : WPMerchantGradeURL parameters:parameters success:^(id success)
     {
-        [WPHelpTool payResultControllerWithTitle:weakSelf.isAgency ? @"代理升级结果" : @"商户升级结果" successResult:success navigationController:weakSelf.navigationController];
+        [WPHelpTool payResultControllerWithTitle:weakSelf.isAgency ? @"代理升级结果" : @"商户升级结果" successResult:success];
     } failure:^(NSError *error)
     {
         

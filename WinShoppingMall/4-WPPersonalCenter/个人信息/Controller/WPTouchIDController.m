@@ -25,9 +25,9 @@
 
 @property (nonatomic, strong) UILabel *touchIdLabel;
 
-@property (nonatomic, strong) WPRowTableViewCell *registerCell;
+@property (nonatomic, strong) WPCustomRowCell *registerCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *payCell;
+@property (nonatomic, strong) WPCustomRowCell *payCell;
 
 @property (nonatomic, strong) UILabel *stateLabel;
 
@@ -64,7 +64,7 @@
 - (UIImageView *)touchIdImageView
 {
     if (!_touchIdImageView) {
-        _touchIdImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 50, WPNavigationHeight + 30, 100, 103)];
+        _touchIdImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kScreenWidth / 2 - 50, WPTopY + 30, 100, 103)];
         _touchIdImageView.image = [UIImage imageNamed:@"touchID"];
         [self.view addSubview:_touchIdImageView];
     }
@@ -111,12 +111,12 @@
     return _protocolButton;
 }
 
-- (WPRowTableViewCell *)registerCell
+- (WPCustomRowCell *)registerCell
 {
     if (!_registerCell) {
-        _registerCell = [[WPRowTableViewCell alloc] init];
+        _registerCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.protocolLabel.frame) + 5, kScreenWidth, WPRowHeight);
-        [_registerCell tableViewCellTitle:@"指纹登录" rectMake:rect];
+        [_registerCell rowCellTitle:@"指纹登录" rectMake:rect];
         _registerCell.switchs.on = [WPJudgeTool isRegisterTouchID];
         [_registerCell.switchs addTarget:self action:@selector(registerSwitchClick:) forControlEvents:UIControlEventValueChanged];
         [self.view addSubview:_registerCell];
@@ -124,12 +124,12 @@
     return _registerCell;
 }
 
-- (WPRowTableViewCell *)payCell
+- (WPCustomRowCell *)payCell
 {
     if (!_payCell) {
-        _payCell = [[WPRowTableViewCell alloc] init];
+        _payCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.registerCell.frame), kScreenWidth, WPRowHeight);
-        [_payCell tableViewCellTitle:@"指纹支付" rectMake:rect];
+        [_payCell rowCellTitle:@"指纹支付" rectMake:rect];
         _payCell.switchs.on = [WPJudgeTool isPayTouchID];
         self.isOpenPay = _payCell.switchs.on;
         [_payCell.switchs addTarget:self action:@selector(paySwitchClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -142,11 +142,12 @@
 - (UILabel *)stateLabel
 {
     if (!_stateLabel) {
-        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [WPJudgeTool isSubAccount] ? CGRectGetMaxY(self.registerCell.frame) + 20 : CGRectGetMaxY(self.payCell.frame) + 20, kScreenWidth, 30)];
+        _stateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [WPJudgeTool isSubAccount] ? CGRectGetMaxY(self.registerCell.frame) + 10 : CGRectGetMaxY(self.payCell.frame) + 10, kScreenWidth, 30)];
         _stateLabel.text = @"开通后，可使用Touch ID验证指纹快速完成登录或支付";
         _stateLabel.textColor = [UIColor grayColor];
-        _stateLabel.font = [UIFont systemFontOfSize:13];
+        _stateLabel.font = [UIFont systemFontOfSize:12];
         _stateLabel.textAlignment = NSTextAlignmentCenter;
+        _stateLabel.numberOfLines = 0;
         [self.view addSubview:_stateLabel];
     }
     return _stateLabel;
@@ -155,7 +156,7 @@
 - (void)createPayPopupView
 {
     __weakSelf
-    [WPHelpTool showPayPasswordViewWithTitle:@"绑定/解绑指纹支付" navigationController:self.navigationController success:^(id success)
+    [WPPayTool payWithViewTitle:@"绑定/解绑指纹支付" success:^(id success)
     {
         [weakSelf postAddTouchIDDataWithPassword:success];        
     }];
@@ -258,6 +259,9 @@
         [WPProgressHUD showInfoWithStatus:@"您的设备不支持指纹识别"];
         [self.payCell.switchs setOn:NO];
         [self.registerCell.switchs setOn:NO];
+        [WPUserInfor sharedWPUserInfor].registerTouchID = @"NO";
+        [WPUserInfor sharedWPUserInfor].payTouchID = @"YES";
+        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
     }
 }
 

@@ -43,10 +43,6 @@
     //  应用内推送
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     center.delegate = self;
-    
-    //  极光推送
-    [JPUSHService setBadge:0];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 
     //  IQKeyboardManager键盘
     [IQKeyboardManager sharedManager].enableAutoToolbar = NO; //键盘不需要标题
@@ -97,9 +93,6 @@
             [WPUserInfor sharedWPUserInfor].userInfoDict = userInfo;
         }
     }
-    
-    [JPUSHService setBadge:0];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 #pragma mark - 3D Touch
@@ -112,8 +105,9 @@
     }
 }
 
-#pragma mark - app从后台进入程序
-- (void)applicationWillEnterForeground:(UIApplication *)application
+#pragma mark - app从前台退出
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [JPUSHService setBadge:0];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];

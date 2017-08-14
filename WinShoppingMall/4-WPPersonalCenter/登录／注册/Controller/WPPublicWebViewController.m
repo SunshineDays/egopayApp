@@ -21,19 +21,29 @@
 {
     [super viewDidLoad];
     self.webView.delegate = self;
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.webUrl]]];
-
+    if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"]) {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.webUrl]]];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.indicatorView startAnimating];
+    [super viewWillAppear:animated];
+    if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"]) {
+        [self.indicatorView startAnimating];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [WPPublicTool cleanCacheAndCookie];
 }
 
 - (UIWebView *)webView
 {
     if (!_webView) {
-        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight)];
+        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight)];
         _webView.backgroundColor = [UIColor cellColor];
         [self.view addSubview:_webView];
     }
@@ -46,6 +56,7 @@
 {
     [self.indicatorView stopAnimating];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

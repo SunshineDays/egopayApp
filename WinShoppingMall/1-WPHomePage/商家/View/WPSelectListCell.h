@@ -14,6 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *cityName;
 
+@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
+
 @property (nonatomic, strong) WPMerchantCityListModel *model;
 
 @end

@@ -15,6 +15,9 @@
     [super awakeFromNib];
     // Initialization code
     self.backgroundColor = [UIColor whiteColor];
+    
+    self.wayImageView.layer.cornerRadius = 24;
+    self.wayImageView.layer.masksToBounds = YES;
 }
 
 
@@ -28,7 +31,7 @@
     self.typeLabel.text = [WPUserTool billTypeStateWithModel:model];
     self.typeLabel.textColor = [WPUserTool billTypeStateColorWithModel:model];
     
-    self.dateLabel.text = [WPPublicTool stringToDateString:model.createDate];
+    self.dateLabel.text = [WPPublicTool dateStringWith:[WPPublicTool stringToDateString:model.createDate]];
     
     NSString *typeStr = model.inPaystate == 1 ? @"+" : @"-";
     self.moneyLabel.text = [NSString stringWithFormat:@"%@ %.2f",typeStr, model.amount];

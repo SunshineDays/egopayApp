@@ -57,7 +57,8 @@
     if (!_pickerView) {
         _pickerView = [[UIPickerView alloc] init];
         _pickerView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight / 3);
-        _pickerView.backgroundColor = [UIColor whiteColor];
+        _pickerView.backgroundColor = [UIColor tableViewColor];
+        _pickerView.alpha = 1.0f;
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
     }
@@ -96,9 +97,7 @@
         [monthArrM addObject:monthString];
         month ++;
     }
-    NSDictionary *yearDic = [NSDictionary dictionaryWithObject:yearArrM forKey:@"year"];
-    NSDictionary *monthDic = [NSDictionary dictionaryWithObject:monthArrM forKey:@"month"];
-    [self.dataArray addObjectsFromArray:@[yearDic, monthDic]];
+    [self.dataArray addObjectsFromArray:@[yearArrM, monthArrM]];
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -108,46 +107,20 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    switch (component)
-    {
-        case 0:
-            return [self.dataArray[0][@"year"] count];
-            break;
-            
-        case 1:
-            return [self.dataArray[1][@"month"] count];
-            break;
-            
-        default:
-            return 0;
-            break;
-    }
+    return [self.dataArray[component] count];
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     if (!self.isSelected)
     {
-        if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)]) {
-            [self.pickerViewDelegate wp_selectedResultWithYear:self.dataArray[0][@"year"][0] month:self.dataArray[1][@"month"][0] day:nil];
+        if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)])
+        {
+            [self.pickerViewDelegate wp_selectedResultWithYear:self.dataArray[0][0] month:self.dataArray[1][0] day:nil];
         }
     }
-
-    switch (component)
-    {
-        case 0:
-            return self.dataArray[0][@"year"][row];
-            break;
-            
-        case 1:
-            return self.dataArray[1][@"month"][row];
-            break;
-            
-        default:
-            return 0;
-            break;
-    }
     
+    return self.dataArray[component][row];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -156,20 +129,22 @@
     switch (component)
     {
         case 0:
-            self.year = self.dataArray[0][@"year"][row];
+            self.year = self.dataArray[0][row];
             break;
         case 1:
-            self.month = self.dataArray[1][@"month"][row];
+            self.month = self.dataArray[1][row];
             break;
             
         default:
             break;
     }
+    
     if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)])
     {
         [self.pickerViewDelegate wp_selectedResultWithYear:self.year month:self.month day:nil];
     }
 }
+
 
 
 - (void)cancelPickerView

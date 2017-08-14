@@ -12,7 +12,7 @@
 #import "WPTabBarController.h"
 #import "WPRegisterController.h"
 #import "WPJpushServiceController.h"
-#import "WPGatheringCodeController.h"
+#import "WPPayCodeController.h"
 #import "WPNavigationController.h"
 #import "WPUserEnrollController.h"
 
@@ -126,7 +126,7 @@
 - (void)showTouchIDView
 {
     __weakSelf
-    [WPHelpTool payWithTouchIDsuccess:^(id success)
+    [WPPayTool payWithTouchIDsuccess:^(id success)
     {
         [WPHelpTool rootViewController:[[WPTabBarController alloc] init]];
         

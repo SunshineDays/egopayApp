@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WPMerchantGradeProuctModel.h"
-#import "WPUpGradeProductModel.h"
+#import "WPMemberProuctModel.h"
+#import "WPAgencyProductModel.h"
 
 @interface WPMerchantGradeProductCell : UITableViewCell
 
@@ -19,8 +19,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *priceNameLabel;
 
-@property (nonatomic, strong) WPMerchantGradeProuctModel *merchantLvModel;
+@property (nonatomic, strong) WPMemberProuctModel *merchantLvModel;
 
-@property (nonatomic, strong) WPUpGradeProductModel *delegateLvModel;
+@property (nonatomic, strong) WPAgencyProductModel *delegateLvModel;
 
 @end

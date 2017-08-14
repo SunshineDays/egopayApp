@@ -37,11 +37,13 @@ static NSString * const channel = @"AppStore";
 static BOOL const isProduction = FALSE;
 
 
-@interface WPAppRegisters ()<TencentSessionDelegate, TencentLoginDelegate>
+@interface WPAppRegisters ()<TencentSessionDelegate>
 
 @end
 
 @implementation WPAppRegisters
+
+#pragma mark - 设置用户信息
 
 + (void)registUserInfor
 {
@@ -54,52 +56,22 @@ static BOOL const isProduction = FALSE;
     [WPUserInfor sharedWPUserInfor].registerTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPRegisterTouchID];
     [WPUserInfor sharedWPUserInfor].isSubAccount = [[NSUserDefaults standardUserDefaults] objectForKey:WPIsSubAccount];
     
-    // 更改老版本缓存
-    [WPUserInfor sharedWPUserInfor].needTouchID = [[NSUserDefaults standardUserDefaults] objectForKey:WPNeedTouchID];
-    if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"1"])
-    {
-        [WPUserInfor sharedWPUserInfor].registerTouchID = @"YES";
-        [WPUserInfor sharedWPUserInfor].payTouchID = @"YES";
-        [WPUserInfor sharedWPUserInfor].needTouchID = nil;
-    }
-    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"2"])
-    {
-        [WPUserInfor sharedWPUserInfor].registerTouchID = nil;
-        [WPUserInfor sharedWPUserInfor].needTouchID = nil;
-    }
-    else if ([[WPUserInfor sharedWPUserInfor].needTouchID isEqualToString:@"3"])
-    {
-        [WPUserInfor sharedWPUserInfor].payTouchID = @"YES";
-        [WPUserInfor sharedWPUserInfor].needTouchID = nil;
-    }
     [[WPUserInfor sharedWPUserInfor] updateUserInfor];
 }
 
+#pragma mark - 注册微信
 + (void)registWechat
 {
     [WXApi registerApp:kWeChat_AppID withDescription:@"易购付"];
 }
 
+#pragma mark - 注册QQ
 + (void)registQQ
 {
     [[TencentOAuth alloc] initWithAppId:kQQ_AppID andDelegate:self];
 }
 
-- (void)tencentDidNotLogin:(BOOL)cancelled
-{
-    
-}
-
-- (void)tencentDidLogin
-{
-
-}
-
-- (void)tencentDidNotNetWork
-{
-
-}
-
+#pragma mark - 注册极光推送
 + (void)registJPushWithLaunchOption:(NSDictionary *)launchOptions
 {
     NSString *advertisingID = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
@@ -113,6 +85,7 @@ static BOOL const isProduction = FALSE;
             advertisingIdentifier:advertisingID];
 }
 
+#pragma mark - 注册3D Touch
 + (void)regist3DTouch:(UIApplication *)application
 {
     if ([WPJudgeTool isShopApprove]) // 通过商家认证之后才有收款码

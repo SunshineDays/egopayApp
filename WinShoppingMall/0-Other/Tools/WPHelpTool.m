@@ -9,11 +9,9 @@
 #import "WPHelpTool.h"
 #import <AFNetworking/AFNetworking.h>
 #import "WPAppConst.h"
-#import <LocalAuthentication/LocalAuthentication.h>
 #import "WPProgressHUD.h"
-#import "WPPayPopupController.h"
-#import "WPPayTypeController.h"
-#import "WPGatheringCodeController.h"
+#import "WPPayTypeSelectController.h"
+#import "WPPayCodeController.h"
 #import "WPShareView.h"
 #import "WPShareTool.h"
 #import "WPBaseViewController.h"
@@ -50,6 +48,7 @@
                  [WPUserInfor sharedWPUserInfor].payTouchID = nil;
                  [[WPUserInfor sharedWPUserInfor] updateUserInfor];
              }
+             
          }
      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
      {
@@ -94,10 +93,10 @@
              {
                  [WPProgressHUD showInfoWithStatus:dict[@"result"][@"err_msg"]];
              }
-             else if (dict[@"reuslt"][@"msg"])
-             {
-                 [WPProgressHUD showInfoWithStatus:dict[@"result"][@"msg"]];
-             }
+//             else if (dict[@"result"][@"msg"])
+//             {
+//                 [WPProgressHUD showInfoWithStatus:dict[@"result"][@"msg"]];
+//             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
     {
@@ -228,12 +227,12 @@
     }
 }
 
-#pragma mark - 支付方式弹窗
-+ (void)showPayTypeWithAmount:(NSString *)amount navigationController:(UINavigationController *)navigationController Card:(void (^)(WPBankCardModel *model))card other:(void (^)(id rowType))other
+#pragma mark - 选择支付方式弹窗
++ (void)showPayTypeWithAmount:(NSString *)amount card:(void (^)(WPBankCardModel *model))card other:(void (^)(id rowType))other
 {
-    WPPayTypeController *vc = [[WPPayTypeController alloc] init];
+    WPPayTypeSelectController *vc = [[WPPayTypeSelectController alloc] init];
     vc.modalPresentationStyle = UIModalPresentationCustom;
-    vc.isBalance = amount ? YES : NO; // 判断是否需要余额支付
+    vc.isBalance = [amount floatValue] > 0 ? YES : NO; // 判断是否需要余额支付
     vc.amount = [amount floatValue]; // 传入金额
     //银行卡支付
     vc.userCardBlock = ^(WPBankCardModel *model)
@@ -252,115 +251,18 @@
         }
     };
     
-    [navigationController presentViewController:vc animated:YES completion:nil];
-}
-
-#pragma mark - 支付输入密码弹窗
-+ (void)showPayPasswordViewWithTitle:(NSString *)title navigationController:(UINavigationController *)navigationController success:(void (^)(id success))success
-{
-    WPPayPopupController *vc = [[WPPayPopupController alloc] init];
-    vc.titleString = title;
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    vc.payPasswordBlock = ^(NSString *payPassword)
-    {
-        if (success)
-        {
-            success(payPassword);
-        }
-    };
-    vc.forgetPasswordBlock = ^
-    {
-        WPPasswordController *vc = [[WPPasswordController alloc] init];
-        vc.passwordType = @"2";
-        [navigationController pushViewController:vc animated:YES];
-    };
-    [navigationController presentViewController:vc animated:YES completion:nil];
-    
-}
-
-#pragma mark - Touch ID
-+ (void)payWithTouchIDsuccess:(void (^)(id success))touchIDSuccess failure:(void (^)(NSError *error))touchIDFailure
-{
-    //初始化上下文对象
-    LAContext *context = [[LAContext alloc] init];
-    //错误对象
-    NSError *error = nil;
-    
-    //首先使用canEvaluatePolicy 判断设备支持状态
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error])
-    {
-        //支持指纹验证
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"通过Home键验证已有手机指纹" reply:^(BOOL success, NSError *error)
-        {
-            if (success)
-            {
-                //验证成功，主线程处理UI
-                dispatch_sync(dispatch_get_main_queue(), ^
-                {
-                    if (touchIDSuccess)
-                    {
-                        touchIDSuccess([WPKeyChainTool keyChainReadforKey:kUserPayPassword]);
-                    }
-                });
-            }
-            else
-            {
-                switch (error.code)
-                {
-                    case LAErrorSystemCancel:
-                    {
-                        //系统取消验证Touch ID
-                        break;
-                    }
-                    case LAErrorUserCancel:
-                    {
-                        //用户取消验证Touch ID
-                        break;
-                    }
-                    case LAErrorUserFallback:
-                    {
-                        [[NSOperationQueue mainQueue] addOperationWithBlock:^
-                        {
-                            if (touchIDFailure)
-                            {
-                                touchIDFailure(error);
-                            }
-                        }];
-                        break;
-                    }
-                    default:
-                    {
-                        [[NSOperationQueue mainQueue] addOperationWithBlock:^
-                        {
-                            //其他情况，切换主线程处理
-                        }];
-                        break;
-                    }
-                }
-            }
-        }];
-    }
-    //不支持指纹识别
-    else {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^
-        {
-            if (touchIDFailure)
-            {
-                touchIDFailure(error);
-            }
-        }];
-    }
+    [[self rootViewController] presentViewController:vc animated:YES completion:nil];
 }
 
 
 #pragma mark - 返回指定界面
-+ (void)popToViewController:(UIViewController *)controller navigationController:(UINavigationController *)navigationController
++ (void)popToViewController:(UIViewController *)controller
 {
-    for (UIViewController *ctr in navigationController.viewControllers)
+    for (UIViewController *ctr in ((UINavigationController *)[self rootViewController]).viewControllers)
     {
         if ([ctr isKindOfClass:[controller class]])
         {
-            [navigationController popToViewController:ctr animated:YES];
+            [[self rootViewController] popToViewController:ctr animated:YES];
         }
     }
 }
@@ -404,17 +306,7 @@
         }
     }]];
     
-    id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-    if([rootViewController isKindOfClass:[UINavigationController class]])
-    {
-        rootViewController = ((UINavigationController *)rootViewController).viewControllers.firstObject;
-    }
-    if([rootViewController isKindOfClass:[UITabBarController class]])
-    {
-        rootViewController = ((UITabBarController *)rootViewController).selectedViewController;
-    }
-    [rootViewController presentViewController:alertController animated:YES completion:nil];
-    
+    [[self rootViewController] presentViewController:alertController animated:YES completion:nil];
 }
 
 /** UIAlertControllerStyleActionSheet */
@@ -448,22 +340,13 @@
     {
         
     }]];
-    
-    id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-    if([rootViewController isKindOfClass:[UINavigationController class]])
-    {
-        rootViewController = ((UINavigationController *)rootViewController).viewControllers.firstObject;
-    }
-    if([rootViewController isKindOfClass:[UITabBarController class]])
-    {
-        rootViewController = ((UITabBarController *)rootViewController).selectedViewController;
-    }
-    [rootViewController presentViewController:alertController animated:YES completion:nil];
+
+    [[self rootViewController] presentViewController:alertController animated:YES completion:nil];
     
 }
 
 #pragma marl - 分享
-+ (void)shareToAppWithModel:(WPShareModel *)model navigationController:(UINavigationController *)navigationController
++ (void)shareToAppWithModel:(WPShareModel *)model
 {
     if (model.title.length > 0)
     {
@@ -472,10 +355,11 @@
          {
              if ([appType isEqualToString:@"二维码"])
              {
-                 WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
+                 WPPayCodeController *vc = [[WPPayCodeController alloc] init];
                  vc.codeUrl = model.webpageUrl;
-                 vc.codeType = 3;
-                 [navigationController pushViewController:vc animated:YES];
+                 vc.codeType = 2;
+                 
+                 [[self rootViewController] pushViewController:vc animated:YES];
              }
              else
              {
@@ -491,7 +375,7 @@
 }
 
 #pragma mark - 支付结果界面
-+ (void)payResultControllerWithTitle:(NSString *)title successResult:(id)successResult navigationController:(UINavigationController *)navigationController
++ (void)payResultControllerWithTitle:(NSString *)title successResult:(id)successResult
 {
     NSString *type = [NSString stringWithFormat:@"%@", successResult[@"type"]];
     NSDictionary *result = successResult[@"result"];
@@ -499,19 +383,34 @@
     {
         WPSuccessOrfailedController *vc = [[WPSuccessOrfailedController alloc] init];
         vc.navigationItem.title = title;
-        [navigationController pushViewController:vc animated:YES];
+        [[self rootViewController] pushViewController:vc animated:YES];
     }
     else if ([type isEqualToString:@"3"])
     {
         WPQRCodeModel *codeModel = [WPQRCodeModel mj_objectWithKeyValues:result];
         
-        WPGatheringCodeController *vc = [[WPGatheringCodeController alloc] init];
+        WPPayCodeController *vc = [[WPPayCodeController alloc] init];
         vc.codeType = 1;
         vc.codeModel = codeModel;
         
-        [navigationController pushViewController:vc animated:YES];
+        [[self rootViewController] pushViewController:vc animated:YES];
     }
 }
+
+
++ (id)rootViewController {
+    id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+    if([rootViewController isKindOfClass:[UINavigationController class]])
+    {
+        rootViewController = ((UINavigationController *)rootViewController).viewControllers.firstObject;
+    }
+    if([rootViewController isKindOfClass:[UITabBarController class]])
+    {
+        rootViewController = ((UITabBarController *)rootViewController).selectedViewController;
+    }
+    return rootViewController;
+}
+
 
 
 @end

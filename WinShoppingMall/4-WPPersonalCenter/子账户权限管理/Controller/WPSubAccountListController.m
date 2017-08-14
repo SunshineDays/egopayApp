@@ -52,7 +52,8 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
@@ -71,8 +72,8 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     WPMessagesCell *cell = [_tableView dequeueReusableCellWithIdentifier:WPMessageCellID];
-    WPSubAccountListModel *model = self.dataArray[indexPath.row];
-    cell.titleLabel.text = model.clerkName;
+    cell.subAccountModel = self.dataArray[indexPath.row];
+    
     return cell;
 }
 
@@ -102,8 +103,15 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
 
 - (void)addSubAccount
 {
-    WPSubAccountAddController *vc = [[WPSubAccountAddController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([WPJudgeTool isShopApprove])
+    {
+        WPSubAccountAddController *vc = [[WPSubAccountAddController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else
+    {
+        [self getMerchantInforData];
+    }
 }
 
 #pragma mark - Data
@@ -123,6 +131,40 @@ static NSString * const WPMessageCellID = @"WPMessageCellID";
             [weakSelf.tableView reloadData];
         }
         [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"clerkList"] noResultLabel:weakSelf.noResultLabel title:@"暂无子账户"];
+    } failure:^(NSError *error)
+    {
+        
+    }];
+}
+
+- (void)getMerchantInforData
+{
+    __weakSelf
+    [WPHelpTool getWithURL:WPQueryShopStatusURL parameters:nil success:^(id success)
+    {
+        NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
+        NSDictionary *result = success[@"result"];
+        if ([type isEqualToString:@"1"])
+        {
+            // 1 成功 2 失败 3 认证中
+            NSString *status = [NSString stringWithFormat:@"%@",result[@"status"]];
+            
+            if ([status intValue] == 1) {
+                WPSubAccountAddController *vc = [[WPSubAccountAddController alloc] init];
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+                [WPUserInfor sharedWPUserInfor].shopPassType = @"YES";
+                [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+            }
+            else
+            {
+                [WPProgressHUD showInfoWithStatus:@"请先完成商家认证"];
+            }
+        }
+        else
+        {
+            [WPProgressHUD showInfoWithStatus:@"请先完成商家认证"];
+        }
+        
     } failure:^(NSError *error)
     {
         

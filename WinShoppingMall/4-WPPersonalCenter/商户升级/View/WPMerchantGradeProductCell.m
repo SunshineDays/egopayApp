@@ -14,15 +14,19 @@
     [super awakeFromNib];
     // Initialization code
 //    self.backgroundColor = [UIColor clearColor];
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.lvImageView.contentMode = UIViewContentModeScaleAspectFit;
+
+
 }
 
 
-- (void)setMerchantLvModel:(WPMerchantGradeProuctModel *)merchantLvModel {
-    self.lvNameLabel.text = merchantLvModel.lvname;
+- (void)setMerchantLvModel:(WPMemberProuctModel *)merchantLvModel {
+    self.lvNameLabel.text = [NSString stringWithFormat:@"%@会员", merchantLvModel.lvname];
     self.priceNameLabel.text = [NSString stringWithFormat:@"%.2f", merchantLvModel.price];
 }
 
-- (void)setDelegateLvModel:(WPUpGradeProductModel *)delegateLvModel {
+- (void)setDelegateLvModel:(WPAgencyProductModel *)delegateLvModel {
     self.lvNameLabel.text = delegateLvModel.gradeName;
     self.priceNameLabel.text = [NSString stringWithFormat:@"%.2f", delegateLvModel.price];
 }

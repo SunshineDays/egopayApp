@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UILabel *vipLabel;
 
 
-- (void)userInforWithName:(NSString *)name vip:(NSString *)vip rate:(NSString *)rate arrowHidden:(BOOL)arrowHidden;
+- (void)userInforWithName:(NSString *)name vip:(NSString *)vip rate:(NSString *)rate;
+
 
 @end

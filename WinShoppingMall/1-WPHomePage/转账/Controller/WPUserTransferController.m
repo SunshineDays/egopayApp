@@ -12,8 +12,9 @@
 #import "WPUserWithDrawView.h"
 #import "WPCardTableViewCell.h"
 #import "WPSuccessOrfailedController.h"
-#import "WPGatheringCodeController.h"
+#import "WPPayCodeController.h"
 #import "WPBankCardModel.h"
+#import "WPPublicWebViewController.h"
 
 @interface WPUserTransferController () <UITextFieldDelegate>
 
@@ -42,6 +43,8 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor cellColor];
     self.navigationItem.title = @"转账";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"userHelp"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAction)];
+
     [self confirmButton];
 }
 
@@ -51,7 +54,7 @@
 {
     if (!_cardCell) {
         _cardCell = [[WPCardTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, WPNavigationHeight + 20, kScreenWidth, 80);
+        CGRect rect = CGRectMake(0, WPTopY + 20, kScreenWidth, 80);
         [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择支付方式" rectMake:rect];
         [_cardCell.backgroundButton addTarget:self action:@selector(wayButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_cardCell];
@@ -64,10 +67,9 @@
     if (!_phoneCell) {
         _phoneCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.cardCell.frame) + 20, kScreenWidth, WPRowHeight);
-        [_phoneCell tableViewCellTitle:@"账号" placeholder:@"请输入对方手机号码/账号" rectMake:rect];
+        [_phoneCell rowCellTitle:@"账号" placeholder:@"请输入对方手机号码/账号" rectMake:rect];
         [_phoneCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
         _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
-        [_phoneCell.textField becomeFirstResponder];
         [self.view addSubview:_phoneCell];
     }
     return _phoneCell;
@@ -92,7 +94,7 @@
     if (!_cvvCell) {
         _cvvCell = [[WPCardTableViewCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.transferView.frame) + 20, kScreenWidth, WPRowHeight);
-        [_cvvCell tableViewCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
+        [_cvvCell rowCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
         _cvvCell.hidden = YES;
         _cvvCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         [_cvvCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
@@ -123,6 +125,14 @@
 
 #pragma mark - Action
 
+- (void)rightItemAction
+{
+    WPPublicWebViewController *vc = [[WPPublicWebViewController alloc] init];
+    vc.navigationItem.title = @"用户帮助";
+    vc.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPUserHelpWebURL];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)changeButtonSurface
 {
     if (self.cvvCell.hidden)
@@ -138,15 +148,17 @@
 - (void)wayButtonAction
 {
     __weakSelf
-    [WPHelpTool showPayTypeWithAmount:self.transferView.moneyTextField.text navigationController:self.navigationController Card:^(WPBankCardModel *model)
+    [WPHelpTool showPayTypeWithAmount:self.transferView.moneyTextField.text card:^(WPBankCardModel *model)
     {
         weakSelf.cvvCell.hidden = [[NSString stringWithFormat:@"%d", model.cardType] isEqualToString:@"1"] ? NO : YES;
         weakSelf.payType = [WPPublicTool payCardWithView:weakSelf.cardCell model:model];
+        weakSelf.model = model;
         
     } other:^(id rowType)
     {
         weakSelf.cvvCell.hidden = YES;
         weakSelf.payType = [WPPublicTool payThirdWithView:weakSelf.cardCell rowType:rowType];
+        weakSelf.model = nil;
     }];
 }
 
@@ -168,22 +180,11 @@
     {
         if ([self.payType isEqualToString:@"1"] || [self.payType isEqualToString:@"4"])
         {
-            if ([WPJudgeTool isPayTouchID])
-            {
-                __weakSelf
-                [WPHelpTool payWithTouchIDsuccess:^(id success)
-                {
-                    [weakSelf pushTransferAccountsDataWithPassword:success];
-                    
-                } failure:^(NSError *error)
-                {
-                    [weakSelf initPayPopupView];
-                }];
-            }
-            else
-            {
-                [self initPayPopupView];
-            }
+            __weakSelf
+            [WPPayTool payWithTitle:[NSString stringWithFormat:@"转账金额:%@元", self.transferView.moneyTextField.text] password:^(id password) {
+                [weakSelf pushTransferAccountsDataWithPassword:password];
+                
+            }];
         }
         else
         {
@@ -192,14 +193,6 @@
     }
 }
 
-- (void)initPayPopupView
-{
-    __weakSelf
-    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"转账金额:%@元", self.transferView.moneyTextField.text] navigationController:self.navigationController success:^(id success)
-    {
-        [weakSelf pushTransferAccountsDataWithPassword:success];
-    }];
-}
 
 #pragma mark - Data
 
@@ -213,11 +206,9 @@
                                  @"cnv" : [WPPublicTool base64EncodeString:self.cvvCell.textField.text],
                                  @"payPassword" : [WPPublicTool base64EncodeString:passwordString]
                                  };
-    __weakSelf
     [WPHelpTool postWithURL:WPTransferAccountsURL parameters:parameters success:^(id success)
     {
-        
-        [WPHelpTool payResultControllerWithTitle:@"转账结果" successResult:success navigationController:weakSelf.navigationController];
+        [WPHelpTool payResultControllerWithTitle:@"转账结果" successResult:success];
 
     } failure:^(NSError *error)
     {

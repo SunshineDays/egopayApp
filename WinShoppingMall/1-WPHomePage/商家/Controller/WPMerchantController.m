@@ -9,7 +9,7 @@
 #import "WPMerchantController.h"
 #import "Header.h"
 #import <SDCycleScrollView.h>
-#import "WPSelectListController.h"
+#import "WPSelectListPopupController.h"
 #import "WPMerchantCell.h"
 #import "WPMerchantDetailController.h"
 #import "WPMerchantSearchController.h"
@@ -106,7 +106,7 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 - (UIView *)tableHeaderView
 {
     if (!_tableHeaderView) {
-        _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 40, kScreenWidth, kScreenWidth / 2 + 40)];
+        _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, WPTopY + 40, kScreenWidth, kScreenWidth / 2 + 40)];
         self.tableView.tableHeaderView = _tableHeaderView;
     }
     return _tableHeaderView;
@@ -115,7 +115,7 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 - (UISearchBar *)searchBar
 {
     if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 5, kScreenWidth, 30)];
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, WPTopY + 5, kScreenWidth, 30)];
         _searchBar.delegate = self;
         _searchBar.placeholder = @"搜索商家";
         _searchBar.layer.borderColor = [UIColor lineColor].CGColor;
@@ -185,8 +185,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight + 40, kScreenWidth, kScreenHeight - WPNavigationHeight - 40) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor cellColor];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY + 40, kScreenWidth, kScreenHeight - WPNavigationHeight - 40) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
@@ -253,7 +253,7 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 {
     [self.searchBar resignFirstResponder];
 
-    WPSelectListController *vc = [[WPSelectListController alloc] init];
+    WPSelectListPopupController *vc = [[WPSelectListPopupController alloc] init];
     vc.modalPresentationStyle = UIModalPresentationCustom;
     vc.navigationItem.title = @"选择城市";
     vc.type = 1;
@@ -273,7 +273,7 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 {
     [self.searchBar resignFirstResponder];
 
-    WPSelectListController *vc = [[WPSelectListController alloc] init];
+    WPSelectListPopupController *vc = [[WPSelectListPopupController alloc] init];
     vc.modalPresentationStyle = UIModalPresentationCustom;
     vc.navigationItem.title = @"选择类别";
     vc.type = 2;

@@ -10,9 +10,9 @@
 
 @interface WPAgencyModel : NSObject
 
-@property (nonatomic, assign) float benefitBalance;
+@property (nonatomic, assign) double benefitBalance;
 
-@property (nonatomic, assign) float todayBenef;
+@property (nonatomic, assign) double todayBenef;
 
 @property (nonatomic, assign) int isAgreeAg;
 

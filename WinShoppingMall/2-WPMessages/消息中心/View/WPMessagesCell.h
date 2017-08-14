@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #import "WPMessagesModel.h"
+#import "WPInvitingPeopleModel.h"
+#import "WPSubAccountListModel.h"
 
 @interface WPMessagesCell : UITableViewCell
 
@@ -18,7 +20,14 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *dataLabel;
 
+/**  系统消息 */
 @property (nonatomic, strong) WPMessagesModel *model;
+
+/**  邀请的人 */
+@property (nonatomic, strong) WPInvitingPeopleModel *invitingModel;
+
+/**  子账户 */
+@property (nonatomic, strong) WPSubAccountListModel *subAccountModel;
 
 
 @end

@@ -30,7 +30,6 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     [self.searchBar becomeFirstResponder];
     [self searchBar];
     [self cancelButton];
@@ -82,7 +81,7 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
@@ -114,6 +113,18 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 100;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 15;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc] init];
+    headerView.backgroundColor = [UIColor clearColor];
+    return headerView;
 }
 
 #pragma mark - UITableViewDelegate

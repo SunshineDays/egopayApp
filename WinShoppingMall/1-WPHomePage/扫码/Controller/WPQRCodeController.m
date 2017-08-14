@@ -60,7 +60,7 @@
     }
     else
     {
-        VPScanQrCodeView *scanView = [[VPScanQrCodeView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) andMaskViewWidth:222 andBorderColor:[UIColor redColor]];
+        VPScanQrCodeView *scanView = [[VPScanQrCodeView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight) andMaskViewWidth:222 andBorderColor:[UIColor redColor]];
         scanView.delegate = self;
         [self.view addSubview:scanView];
     }
@@ -71,7 +71,7 @@
 
 - (void)vpScanQrCodeCompletedWithResult:(NSString *)result
 {
-    [WPProgressHUD showProgressIsLoading];
+//    [WPProgressHUD showProgressIsLoading];
     WPQRCodePayController *vc = [[WPQRCodePayController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
     

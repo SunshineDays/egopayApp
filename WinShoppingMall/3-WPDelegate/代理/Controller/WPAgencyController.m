@@ -15,7 +15,7 @@
 #import "WPProfitDetailController.h"
 #import "WPProductController.h"
 #import "WPPublicWebViewController.h"
-#import "WPDelegateAgreementController.h"
+#import "WPAgencyprotocolController.h"
 #import "WPInvitingPeopleController.h"
 #import "WPAgencyCell.h"
 #import "WPAgencyModel.h"
@@ -79,7 +79,7 @@ static NSString * const WPAgencyCellID = @"WPAgencyCellID";
         CGRect rect = CGRectMake(0, 0, kScreenWidth, kScreenWidth / 2);
         _cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:rect
                                                               delegate:self
-                                                      placeholderImage:[UIImage imageNamed:@"icon_Selected"]];
+                                                      placeholderImage:[UIImage imageNamed:@"bannerImage"]];
         _cycleScrollView.localizationImageNamesGroup = self.pictureArray;
         _cycleScrollView.bannerImageViewContentMode = UIViewContentModeScaleToFill;
         _cycleScrollView.showPageControl = YES;
@@ -96,6 +96,7 @@ static NSString * const WPAgencyCellID = @"WPAgencyCellID";
         _flowLayout.minimumLineSpacing = 20;
         _flowLayout.sectionInset = UIEdgeInsetsMake(20, 20, 20, 20);
         _flowLayout.headerReferenceSize = CGSizeMake(kScreenWidth, kScreenWidth / 2);
+        _flowLayout.scrollDirection  = UICollectionViewScrollDirectionVertical;
     }
     return _flowLayout;
 }
@@ -103,10 +104,11 @@ static NSString * const WPAgencyCellID = @"WPAgencyCellID";
 - (UICollectionView *)collectionView
 {
     if (!_collectionView) {
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) collectionViewLayout:self.flowLayout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, WPTopY, kScreenWidth, kScreenHeight - WPNavigationHeight - 49) collectionViewLayout:self.flowLayout];
         _collectionView.backgroundColor = [UIColor cellColor];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
+        _collectionView.alwaysBounceVertical = YES;
         [_collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([WPAgencyCell class]) bundle:nil] forCellWithReuseIdentifier:WPAgencyCellID];
         [_collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header"];
         [self.view addSubview:_collectionView];
@@ -116,7 +118,7 @@ static NSString * const WPAgencyCellID = @"WPAgencyCellID";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 6;
+    return self.dataArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -195,8 +197,7 @@ static NSString * const WPAgencyCellID = @"WPAgencyCellID";
                 }
                 else
                 {
-                    WPDelegateAgreementController *vc = [[WPDelegateAgreementController alloc] init];
-                    vc.agreementString = self.agencyModel.agAgreement;
+                    WPAgencyprotocolController *vc = [[WPAgencyprotocolController alloc] init];
                     __weakSelf
                     vc.agreeBlock = ^
                     {

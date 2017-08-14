@@ -20,6 +20,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *orderNumberLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *lineLabel;
 
 @property (nonatomic, strong) WPProfitDetailModel *profitModel;
 

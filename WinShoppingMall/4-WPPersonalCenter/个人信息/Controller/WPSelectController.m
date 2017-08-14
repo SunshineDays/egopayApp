@@ -27,7 +27,7 @@ static NSString * const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor tableViewColor];
     [self judgeTitleType];
     [self.tableView reloadData];
 }
@@ -59,8 +59,8 @@ static NSString * const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPNavigationHeight, kScreenWidth, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY + 15, kScreenWidth, kScreenHeight - WPNavigationHeight - 15) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];

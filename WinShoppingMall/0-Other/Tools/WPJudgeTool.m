@@ -60,6 +60,16 @@
     return [phoneTest evaluateWithObject:mobile];
 }
 
+/** 验证固定电话 */
++ (BOOL)validateTel:(NSString *)tel
+{
+    //010,020,021,022,023,024,025,027,028,029,400
+    NSString *phoneRegex = @"^((0(10|2[0-5789]|\\d{3}))|(400))\\d{7,8}$";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
+    return [phoneTest evaluateWithObject:tel];
+}
+
+
 /** 验证邮箱 */
 + (BOOL)validateEmail:(NSString *)email
 {

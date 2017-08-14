@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,48 +19,48 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="F94-B1-nk2">
-                        <rect key="frame" x="13" y="13" width="40" height="40"/>
+                        <rect key="frame" x="9" y="13" width="40" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="A6S-0I-VrQ"/>
                             <constraint firstAttribute="width" constant="40" id="xdS-XP-JPh"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="信用卡" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Jq-UO-up7">
-                        <rect key="frame" x="63" y="38" width="37" height="15"/>
+                        <rect key="frame" x="59" y="38" width="37" height="15"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="1234567876765544" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0e-aB-4sM">
-                        <rect key="frame" x="44" y="68" width="263" height="33.5"/>
+                        <rect key="frame" x="48" y="68" width="263" height="33.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="28"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="中国邮政储蓄银行" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BwG-uJ-ATg">
-                        <rect key="frame" x="63" y="13" width="123" height="18"/>
+                        <rect key="frame" x="59" y="13" width="123" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="      " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pE1-en-m4w">
-                        <rect key="frame" x="273" y="23" width="24" height="18"/>
+                        <rect key="frame" x="287" y="23" width="24" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="U0e-aB-4sM" secondAttribute="trailing" constant="5" id="1VO-DL-bKr"/>
                     <constraint firstAttribute="bottomMargin" secondItem="U0e-aB-4sM" secondAttribute="bottom" constant="10" id="7Tl-0N-hDY"/>
+                    <constraint firstAttribute="trailing" secondItem="U0e-aB-4sM" secondAttribute="trailing" constant="9" id="7ZW-Uk-mxS"/>
                     <constraint firstItem="pE1-en-m4w" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="15" id="7hL-lb-pAy"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="pE1-en-m4w" secondAttribute="trailing" constant="15" id="HyT-ya-caO"/>
+                    <constraint firstItem="F94-B1-nk2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="9" id="Eg9-dB-3Xa"/>
                     <constraint firstItem="BwG-uJ-ATg" firstAttribute="top" secondItem="F94-B1-nk2" secondAttribute="top" id="OHU-7X-cdO"/>
                     <constraint firstItem="0Jq-UO-up7" firstAttribute="leading" secondItem="F94-B1-nk2" secondAttribute="trailing" constant="10" id="Q8X-LZ-i5r"/>
                     <constraint firstItem="BwG-uJ-ATg" firstAttribute="leading" secondItem="F94-B1-nk2" secondAttribute="trailing" constant="10" id="S1Y-fp-sf2"/>
                     <constraint firstItem="0Jq-UO-up7" firstAttribute="bottom" secondItem="F94-B1-nk2" secondAttribute="bottom" id="Uwk-gq-Dw5"/>
                     <constraint firstItem="F94-B1-nk2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="tQ6-6Q-kIM"/>
-                    <constraint firstItem="F94-B1-nk2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="uX3-8B-KLe"/>
+                    <constraint firstAttribute="trailing" secondItem="pE1-en-m4w" secondAttribute="trailing" constant="9" id="v37-OR-JZb"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.1058823529" green="0.69019607839999997" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

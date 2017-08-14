@@ -8,19 +8,20 @@
 
 #import "WPPasswordController.h"
 #import "Header.h"
-#import "WPUserInforController.h"
+#import "WPUserInforsController.h"
+#import "WPPersonalSettingController.h"
 
 @interface WPPasswordController () <UITextFieldDelegate>
 
-@property (nonatomic, strong) WPRowTableViewCell *phoneCell;
+@property (nonatomic, strong) WPCustomRowCell *phoneCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *verificationCodeCell;
+@property (nonatomic, strong) WPCustomRowCell *verificationCodeCell;
 
 @property (nonatomic, strong) UIButton *verificationCodeButton;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordCell;
 
-@property (nonatomic, strong) WPRowTableViewCell *passwordConfirmCell;
+@property (nonatomic, strong) WPCustomRowCell *passwordConfirmCell;
 
 @property (nonatomic, strong) WPButton *confirmButton;
 
@@ -50,11 +51,11 @@
     self.currentTime = getVerificationCodeTime;
     if (self.isFirstPassword)
     {
-        self.passwordHeight = WPNavigationHeight + 10;
+        self.passwordHeight = WPTopY + 10;
     }
     else
     {
-        self.passwordHeight = WPNavigationHeight + 10 + WPRowHeight * 2;
+        self.passwordHeight = WPTopY + 10 + WPRowHeight * 2;
         [self phoneCell];
         [self verificationCodeCell];
         [self verificationCodeButton];
@@ -70,36 +71,35 @@
 
 #pragma mark - Init
 
-- (WPRowTableViewCell *)phoneCell
+- (WPCustomRowCell *)phoneCell
 {
     if (!_phoneCell) {
-        _phoneCell = [[WPRowTableViewCell alloc] init];
+        _phoneCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, WPTopMargin, kScreenWidth, WPRowHeight);
         NSString *placeholder = [WPUserInfor sharedWPUserInfor].clientId.length == 0 ? @"请输入手机号码" : [WPUserInfor sharedWPUserInfor].userPhone;
-        [_phoneCell tableViewCellTitle:@"手机号码" placeholder:placeholder rectMake:rect];
+        [_phoneCell rowCellTitle:@"手机号码" placeholder:placeholder rectMake:rect];
         _phoneCell.textField.enabled = [WPUserInfor sharedWPUserInfor].clientId.length == 0 ? YES : NO;
         _phoneCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         _phoneCell.hidden = self.isFirstPassword ? YES : NO;
         if ([WPUserInfor sharedWPUserInfor].clientId.length == 0) {
             [_phoneCell.textField becomeFirstResponder];
         }
+        
         [self.view addSubview:_phoneCell];
     }
     return _phoneCell;
 }
 
-- (WPRowTableViewCell *)verificationCodeCell
+- (WPCustomRowCell *)verificationCodeCell
 {
     if (!_verificationCodeCell) {
-        _verificationCodeCell = [[WPRowTableViewCell alloc] init];
+        _verificationCodeCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.phoneCell.frame), kScreenWidth, WPRowHeight);
-        [_verificationCodeCell tableViewCellTitle:@"验证码" placeholder:@"六位数字验证码" rectMake:rect];
+        [_verificationCodeCell rowCellTitle:@"验证码" placeholder:@"六位数字验证码" rectMake:rect];
         _verificationCodeCell.textField.keyboardType = UIKeyboardTypeNumberPad;
         _verificationCodeCell.hidden = self.isFirstPassword ? YES : NO;
         [_verificationCodeCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
-        if (self.isFirstPassword) {
-            [_verificationCodeCell.textField becomeFirstResponder];
-        }
+
         [self.view addSubview:_verificationCodeCell];
     }
     return _verificationCodeCell;
@@ -119,12 +119,12 @@
     return _verificationCodeButton;
 }
 
-- (WPRowTableViewCell *)passwordCell
+- (WPCustomRowCell *)passwordCell
 {
     if (!_passwordCell) {
-        _passwordCell = [[WPRowTableViewCell alloc] init];
+        _passwordCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, self.passwordHeight, kScreenWidth, WPRowHeight);
-        [_passwordCell tableViewCellTitle:@"密        码" placeholder:[self.passwordType isEqualToString:@"1"] ? @"请输入密码" : @"请输入六位纯数字密码" rectMake:rect];
+        [_passwordCell rowCellTitle:@"密码" placeholder:[self.passwordType isEqualToString:@"1"] ? @"请输入密码" : @"请输入六位纯数字密码" rectMake:rect];
         _passwordCell.textField.keyboardType = [self.passwordType isEqualToString:@"1"] ? UIKeyboardTypeDefault : UIKeyboardTypeNumberPad;
         _passwordCell.textField.secureTextEntry = YES;
         [_passwordCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
@@ -134,12 +134,12 @@
     return _passwordCell;
 }
 
-- (WPRowTableViewCell *)passwordConfirmCell
+- (WPCustomRowCell *)passwordConfirmCell
 {
     if (!_passwordConfirmCell) {
-        _passwordConfirmCell = [[WPRowTableViewCell alloc] init];
+        _passwordConfirmCell = [[WPCustomRowCell alloc] init];
         CGRect rect = CGRectMake(0, CGRectGetMaxY(self.passwordCell.frame), kScreenWidth, WPRowHeight);
-        [_passwordConfirmCell tableViewCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
+        [_passwordConfirmCell rowCellTitle:@"确认密码" placeholder:@"请确认密码" rectMake:rect];
         _passwordConfirmCell.textField.keyboardType = [self.passwordType isEqualToString:@"1"] ? UIKeyboardTypeDefault : UIKeyboardTypeNumberPad;
         _passwordConfirmCell.textField.secureTextEntry = YES;
         [_passwordConfirmCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
@@ -153,7 +153,7 @@
 {
     if (!_confirmButton) {
         _confirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.passwordConfirmCell.frame) + 30, kScreenWidth - 2 * WPLeftMargin , WPButtonHeight)];
-        [_confirmButton setTitle:@"确认修改" forState:UIControlStateNormal];
+        [_confirmButton setTitle:self.isFirstPassword ? @"提交" : @"确认修改" forState:UIControlStateNormal];
         [_confirmButton addTarget:self action:@selector(confirmButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_confirmButton];
     }
@@ -192,12 +192,13 @@
 
 - (void)changeButtonSurface
 {
-    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:(self.verificationCodeCell.textField.text.length == 6 && self.passwordCell.textField.text.length >= 6 && self.passwordConfirmCell.textField.text.length >= 6) ? YES : NO];
+    BOOL isEnabled = self.isFirstPassword ? (self.passwordCell.textField.text.length >= 6 && self.passwordConfirmCell.textField.text.length >= 6) : (self.verificationCodeCell.textField.text.length >= 6 && self.passwordCell.textField.text.length >= 6 && self.passwordConfirmCell.textField.text.length >= 6);
+    
+    [WPPublicTool buttonWithButton:self.confirmButton userInteractionEnabled:isEnabled];
 }
 
 - (void)timerClick
 {
-    self.currentTime--;
     if (self.currentTime == 0)
     {
         [self.verificationCodeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
@@ -208,9 +209,11 @@
     }
     else
     {
+        self.currentTime--;
         [self.verificationCodeButton setTitle:[NSString stringWithFormat:@"%ld秒后重发",(long)self.currentTime] forState:UIControlStateNormal];
         self.verificationCodeButton.userInteractionEnabled = NO;
     }
+
 }
 
 - (void)verificationCodeButtonClick:(UIButton *)sender
@@ -302,9 +305,9 @@
         {
             [WPProgressHUD showSuccessWithStatus:[NSString stringWithFormat:[self.passwordType isEqualToString:@"1"] ? @"修改登录密码成功" : @"修改支付密码成功"]];
             
-            [WPHelpTool popToViewController:[[WPUserInforController alloc] init] navigationController:weakSelf.navigationController];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
             
-            if ([weakSelf.passwordType isEqualToString:@"2"])
+            if ([weakSelf.passwordType isEqualToString:@"2"] && [WPJudgeTool isPayTouchID])
             {
                 [WPKeyChainTool keyChainSave:weakSelf.passwordCell.textField.text forKey:kUserPayPassword];
             }

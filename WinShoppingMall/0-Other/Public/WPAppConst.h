@@ -26,6 +26,8 @@ UIKIT_EXTERN CGFloat const WPLeftMargin;
 /** 输入框的左边间距 */
 UIKIT_EXTERN CGFloat const WPLeftMarginField;
 
+UIKIT_EXTERN CGFloat const WPTopY;
+
 /** 控件的上边间距 */
 UIKIT_EXTERN CGFloat const WPTopMargin;
 
@@ -72,8 +74,6 @@ UIKIT_EXTERN NSString * const WPUserShopPass;
 
 UIKIT_EXTERN NSString * const WPUserPhone;
 
-UIKIT_EXTERN NSString * const WPNeedTouchID;
-
 UIKIT_EXTERN NSString * const WPRegisterTouchID;
 
 UIKIT_EXTERN NSString * const WPPayTouchID;
@@ -119,6 +119,8 @@ UIKIT_EXTERN NSString * const WPUserHelpWebURL;
 
 UIKIT_EXTERN NSString * const WPDelegateAgentWebURL;
 
+UIKIT_EXTERN NSString * const WPDelegateProtocolWebURL;
+
 UIKIT_EXTERN NSString * const WPTouchIDWebURL;
 
 /**********/
@@ -138,6 +140,8 @@ UIKIT_EXTERN NSString * const WPWithdrawURL;
 UIKIT_EXTERN NSString * const WPProfitWithdrawURL;
 
 UIKIT_EXTERN NSString * const WPRechargeURL;
+
+UIKIT_EXTERN NSString * const WPRedPacketURL;
 
 UIKIT_EXTERN NSString * const WPUserApproveIDCardURL;
 

@@ -13,7 +13,8 @@
 #import "WPBankCardModel.h"
 #import "WPUserWithDrawView.h"
 #import "WPSuccessOrfailedController.h"
-#import "WPEditUserInfoModel.h"
+#import "WPUserInforModel.h"
+#import "WPPublicWebViewController.h"
 
 @interface WPUserWithDrawController ()<UITextFieldDelegate>
 
@@ -21,11 +22,13 @@
 
 @property (nonatomic, strong) WPUserWithDrawView *withDrawView;
 
+@property (nonatomic, strong) UILabel *poundageLabel;
+
 @property (nonatomic, strong) WPButton *confirmButton;;
 
 @property (nonatomic, strong) WPBankCardModel *model;
 
-@property (nonatomic, strong) WPEditUserInfoModel *userInfoModel;
+@property (nonatomic, strong) WPUserInforModel *userInfoModel;
 
 @end
 
@@ -36,13 +39,10 @@
     [super viewDidLoad];
     self.navigationItem.title = @"提现";
     self.view.backgroundColor = [UIColor cellColor];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"userHelp"] style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAction)];
+    
     [self getUserInforData];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self.withDrawView.moneyTextField becomeFirstResponder];
 }
 
 #pragma mark - Init
@@ -51,7 +51,7 @@
 {
     if (!_cardCell) {
         _cardCell = [[WPCardTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, WPNavigationHeight + 20, kScreenWidth, 80);
+        CGRect rect = CGRectMake(0, WPTopY + 20, kScreenWidth, 80);
         [_cardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择银行卡" rectMake:rect];
         [_cardCell.backgroundButton addTarget:self action:@selector(selectCardAction) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_cardCell];
@@ -73,10 +73,22 @@
     return _withDrawView;
 }
 
+- (UILabel *)poundageLabel
+{
+    if (!_poundageLabel) {
+        _poundageLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.withDrawView.frame), kScreenWidth - 2 * WPLeftMargin, WPRowHeight)];
+        _poundageLabel.text = @"提现每笔手续费为：2元";
+        _poundageLabel.textColor = [UIColor themeColor];
+        _poundageLabel.font = [UIFont systemFontOfSize:14];
+        [self.view addSubview:_poundageLabel];
+    }
+    return _poundageLabel;
+}
+
 - (WPButton *)confirmButton
 {
     if (!_confirmButton) {
-        _confirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.withDrawView.frame) + 30, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
+        _confirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.poundageLabel.frame) + 30, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
         [_confirmButton setTitle:@"确认提现" forState:UIControlStateNormal];
         [_confirmButton addTarget:self action:@selector(confirmButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:_confirmButton];
@@ -92,6 +104,14 @@
 }
 
 #pragma mark - Action
+
+- (void)rightItemAction
+{
+    WPPublicWebViewController *vc = [[WPPublicWebViewController alloc] init];
+    vc.navigationItem.title = @"用户帮助";
+    vc.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPUserHelpWebURL];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 - (void)selectCardAction
 {
@@ -133,34 +153,14 @@
     }
     else
     {
-        if ([WPJudgeTool isPayTouchID])
-        {
-            __weakSelf
-            [WPHelpTool payWithTouchIDsuccess:^(id success)
-            {
-                [weakSelf pushWithdrawDataWithPassword:success];
-                
-            } failure:^(NSError *error)
-            {
-                [weakSelf initPayPopupView];
-            }];
-        }
-        else
-        {
-            [self initPayPopupView];
-        }
+        __weakSelf
+        [WPPayTool payWithTitle:[NSString stringWithFormat:@"提现金额:%@元", self.withDrawView.moneyTextField.text] password:^(id password) {
+            [weakSelf pushWithdrawDataWithPassword:password];
+            
+        }];
     }
 }
 
-- (void)initPayPopupView
-{
-    __weakSelf
-    [WPHelpTool showPayPasswordViewWithTitle:[NSString stringWithFormat:@"提现金额:%@元", self.withDrawView.moneyTextField.text] navigationController:self.navigationController success:^(id success)
-    {
-        [weakSelf pushWithdrawDataWithPassword:success];
-        
-    }];
-}
 
 #pragma mark - Data
 
@@ -173,7 +173,7 @@
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"])
         {
-            weakSelf.userInfoModel = [WPEditUserInfoModel mj_objectWithKeyValues:result];
+            weakSelf.userInfoModel = [WPUserInforModel mj_objectWithKeyValues:result];
             [weakSelf confirmButton];
         }
     } failure:^(NSError *error) {

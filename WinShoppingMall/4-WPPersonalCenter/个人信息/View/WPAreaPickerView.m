@@ -43,6 +43,7 @@
         self.backgroundColor = [UIColor colorWithRGBString:@"#000000" alpha:0.3f];
         self.userInteractionEnabled = YES;
         [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelPickerView)]];
+        
         [self initAreaData];
         [self addSubview:self.pickerView];
         [self addSubview:self.titleView];
@@ -79,7 +80,7 @@
 {
     if (!_titleView) {
         _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, CGRectGetWidth(self.pickerView.frame), 40)];
-        _titleView.backgroundColor = [UIColor whiteColor];
+        _titleView.backgroundColor = [UIColor tableViewColor];
         _titleView.userInteractionEnabled = YES;
     }
     return _titleView;
@@ -91,7 +92,7 @@
         _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
+        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_cancelButton addTarget:self action:@selector(cancelPickerView) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
@@ -103,7 +104,7 @@
         _confirmButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.pickerView.frame) - 100, 0, 100, 40)];
         [_confirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_confirmButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:WPFontDefaultSize];
+        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_confirmButton addTarget:self action:@selector(confirmButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmButton;
@@ -114,7 +115,7 @@
     if (!_pickerView) {
         _pickerView = [[UIPickerView alloc] init];
         _pickerView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight / 3 - 40);
-        _pickerView.backgroundColor = [UIColor whiteColor];
+        _pickerView.backgroundColor = [UIColor tableViewColor];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
         
@@ -223,7 +224,7 @@
         pickerLabel.adjustsFontSizeToFitWidth = YES;
         [pickerLabel setTextAlignment:NSTextAlignmentCenter];
         [pickerLabel setBackgroundColor:[UIColor clearColor]];
-        [pickerLabel setFont:[UIFont systemFontOfSize:14]];
+        [pickerLabel setFont:[UIFont systemFontOfSize:15]];
     }
     pickerLabel.text = [self pickerView:pickerView titleForRow:row forComponent:component];
     return pickerLabel;
