@@ -36,7 +36,7 @@
     NSString *typeStr = model.inPaystate == 1 ? @"+" : @"-";
     self.moneyLabel.text = [NSString stringWithFormat:@"%@ %.2f",typeStr, model.amount];
     
-    self.poundageLabel.text = model.counterFee > 0 ? [NSString stringWithFormat:@"-%.2f%@", model.counterRate * 100, @"%"] : @"   ";
+//    self.poundageLabel.text = model.counterFee > 0 ? [NSString stringWithFormat:@"-%.2f%@", model.counterRate * 100, @"%"] : @"   ";
 }
 
 

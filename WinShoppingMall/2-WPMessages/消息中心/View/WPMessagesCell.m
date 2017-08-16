@@ -21,9 +21,9 @@
 
 - (void)setModel:(WPMessagesModel *)model
 {
-    self.titleLabel.text = model.title;
+    self.titleLabel.text = model.title ? model.title : @"";
     
-    NSString *dateString = [WPPublicTool stringToDateString:model.create_time];
+    NSString *dateString = [WPPublicTool stringToDateString:model.create_time ? model.create_time : @""];
     self.dataLabel.text = [WPPublicTool dateStringWith:dateString];
 }
 
