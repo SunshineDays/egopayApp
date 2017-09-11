@@ -64,25 +64,22 @@
     return _moneyCell;
 }
 
-
-- (WPCardTableViewCell *)cvvCell
+- (WPCardTableViewCell *)depositCardCell
 {
-    if (!_cvvCell) {
-        _cvvCell = [[WPCardTableViewCell alloc] init];
-        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.moneyCell.frame) + 20, kScreenWidth, WPRowHeight);
-        [_cvvCell rowCellTitle:@"CVV码" placeholder:@"信用卡背面后三位数字" rectMake:rect];
-        _cvvCell.hidden = YES;
-        _cvvCell.textField.keyboardType = UIKeyboardTypeNumberPad;
-        _cvvCell.textField.delegate = self;
-        [self addSubview:_cvvCell];
+    if (!_depositCardCell) {
+        _depositCardCell = [[WPCardTableViewCell alloc] init];
+        CGRect rect = CGRectMake(0, CGRectGetMaxY(self.moneyCell.frame) + 20, kScreenWidth, 80);
+        [_depositCardCell tableViewCellImage:[UIImage imageNamed:@"icon_yinhang_n"] content:@"请选择银行卡" rectMake:rect];
+        _depositCardCell.hidden = YES;
+        [self addSubview:_depositCardCell];
     }
-    return _cvvCell;
+    return _depositCardCell;
 }
 
 - (WPButton *)confirmButton
 {
     if (!_confirmButton) {
-        _confirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.cvvCell.frame) + 30, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
+        _confirmButton = [[WPButton alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.depositCardCell.frame) + 30, kScreenWidth - 2 * WPLeftMargin, WPButtonHeight)];
         [_confirmButton setTitle:@"确认充值" forState:UIControlStateNormal];
         [_confirmButton setBackgroundColor:[UIColor buttonBackgroundDefaultColor]];
         [self addSubview:_confirmButton];

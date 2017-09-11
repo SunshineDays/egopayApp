@@ -15,17 +15,26 @@
 #import "WPUserRechargeView.h"
 #import "WPQRCodeModel.h"
 #import "WPPublicWebViewController.h"
+#import "WPBankCardController.h"
+#import "WPRechargeWebViewController.h"
 
 @interface WPUserRechargeController () <UITextFieldDelegate>
 
 //  支付方式
 @property (nonatomic, copy) NSString *payType;
 
-@property (nonatomic, strong) WPBankCardModel *cardModel;
+//@property (nonatomic, strong) WPBankCardModel *cardModel;
 
 @property (nonatomic, strong) WPUserRateModel *rateModel;
 
 @property (nonatomic, strong) WPUserRechargeView *rechargeView;
+
+@property (nonatomic, copy) NSString *depositCardID;
+
+@property (nonatomic, copy) NSString *creditCradID;
+
+/**  是否是第三方支付  */
+@property (nonatomic, assign) BOOL isApp;
 
 @end
 
@@ -54,8 +63,8 @@
 
         [_rechargeView.moneyCell.textField addTarget:self action:@selector(moneyCellTextField) forControlEvents:UIControlEventEditingChanged];
 
-        [_rechargeView.cvvCell.textField addTarget:self action:@selector(changeButtonSurface) forControlEvents:UIControlEventEditingChanged];
-
+        [_rechargeView.depositCardCell.backgroundButton addTarget:self action:@selector(selectCardAction) forControlEvents:UIControlEventTouchUpInside];
+        
         [_rechargeView.confirmButton addTarget:self action:@selector(confirmButtonAction) forControlEvents:UIControlEventTouchUpInside];
 
         [self.view addSubview:_rechargeView];
@@ -84,8 +93,7 @@
 //  动态设置按钮的外观以及是否可以点击
 - (void)changeButtonSurface
 {
-    BOOL isEdabled = self.rechargeView.cvvCell.hidden ? ([self.rechargeView.moneyCell.textField.text floatValue] > 0 ? YES : NO) : (([self.rechargeView.moneyCell.textField.text floatValue] > 0 && self.rechargeView.cvvCell.textField.text.length == 3) ? YES : NO);
-    [WPPublicTool buttonWithButton:self.rechargeView.confirmButton userInteractionEnabled:isEdabled];
+    [WPPublicTool buttonWithButton:self.rechargeView.confirmButton userInteractionEnabled:[self.rechargeView.moneyCell.textField.text floatValue] > 0];
 }
 
 - (void)selectWayAction
@@ -93,18 +101,34 @@
     __weakSelf
     [WPHelpTool showPayTypeWithAmount:nil card:^(WPBankCardModel *model)
     {
-        weakSelf.rechargeView.cvvCell.hidden = [[NSString stringWithFormat:@"%d", model.cardType] isEqualToString:@"1"] ? NO : YES;
+        weakSelf.rechargeView.depositCardCell.hidden = NO;
         //  获取payType以及改变weakSelf.rechargeView.cardCell内容
         weakSelf.payType = [WPPublicTool payCardWithView:weakSelf.rechargeView.cardCell model:model];
-        weakSelf.cardModel = model;
+//        weakSelf.cardModel = model;
+        weakSelf.creditCradID = [NSString stringWithFormat:@"%ld", (long)model.id];
+        weakSelf.isApp = NO;
     } other:^(id rowType)
     {
-        weakSelf.rechargeView.cvvCell.hidden = YES;
+        weakSelf.rechargeView.depositCardCell.hidden = YES;
         //  获取payType以及改变weakSelf.rechargeView.cardCell内容
         weakSelf.payType = [WPPublicTool payThirdWithView:weakSelf.rechargeView.cardCell rowType:rowType];
-        weakSelf.cardModel = nil;
+        weakSelf.creditCradID = nil;
+        weakSelf.isApp = YES;
     }];
     
+}
+
+- (void)selectCardAction
+{
+    WPBankCardController *vc = [[WPBankCardController alloc] init];
+    vc.showCardType = @"3";
+    __weakSelf
+    vc.cardInfoBlock = ^(WPBankCardModel *model)
+    {
+        weakSelf.depositCardID = [NSString stringWithFormat:@"%ld", (long)model.id];
+        [WPPublicTool payCardWithView:weakSelf.rechargeView.depositCardCell model:model];
+    };
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)confirmButtonAction
@@ -118,18 +142,6 @@
     {
         [WPProgressHUD showInfoWithStatus:@"请选择支付方式"];
     }
-    else if (self.rechargeView.cvvCell.hidden == NO && self.rechargeView.cvvCell.textField.text.length != 3)
-    {
-        [WPProgressHUD showInfoWithStatus:@"请输入CVV码"];
-    }
-    else if ([self.rechargeView.moneyCell.textField.text floatValue] > 500 && [self.payType isEqualToString:@"2"] && ![WPJudgeTool isIDCardApprove])
-    {
-        [WPProgressHUD showInfoWithStatus:@"微信每次最多充值500元"];
-    }
-    else if ([self.rechargeView.moneyCell.textField.text floatValue] > 1000 && [self.payType isEqualToString:@"3"] && ![WPJudgeTool isIDCardApprove])
-    {
-        [WPProgressHUD showInfoWithStatus:@"支付宝每次最多充值1000元"];
-    }
     else
     {
         if ([self.payType isEqualToString:@"1"])
@@ -141,7 +153,7 @@
         }
         else
         {
-            [self pushWithChargeDataWithPassword:@""];
+            [self pushAppData];
         }
         
     }
@@ -174,23 +186,82 @@
 - (void)pushWithChargeDataWithPassword:(NSString *)payPassword
 {
     NSDictionary *parameters = @{
+                                 @"clientId" : [WPUserInfor sharedWPUserInfor].clientId,
                                  @"rechargeAmount" : self.rechargeView.moneyCell.textField.text,
                                  @"payMethod" : self.payType,
-                                 @"cardId" : self.cardModel.id ? [NSString stringWithFormat:@"%ld", (long)self.cardModel.id] : @"",
-                                 @"cnv" : [WPPublicTool base64EncodeString:self.rechargeView.cvvCell.textField.text],
+                                 @"receiveCardId" : self.depositCardID,
+                                 @"payCardId" : self.creditCradID,
                                  @"payPassword" : [WPPublicTool base64EncodeString:payPassword]
                                  };
-    [WPHelpTool postWithURL:WPRechargeURL parameters:parameters success:^(id success)
-    {
-        [WPHelpTool payResultControllerWithTitle:@"充值结果" successResult:success];
-
-    } failure:^(NSError *error)
-    {
-        
-        
-    }];
+    
+        NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+        __weakSelf
+        NSBlockOperation *blockoperation = [NSBlockOperation blockOperationWithBlock:^{
+            [WPProgressHUD showProgressIsLoading];
+            
+            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+            manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+            manager.requestSerializer.timeoutInterval = 40;
+            [manager POST:[NSString stringWithFormat:@"%@/%@", WPBaseURL, WPRechargeURL]
+               parameters:parameters
+                 progress:^(NSProgress * _Nonnull uploadProgress)
+             {
+                 
+             }
+                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+             {
+                 [WPProgressHUD dismiss];
+                 // 把\n转化为\\n
+                 NSString *dataString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                 dataString = [dataString stringByReplacingOccurrencesOfString:@"" withString:@"\\n"];
+                 
+                 WPRechargeWebViewController *vc = [[WPRechargeWebViewController alloc] init];
+                 vc.htmlString = dataString;
+                 [weakSelf.navigationController pushViewController:vc animated:YES];
+                 
+                 NSData *resultData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+                 NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:resultData options:NSJSONReadingMutableContainers error:nil];
+                 NSString *type = [NSString stringWithFormat:@"%@", dict[@"type"]];
+                 if ([type isEqualToString:@"-1"])  //重新登录
+                 {
+                     [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationUserLogout object:nil];
+                     [WPUserInfor sharedWPUserInfor].payTouchID = nil;
+                     [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+                 }
+                 else if (dict[@"result"][@"err_msg"])
+                 {
+                     [WPProgressHUD showInfoWithStatus:dict[@"result"][@"err_msg"]];
+                 }
+             }
+                  failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+             {
+                 [WPProgressHUD dismiss];
+                 [WPProgressHUD showInfoWithStatus:@"网络错误,请重试"];
+             }];
+        }];
+        [operationQueue addOperation:blockoperation];
+    
 }
 
+
+- (void)pushAppData
+{
+    NSDictionary *parameters = @{
+                                 @"rechargeAmount" : self.rechargeView.moneyCell.textField.text,
+                                 @"payMethod" : self.payType,
+                                 @"receiveCardId" : @"",
+                                 @"payCardId" : @"",
+                                 @"payPassword" : @""
+                                 };
+    [WPHelpTool postWithURL:WPRechargeURL parameters:parameters success:^(id success)
+     {
+         [WPHelpTool payResultControllerWithTitle:@"充值结果" successResult:success];
+         
+     } failure:^(NSError *error)
+     {
+         
+     }];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

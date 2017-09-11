@@ -35,7 +35,6 @@
     // 3、获得滤镜输出的图像
     CIImage *outputImage = [filter outputImage];
     
-    
     return [SGQRCodeTool createNonInterpolatedUIImageFormCIImage:outputImage withSize:imageViewWidth];
 }
 
@@ -90,11 +89,12 @@
     // 3、获得滤镜输出的图像
     CIImage *outputImage = [filter outputImage];
     
-    // 图片小于(27,27),我们需要放大
+    // 图片小于(20,20),我们需要放大
     outputImage = [outputImage imageByApplyingTransform:CGAffineTransformMakeScale(20, 20)];
     
     // 4、将CIImage类型转成UIImage类型
     UIImage *start_image = [UIImage imageWithCIImage:outputImage];
+//    start_image = [self imageWithColor:[UIColor blueColor] image:start_image];
     
     
     // - - - - - - - - - - - - - - - - 添加中间小图标 - - - - - - - - - - - - - - - -
@@ -169,6 +169,25 @@
     CIImage *colorImage = [color_filter outputImage];
     
     return [UIImage imageWithCIImage:colorImage];
+}
+
+
++ (UIImage *)imageWithColor:(UIColor *)color image:(UIImage *)image
+{
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(contextRef, 0, image.size.height - 20);
+    CGContextScaleCTM(contextRef, 1.0, -1.0);
+    CGContextSetBlendMode(contextRef, kCGBlendModeNormal);
+    
+    CGRect rect = CGRectMake(0, 0, image.size.width - 20, image.size.height - 20);
+    CGContextClipToMask(contextRef, rect, image.CGImage);
+    [color setFill];
+    CGContextFillRect(contextRef, rect);
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
 }
 
 

@@ -60,12 +60,12 @@ static NSString * const WPPersonalCenterCellID = @"WPPersonalCenterCellID";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor tableViewColor];
     self.navigationItem.title = @"我";
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(rightItemAction)];
     
-    self.titleArray = @[@[@"我的积分"], @[@"账单", @"余额", @"银行卡"], @[@"子账户", @"商户升级"],@[@"系统消息", @"分享易购付"]];
+    self.titleArray = @[@[@"我的积分"], @[@"账单", @"余额", @"银行卡"], @[@"子账户", @"我的会员"],@[@"系统消息", @"分享易购付"]];
     self.imageArray = @[@[@"icon_tixian_content_n"], @[@"icon_zhangdan_content_n", @"icon_yue_n", @"icon_yinhang_n"], @[@"icon_shanghushengji_n", @"icon_shanghu_n"], @[@"icon_xiaoxi_content_n" ,@"icon_tuijian_content_n"]];
     
     __weakSelf
@@ -98,7 +98,6 @@ static NSString * const WPPersonalCenterCellID = @"WPPersonalCenterCellID";
         _headerButton = [[WPPersonalButton alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 95) avaterUrl:self.model.picurl phone:self.model.phone vip:[WPUserTool userMemberVipWithMerchantlvID:self.model.merchantlvid]];
         [_headerButton addTarget:self action:@selector(personalButonAction) forControlEvents:UIControlEventTouchUpInside];
         self.tableView.tableHeaderView = _headerButton;
-
     }
     return _headerButton;
 }
@@ -151,9 +150,22 @@ static NSString * const WPPersonalCenterCellID = @"WPPersonalCenterCellID";
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *view = [[UIView alloc] init];
-    view.backgroundColor = [UIColor clearColor];
+    view.backgroundColor = [UIColor tableViewColor];
     return view;
 }
+
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if (scrollView.contentOffset.y < 0)
+//    {
+//        self.tableView.backgroundColor = [UIColor themeColor];
+//    }
+//    if (scrollView.contentOffset.y > 0)
+//    {
+//        self.tableView.backgroundColor = [UIColor tableViewColor];
+//    }
+//}
+
 
 #pragma mark - UITableViewDelegate
 
@@ -165,7 +177,7 @@ static NSString * const WPPersonalCenterCellID = @"WPPersonalCenterCellID";
     {
         case 0: //我的积分
         {
-            
+            [WPProgressHUD showInfoWithStatus:@"敬请期待"];
             break;
         }
             
@@ -228,12 +240,12 @@ static NSString * const WPPersonalCenterCellID = @"WPPersonalCenterCellID";
                     break;
                 }
                     
-                case 1: //商户升级
+                case 1: //我的会员
                 {
                     if ([WPJudgeTool isIDCardApprove])
                     {
                         WPProductController *vc = [[WPProductController alloc] init];
-                        vc.navigationItem.title = @"商户升级";
+                        vc.navigationItem.title = @"我的会员";
                         [self.navigationController pushViewController:vc animated:YES];
                     }
                     else
@@ -314,7 +326,7 @@ static NSString * const WPPersonalCenterCellID = @"WPPersonalCenterCellID";
              weakSelf.model = [WPUserInforModel mj_objectWithKeyValues:result];
              NSString *money = [NSString stringWithFormat:@"%.2f元", weakSelf.model.avl_balance];
              
-             self.contentArray = @[@[@""], @[@"", money, @""], @[@"", @""], @[@"", @""]];
+             weakSelf.contentArray = @[@[@""], @[@"", money, @""], @[@"", @""], @[@"", @""]];
              
              [weakSelf headerButton];
              weakSelf.headerButton.vipLabel.text = [WPUserTool userMemberVipWithMerchantlvID:weakSelf.model.merchantlvid];
@@ -327,6 +339,7 @@ static NSString * const WPPersonalCenterCellID = @"WPPersonalCenterCellID";
      {
          [weakSelf.indicatorView stopAnimating];
          [weakSelf.tableView.mj_header endRefreshing];
+         [WPProgressHUD showInfoWithStatus:@"网络错误,请重试"];
      }];
 }
 

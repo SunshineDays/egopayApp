@@ -36,6 +36,8 @@ Single_Implementation(WPUserInfor)
         
     [WPUserInfor sharedWPUserInfor].isSubAccount = self.isSubAccount;
     
+    [WPUserInfor sharedWPUserInfor].isRefresh = self.isRefresh;
+    
                 
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     
@@ -61,6 +63,8 @@ Single_Implementation(WPUserInfor)
     [userDefault setObject:self.isRemindTouchID forKey:WPIsRemindTouchID];
             
     [userDefault setObject:self.isSubAccount forKey:WPIsSubAccount];
+    
+    [userDefault setObject:self.isRefresh forKey:@"WPIsRefresh"];
         
     [userDefault synchronize];
 }

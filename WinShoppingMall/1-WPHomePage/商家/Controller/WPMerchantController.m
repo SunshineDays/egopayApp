@@ -8,7 +8,7 @@
 
 #import "WPMerchantController.h"
 #import "Header.h"
-#import <SDCycleScrollView.h>
+#import "SDCycleScrollView.h"
 #import "WPSelectListPopupController.h"
 #import "WPMerchantCell.h"
 #import "WPMerchantDetailController.h"
@@ -71,13 +71,15 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
         weakSelf.page ++;
         [weakSelf postSelectTypeData];
     }];
-    [self.indicatorView startAnimating];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    if ([[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18888888888"]) {
+        self.tabBarController.tabBar.hidden = NO;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -185,7 +187,8 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY + 40, kScreenWidth, kScreenHeight - WPNavigationHeight - 40) style:UITableViewStylePlain];
+        float height = [[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18888888888"] ? kScreenHeight - WPNavigationHeight - 40 - 44 : kScreenHeight - WPNavigationHeight - 40;
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, WPTopY + 40, kScreenWidth, height) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor tableViewColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -318,7 +321,6 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     __weakSelf
     [WPHelpTool getWithURL:WPShowMerShopsURL parameters:nil success:^(id success)
     {
-        [weakSelf.indicatorView stopAnimating];
         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
         NSDictionary *result = success[@"result"];
         if ([type isEqualToString:@"1"])
@@ -335,7 +337,6 @@ static NSString * const WPMerchantCellID = @"WPMerchantCellID";
     {
         [weakSelf.tableView.mj_header endRefreshing];
         [weakSelf.tableView.mj_footer endRefreshing];
-        [weakSelf.indicatorView stopAnimating];
     }];
 }
 

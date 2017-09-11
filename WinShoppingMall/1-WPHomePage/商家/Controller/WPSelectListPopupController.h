@@ -17,7 +17,7 @@
 @property (nonatomic, copy) void(^selecteNameBlock)(NSString *nameStr);
 
 /**
- *  1:城市 2:类别 3:银行 4:日期
+ *  1:城市 2:类别 3:银行
  */
 @property (nonatomic, assign) int type;
 

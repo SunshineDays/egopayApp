@@ -47,7 +47,7 @@
 /**  会员等级 */
 + (NSString *)userMemberVipWithMerchantlvID:(NSInteger)vipID
 {
-    NSArray *memberVipArray = @[@" ", @"白银会员",@"黄金会员", @"铂金会员", @"钻石会员"];
+    NSArray *memberVipArray = @[@" ", @"白银会员", @"黄金会员", @"铂金会员", @"钻石会员"];
     return memberVipArray[vipID];
 }
 

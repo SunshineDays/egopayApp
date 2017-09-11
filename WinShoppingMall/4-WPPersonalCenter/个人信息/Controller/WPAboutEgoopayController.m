@@ -43,7 +43,7 @@ static NSString * const WPUserInforCellID = @"WPUserInforCell";
     self.dataArray = @[@"关于易购付", @"用户协议", @"去评价", @"分享给朋友"];
     
     [self.tableView reloadData];
-    [self copyrightLabel];
+//    [self copyrightLabel];
     [self getShareData];
 }
 

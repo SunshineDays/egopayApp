@@ -9,17 +9,12 @@
 #import "WPAppRegisters.h"
 #import "WPUserInfor.h"
 #import <AdSupport/AdSupport.h>
-#import <UMengSocial/WXApi.h>
 #import <JPush/JPUSHService.h>
-#import <UMengSocial/UMSocialWechatHandler.h>
-
-#import <TencentOpenAPI/QQApiInterfaceObject.h>
-#import <TencentOpenAPI/TencentOAuth.h>
-
+#import "OpenShareHeader.h"
 #import "WPJudgeTool.h"
 
 /** 友盟的apiKey */
-NSString * const kGetUMAppkey = @"591bc4f58630f57b330013c2";
+//NSString * const kGetUMAppkey = @"591bc4f58630f57b330013c2";
 
 /** 微信 */
 static NSString * const kWeChat_AppID = @"wxa2e49f2b1fd0f1a0";
@@ -37,7 +32,7 @@ static NSString * const channel = @"AppStore";
 static BOOL const isProduction = FALSE;
 
 
-@interface WPAppRegisters ()<TencentSessionDelegate>
+@interface WPAppRegisters ()
 
 @end
 
@@ -59,19 +54,13 @@ static BOOL const isProduction = FALSE;
     [[WPUserInfor sharedWPUserInfor] updateUserInfor];
 }
 
-#pragma mark - 注册微信
-+ (void)registWechat
++ (void)registThirdApp
 {
-    [WXApi registerApp:kWeChat_AppID withDescription:@"易购付"];
+    [OpenShare connectQQWithAppId:kQQ_AppID];
+    [OpenShare connectWeixinWithAppId:kWeChat_AppID];
 }
 
-#pragma mark - 注册QQ
-+ (void)registQQ
-{
-    [[TencentOAuth alloc] initWithAppId:kQQ_AppID andDelegate:self];
-}
-
-#pragma mark - 注册极光推送
+//#pragma mark - 注册极光推送
 + (void)registJPushWithLaunchOption:(NSDictionary *)launchOptions
 {
     NSString *advertisingID = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];

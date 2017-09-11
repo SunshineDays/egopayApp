@@ -110,11 +110,11 @@
         
         // 设置带logo的二维码
         _codeImageView.image = [SGQRCodeTool SG_generateWithLogoQRCodeData:self.codeUrl logoImage:self.centerImage logoScaleToSuperView:0.2];
+//        _codeImageView.tintColor = [UIColor themeColor];
+//        _codeImageView.image = [SGQRCodeTool SG_generateWithColorQRCodeData:self.codeUrl backgroundColor:[CIColor blueColor] mainColor:[CIColor whiteColor]];
         _codeImageView.userInteractionEnabled = YES;
         [self.codeView addSubview:_codeImageView];
         
-        
-//        _codeImageView.image = [SGQRCodeTool SG_generateWithColorQRCodeData:self.codeUrl backgroundColor:[CIColor whiteColor] mainColor:[CIColor blackColor]];
         
         // 给二维码添加长按保存图片事件
         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressGesture:)];
@@ -223,10 +223,13 @@
          if ([type isEqualToString:@"1"])
          {
              weakSelf.codeUrl = result[@"qr_url"];
-             NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:result[@"picurl"]]];
-             weakSelf.centerImage = [UIImage imageWithData:data];
-             [weakSelf stateLabel];
-             [weakSelf recodeButton];
+
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 weakSelf.centerImage = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:result[@"picurl"]];
+                 weakSelf.centerImage = weakSelf.centerImage ? weakSelf.centerImage : [UIImage imageNamed:@"appImage"];
+                 [weakSelf stateLabel];
+                 [weakSelf recodeButton];
+             });
          }
          else if ([type isEqualToString:@"2"])
          {

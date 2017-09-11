@@ -18,19 +18,12 @@
 + (void)registUserInfor;
 
 /**
- *  微信分享
- */
-+ (void)registWechat;
-
-/**
- *  QQ分享
- */
-+ (void)registQQ;
-
-/**
  *  极光推送
  */
 + (void)registJPushWithLaunchOption:(NSDictionary *)launchOptions;
+
++ (void)registThirdApp;
+
 
 /**
  *  3DTouch

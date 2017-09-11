@@ -64,7 +64,7 @@
 {
     if (!_contentLabel) {
         
-        NSString * contentString = [self.model.content stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
+        NSString * contentString = self.model.content;
         _contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.titleLabel.frame), kScreenWidth - 2 * WPLeftMargin, [WPPublicTool textHeightFromTextString:contentString width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15])];
         _contentLabel.text = contentString;
         _contentLabel.textColor = [UIColor blackColor];

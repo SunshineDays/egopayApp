@@ -7,10 +7,11 @@
 //
 
 #import "WPShareTool.h"
-#import "UMSocialQQHandler.h"
-#import <TencentOpenAPI/QQApiInterface.h>
 #import "SGQRCodeTool.h"
-#import <UMengSocial/WXApi.h>
+
+#import "OpenShareHeader.h"
+#import <MessageUI/MessageUI.h>
+
 #import "WPProgressHUD.h"
 
 @implementation WPShareTool
@@ -27,19 +28,19 @@
             switch (i)
             {
                 case 0:  //微信好友
-                    [self shareToWeChatWithModel:model shareType:0];
+                    [self shareToWeiXinFriendWithModel:model];
                     break;
                     
                 case 1:  //微信朋友圈
-                    [self shareToWeChatWithModel:model shareType:1];
+                    [self shareToWeiXinCircleWithModel:model];
                     break;
                     
                 case 2:  //QQ好友
-                    [self shareToQQWithModel:model shareType:0];
+                    [self shareToQQFriendWithModel:model];
                     break;
                     
                 case 3:  //QQ空间
-                    [self shareToQQWithModel:model shareType:1];
+                    [self shareToQQQzoneWithModel:model];
                     break;
                     
                 case 4:  //Safari中打开
@@ -57,61 +58,56 @@
     }
 }
 
-+ (void)shareToWeChatWithModel:(WPShareModel *)model shareType:(int)shareType
+
++ (OSMessage *)shareMessageWithModel:(WPShareModel *)model
 {
-    if ([WXApi isWXAppInstalled])
-    {
-        SendMessageToWXReq *sendReq = [[SendMessageToWXReq alloc] init];
-        sendReq.bText = NO;
-        sendReq.scene = shareType;//0 = 好友列表 1 = 朋友圈 2 = 收藏
-        WXMediaMessage *urlMessage = [WXMediaMessage message];
-        urlMessage.title = model.title;
-        urlMessage.description = model.share_despt;
-        [urlMessage setThumbImage:[UIImage imageNamed:@"share_wintopay"]];
-        
-        WXWebpageObject *webObj = [WXWebpageObject object];
-        webObj.webpageUrl = model.webpageUrl;
-        urlMessage.mediaObject = webObj;
-        sendReq.message = urlMessage;
-        
-        [WXApi sendReq:sendReq];
-    }
-    else
-    {
-        [WPProgressHUD showInfoWithStatus:@"您还没有安装微信"];
-    }
+    OSMessage *message = [[OSMessage alloc] init];
+    message.title = model.title;
+    message.desc = model.share_despt;
+    message.image = UIImagePNGRepresentation([UIImage imageNamed:@"appImage"]);
+    message.link = model.webpageUrl;
+    return message;
 }
 
-+ (void)shareToQQWithModel:(WPShareModel *)model shareType:(int)shareType
++ (void)shareToWeiXinFriendWithModel:(WPShareModel *)model
 {
-    if ([TencentOAuth iphoneQQInstalled])
-    {
-        QQApiNewsObject *newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:model.webpageUrl] title:model.title description:model.share_despt previewImageURL:nil];
-        switch (shareType)
-        {
-            case 0:  //QQ
-            {
-                SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObj];
-                [QQApiInterface sendReq:req];
-                break;
-            }
-                
-            case 1:  //QQ空间
-            {
-                [newsObj setCflag:kQQAPICtrlFlagQZoneShareOnStart];
-                SendMessageToQQReq *rep = [SendMessageToQQReq reqWithContent:newsObj];
-                [QQApiInterface SendReqToQZone:rep];
-                break;
-            }
-                
-            default:
-                break;
-        }
-    }
-    else
-    {
-        [WPProgressHUD showInfoWithStatus:@"您还没有安装QQ"];
-    }
+    OSMessage *message = [self shareMessageWithModel:model];
+    [OpenShare shareToWeixinSession:message Success:^(OSMessage *message) {
+        //...
+    } Fail:^(OSMessage *message, NSError *error) {
+        //...
+    }];
+}
+
++ (void)shareToWeiXinCircleWithModel:(WPShareModel *)model
+{
+    OSMessage *message = [self shareMessageWithModel:model];
+    [OpenShare shareToWeixinTimeline:message Success:^(OSMessage *message) {
+        //...
+    } Fail:^(OSMessage *message, NSError *error) {
+        //...
+    }];
+}
+
++ (void)shareToQQFriendWithModel:(WPShareModel *)model
+{
+    OSMessage *message = [self shareMessageWithModel:model];
+    [OpenShare shareToQQFriends:message Success:^(OSMessage *message) {
+        //...
+    } Fail:^(OSMessage *message, NSError *error) {
+        //...
+    }];
+    
+}
+
++ (void)shareToQQQzoneWithModel:(WPShareModel *)model
+{
+    OSMessage *message = [self shareMessageWithModel:model];
+    [OpenShare shareToQQZone:message Success:^(OSMessage *message) {
+        //...
+    } Fail:^(OSMessage *message, NSError *error) {
+        //...
+    }];
 }
 
 + (void)shareToSinaWithModel:(WPShareModel *)model

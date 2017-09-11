@@ -70,7 +70,7 @@
 #pragma mark - VPScanQrCodeViewDelegate
 
 - (void)vpScanQrCodeCompletedWithResult:(NSString *)result
-{
+{ 
 //    [WPProgressHUD showProgressIsLoading];
     WPQRCodePayController *vc = [[WPQRCodePayController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];

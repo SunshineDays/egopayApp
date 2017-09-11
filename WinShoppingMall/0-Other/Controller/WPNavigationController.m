@@ -31,7 +31,6 @@
     [navigationBar setTitleTextAttributes:dictM];
     navigationBar.tintColor = [UIColor whiteColor];
     navigationBar.translucent = NO;
-    
 }
 
 - (void)viewDidLoad

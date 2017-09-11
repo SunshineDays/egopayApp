@@ -140,7 +140,7 @@
         for (int i = 0; i < array.count; i++)
         {
             _descripImageView = [[UIImageView alloc] initWithFrame:CGRectMake(WPLeftMargin + (imageWidth + WPLeftMargin) * (i % 2), CGRectGetMaxY(self.descripLabel.frame) + 10 + (imageWidth + 10) * (i / 2), imageWidth, imageWidth)];
-            [_descripImageView sd_setImageWithURL:[NSURL URLWithString:array[i]] placeholderImage:[UIImage imageNamed:@"123"] options:SDWebImageRefreshCached];
+            [_descripImageView sd_setImageWithURL:[NSURL URLWithString:array[i]] placeholderImage:nil options:SDWebImageRefreshCached];
             
             [self.scrollView addSubview:_descripImageView];
             self.scrollView.contentSize = CGSizeMake(kScreenWidth, CGRectGetMaxY(_descripImageView.frame) + 10);

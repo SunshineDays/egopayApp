@@ -10,12 +10,12 @@
 #import "Header.h"
 #import "WPProfitDetailCell.h"
 #import "WPProfitDetailModel.h"
-#import "WPBillTitleView.h"
 #import "WPSelectListPopupController.h"
+#import "WPBillDatePickerView.h"
 
 static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
-@interface WPProfitDetailController () <UITableViewDelegate, UITableViewDataSource>
+@interface WPProfitDetailController () <UITableViewDelegate, UITableViewDataSource, WPBillDatePickerViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -155,14 +155,15 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
     NSInteger month = [[self.dateArray[section] substringWithRange:NSMakeRange(5, 2)] integerValue];
     
     NSString *dateString;
-    if (nowYear == year) {
+    if (nowYear == year)
+    {
         if (nowMonth == month)
         {
             dateString = @"本月";
         }
         else
         {
-            dateString = [NSString stringWithFormat:@"%ld月", month];
+            dateString = [NSString stringWithFormat:@"%ld月", (long)month];
         }
     }
     else
@@ -194,21 +195,17 @@ static NSString * const WPProfitDetailCellID = @"WPProfitDetailCellID";
 
 - (void)rightItemAction
 {
-    WPSelectListPopupController *vc = [[WPSelectListPopupController alloc] init];
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    vc.type = 4;
-    
-    __weakSelf
-    vc.selecteNameBlock = ^(NSString *nameStr)
-    {
-        NSString *year = [nameStr substringToIndex:4];
-        NSString *month = [nameStr substringWithRange:NSMakeRange(nameStr.length - 3, 2)];
-        weakSelf.dateString = [NSString stringWithFormat:@"%@%@", year, month];
-        [weakSelf.tableView.mj_header beginRefreshing];
-    };
-    
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
+    WPBillDatePickerView *pickerView = [[WPBillDatePickerView alloc] initPickerView];
+    pickerView.pickerViewDelegate = self;
+    [[UIApplication sharedApplication].keyWindow addSubview:pickerView];
 }
+
+- (void)wp_selecteBillDataWithYear:(NSString *)year month:(NSString *)month
+{
+    self.dateString = [NSString stringWithFormat:@"%@%@", year, month];
+    [self.tableView.mj_header beginRefreshing];
+}
+
 
 
 #pragma mark - Data

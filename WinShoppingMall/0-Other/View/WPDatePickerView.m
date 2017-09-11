@@ -38,7 +38,7 @@
         [self addSubview:self.pickerView];
         [UIView animateWithDuration:0.2f animations:^
         {
-            self.pickerView.frame = CGRectMake(0, kScreenHeight * 2 / 3, kScreenWidth, kScreenHeight / 3);
+            self.pickerView.frame = CGRectMake(0, kScreenHeight * 5 / 8, kScreenWidth, kScreenHeight * 3 / 8);
         }];
     }
     return self;
@@ -80,9 +80,9 @@
     NSMutableArray *yearArrM = [[NSMutableArray alloc] init];
     NSMutableArray *monthArrM = [[NSMutableArray alloc] init];
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i <= 5; i++)
     {
-        [yearArrM addObject:[NSString stringWithFormat:@"%ld", (long)year]];
+        [yearArrM addObject:[NSString stringWithFormat:@"%ld年", (long)year]];
         year ++;
     }
 
@@ -92,7 +92,7 @@
         {
             month = month - 12;
         }
-        NSString *monthString = month < 10 ? [NSString stringWithFormat:@"0%ld", (long)month] : [NSString stringWithFormat:@"%ld", (long)month];
+        NSString *monthString = [NSString stringWithFormat:@"%ld月", (long)month];
 
         [monthArrM addObject:monthString];
         month ++;
@@ -110,17 +110,45 @@
     return [self.dataArray[component] count];
 }
 
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+    return 32;
+}
+
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     if (!self.isSelected)
     {
         if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)])
         {
-            [self.pickerViewDelegate wp_selectedResultWithYear:self.dataArray[0][0] month:self.dataArray[1][0] day:nil];
+            
+            [self.pickerViewDelegate wp_selectedResultWithYear:[self.dataArray[0][0] stringByReplacingOccurrencesOfString:@"年" withString:@""] month:[self.dataArray[1][0] stringByReplacingOccurrencesOfString:@"月" withString:@""] day:nil];
         }
     }
     
     return self.dataArray[component][row];
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    for (UIView *linView in pickerView.subviews)
+    {
+        if (linView.frame.size.height < 1)
+        {
+            linView.backgroundColor = [UIColor lightGrayColor];
+        }
+    }
+    
+    UILabel* pickerLabel = (UILabel*)view;
+    if (!pickerLabel) {
+        pickerLabel = [[UILabel alloc] init];
+        pickerLabel.adjustsFontSizeToFitWidth = YES;
+        [pickerLabel setTextAlignment:NSTextAlignmentCenter];
+        [pickerLabel setBackgroundColor:[UIColor clearColor]];
+        [pickerLabel setFont:[UIFont systemFontOfSize:17]];
+    }
+    pickerLabel.text = [self pickerView:pickerView titleForRow:row forComponent:component];
+    return pickerLabel;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -141,7 +169,10 @@
     
     if (self.pickerViewDelegate && [self.pickerViewDelegate respondsToSelector:@selector(wp_selectedResultWithYear:month:day:)])
     {
-        [self.pickerViewDelegate wp_selectedResultWithYear:self.year month:self.month day:nil];
+        NSString *year = [[self pickerView:self.pickerView titleForRow:[self.pickerView selectedRowInComponent:0] forComponent:0] stringByReplacingOccurrencesOfString:@"年" withString:@""];
+        NSString *month = [[self pickerView:self.pickerView titleForRow:[self.pickerView selectedRowInComponent:1] forComponent:1] stringByReplacingOccurrencesOfString:@"月" withString:@""];
+        
+        [self.pickerViewDelegate wp_selectedResultWithYear:year month:month day:nil];
     }
 }
 

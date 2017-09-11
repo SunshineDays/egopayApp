@@ -26,14 +26,17 @@
     // 获取用户的基本信息
     [WPAppRegisters registUserInfor];
     
+    [WPAppRegisters registThirdApp];
+    
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = [WPChooseInterface chooseRootViewController];
     [self.window makeKeyWindow];
     
     // 注册第三方
-    [WPAppRegisters registQQ];
-    [WPAppRegisters registWechat];
+//    [WPAppRegisters registQQ];
+//    [WPAppRegisters registWechat];
     [WPAppRegisters registJPushWithLaunchOption:launchOptions];
     [WPAppRegisters regist3DTouch:application];
     
@@ -65,7 +68,7 @@
 }
 
 // 后台
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler
 {
     completionHandler();
     [WPUserInfor sharedWPUserInfor].userInfoDict = response.notification.request.content.userInfo;

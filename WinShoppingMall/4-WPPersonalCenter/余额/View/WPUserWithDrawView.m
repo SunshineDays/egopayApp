@@ -40,7 +40,7 @@
     symbolLabel.font = [UIFont systemFontOfSize:30];
     [self addSubview:symbolLabel];
     
-    _moneyTextField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(symbolLabel.frame), CGRectGetMaxY(_titleLabel.frame), self.frame.size.width - 50, 80)];
+    _moneyTextField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(symbolLabel.frame), CGRectGetMaxY(_titleLabel.frame), self.frame.size.width / 2, 80)];
     _moneyTextField.keyboardType = UIKeyboardTypeDecimalPad;
     _moneyTextField.font = [UIFont systemFontOfSize:30];
     [self addSubview:_moneyTextField];

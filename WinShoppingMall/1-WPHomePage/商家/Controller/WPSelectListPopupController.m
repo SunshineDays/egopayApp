@@ -49,10 +49,6 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
             [self getBankListData];
             break;
             
-        case 4:// 日期
-            [self getDateListData];
-            break;
-            
         default:
             break;
     }
@@ -214,32 +210,6 @@ static NSString *const WPMerchantCityListCellID = @"WPMerchantCityListCellID";
     }];
 }
 
-- (void)getDateListData
-{
-    NSDate *date = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    
-    [formatter setDateFormat:@"yyyy"];
-    NSInteger year = [[formatter stringFromDate:date] integerValue];
-    
-    [formatter setDateFormat:@"MM"];
-    NSInteger month = [[formatter stringFromDate:date] integerValue];
-    
-    for (int i = 0; i < 12; i++)
-    {
-        if (month < 1)
-        {
-            month = month + 12;
-            year = year - 1;
-        }
-        NSString *monthString = month < 10 ? [NSString stringWithFormat:@"0%ld", (long)month] : [NSString stringWithFormat:@"%ld", (long)month];
-        NSString *dateString = [NSString stringWithFormat:@"%ld年%@月", (long)year, monthString];
-        [self.dataArray addObject:dateString];
-        month --;
-    }
-    
-    [self.tableView reloadData];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

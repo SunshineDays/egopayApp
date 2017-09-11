@@ -70,6 +70,10 @@ Single_Interface(WPUserInfor)
  */
 @property (nonatomic, copy) NSString *isSubAccount;
 
+/**
+ *  是否刷新账单消息界面
+ */
+@property (nonatomic, copy) NSString *isRefresh;
 
 - (void)updateUserInfor;
 

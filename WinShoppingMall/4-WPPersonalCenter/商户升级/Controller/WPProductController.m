@@ -129,26 +129,21 @@ static NSString * const WPMerchantGradeProductCellID = @"WPMerchantGradeProductC
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"])
+
+    if (self.isAgencyView)
     {
-        [WPProgressHUD showInfoWithStatus:@"请先完成实名认证"];
+        WPAgencyProductModel *model = self.dataArray[indexPath.row];
+        WPProductDetailController *vc = [[WPProductDetailController alloc] init];
+        [vc initWithTitle:@"代理升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.agentGradeId ? YES : NO];
+        [self.navigationController pushViewController:vc animated:YES];
     }
-    else
-    {
-        if (self.isAgencyView)
-        {
-            WPAgencyProductModel *model = self.dataArray[indexPath.row];
-            WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-            [vc initWithTitle:@"代理升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.agentGradeId ? YES : NO];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-        else {
-            WPMemberProuctModel *model = self.dataArray[indexPath.row];
-            WPProductDetailController *vc = [[WPProductDetailController alloc] init];
-            [vc initWithTitle:@"商户升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.merchantlvid ? YES : NO];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
+    else {
+        WPMemberProuctModel *model = self.dataArray[indexPath.row];
+        WPProductDetailController *vc = [[WPProductDetailController alloc] init];
+        [vc initWithTitle:@"商户升级" titleImage:[UIImage imageNamed:self.imageArray[indexPath.row]] model:model isAgency:self.isAgencyView isUpgrade:model.id > self.userInforModel.merchantlvid ? YES : NO];
+        [self.navigationController pushViewController:vc animated:YES];
     }
+    
 }
 
 #pragma mark - Data

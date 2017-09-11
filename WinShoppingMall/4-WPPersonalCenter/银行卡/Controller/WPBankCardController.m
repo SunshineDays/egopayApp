@@ -95,7 +95,7 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
 {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(6, WPTopY, kScreenWidth - 12, kScreenHeight - WPNavigationHeight) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor tableViewColor];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableFooterView = [UIView new];
@@ -180,8 +180,8 @@ static NSString *const WPBankCardCellID = @"WPBankCardCellID";
                 {
                     [WPHelpTool alertControllerTitle:@"确定解绑该银行卡" confirmTitle:@"确定" confirm:^(UIAlertAction *alertAction)
                     {
-                        weakSelf.deleteModel = weakSelf.cardArray[indexPath.row];
-                        weakSelf.indexNumber = indexPath.row;
+                        weakSelf.deleteModel = weakSelf.cardArray[indexPath.section];
+                        weakSelf.indexNumber = indexPath.section;
 
                         [WPPayTool payWithTitle:@"解绑银行卡" password:^(id password) {
                             [weakSelf postDeleteCardDataWithPassword:password];

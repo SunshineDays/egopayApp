@@ -25,88 +25,105 @@
 /** GET请求 */
 + (void)getWithURL:(NSString *)url parameters:(NSDictionary *)parameters success:(void (^)(id success))success failure:(void (^)(NSError *error))failure
 {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = 30;
-    
-    [manager GET:[NSString stringWithFormat:@"%@/%@", WPBaseURL, url]
-      parameters:[self joiningTogetherParameters:parameters]
-        progress:^(NSProgress * _Nonnull downloadProgress)
-    {
-            
-    }
-     success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
-     {
-         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-         if (success)
+    NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+    __weakSelf
+    NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = 30;
+        [manager GET:[NSString stringWithFormat:@"%@/%@", WPBaseURL, url]
+          parameters:[weakSelf joiningTogetherParameters:parameters]
+            progress:^(NSProgress * _Nonnull downloadProgress)
          {
-             success(dict);
-             NSString *type = [NSString stringWithFormat:@"%@", dict[@"type"]];
-             if ([type isEqualToString:@"-1"])  //重新登录
-             {
-                 [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationUserLogout object:nil];
-                 [WPUserInfor sharedWPUserInfor].payTouchID = nil;
-                 [[WPUserInfor sharedWPUserInfor] updateUserInfor];
-             }
              
          }
-     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
-     {
-         if (failure)
+             success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
          {
-             failure(error);
-         }
-     }];
+             // \n解析错误，把\n转化为\\n
+             NSString *dataString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+             dataString = [dataString stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+             NSData *resultData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+             
+             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:resultData options:NSJSONReadingMutableContainers error:nil];
+             if (success)
+             {
+                 success(dict);
+                 NSString *type = [NSString stringWithFormat:@"%@", dict[@"type"]];
+                 if ([type isEqualToString:@"-1"])  //重新登录
+                 {
+                     [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationUserLogout object:nil];
+                     [WPUserInfor sharedWPUserInfor].payTouchID = nil;
+                     [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+                 }
+             }
+         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+         {
+             if (failure)
+             {
+                 failure(error);
+             }
+         }];
+    }];
+    [operationQueue addOperation:blockOperation];
+    
 }
 
 /** POST请求 */
 + (void)postWithURL:(NSString *)url parameters:(NSDictionary *)parameters success:(void (^)(id success))success failure:(void (^)(NSError *error))failure
 {
-    [WPProgressHUD showProgressIsLoading];
-    
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = 40;
-    
-    
-    
-    [manager POST:[NSString stringWithFormat:@"%@/%@", WPBaseURL, url]
-       parameters:[self joiningTogetherParameters:parameters]
-         progress:^(NSProgress * _Nonnull uploadProgress)
-    {
-     
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
- {
-     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-         if (success)
+    NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+    __weakSelf
+    NSBlockOperation *blockoperation = [NSBlockOperation blockOperationWithBlock:^{
+        [WPProgressHUD showProgressIsLoading];
+        
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = 40;
+        
+        [manager POST:[NSString stringWithFormat:@"%@/%@", WPBaseURL, url]
+           parameters:[weakSelf joiningTogetherParameters:parameters]
+             progress:^(NSProgress * _Nonnull uploadProgress)
          {
-             [WPProgressHUD dismiss];
-             success(dict);
-             NSString *type = [NSString stringWithFormat:@"%@", dict[@"type"]];
-             if ([type isEqualToString:@"-1"])  //重新登录
+             
+         }
+              success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+         {
+             // 把\n转化为\\n
+             NSString *dataString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+             
+             dataString = [dataString stringByReplacingOccurrencesOfString:@"" withString:@"\\n"];
+             
+             NSData *resultData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+             
+             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:resultData options:NSJSONReadingMutableContainers error:nil];
+             if (success)
              {
-                 [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationUserLogout object:nil];
-                 [WPUserInfor sharedWPUserInfor].payTouchID = nil;
-                 [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+                 [WPProgressHUD dismiss];
+                 success(dict);
+                 NSString *type = [NSString stringWithFormat:@"%@", dict[@"type"]];
+                 if ([type isEqualToString:@"-1"])  //重新登录
+                 {
+                     [[NSNotificationCenter defaultCenter] postNotificationName:WPNotificationUserLogout object:nil];
+                     [WPUserInfor sharedWPUserInfor].payTouchID = nil;
+                     [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+                 }
+                 else if (dict[@"result"][@"err_msg"])
+                 {
+                     [WPProgressHUD showInfoWithStatus:dict[@"result"][@"err_msg"]];
+                 }
              }
-             else if (dict[@"result"][@"err_msg"])
+         }
+              failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+         {
+             if (failure)
              {
-                 [WPProgressHUD showInfoWithStatus:dict[@"result"][@"err_msg"]];
+                 [WPProgressHUD dismiss];
+                 [WPProgressHUD showInfoWithStatus:@"网络错误,请重试"];
+                 failure(error);
              }
-//             else if (dict[@"result"][@"msg"])
-//             {
-//                 [WPProgressHUD showInfoWithStatus:dict[@"result"][@"msg"]];
-//             }
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
-    {
-     if (failure)
-     {
-         [WPProgressHUD dismiss];
-         [WPProgressHUD showInfoWithStatus:@"网络错误,请重试"];
-         failure(error);
-     }
+         }];
     }];
+    [operationQueue addOperation:blockoperation];
 }
 
 
@@ -352,20 +369,20 @@
     {
         WPShareView *shareView = [[WPShareView alloc] initShareToApp];
         [shareView setShareBlock:^(NSString *appType)
-         {
-             if ([appType isEqualToString:@"二维码"])
-             {
-                 WPPayCodeController *vc = [[WPPayCodeController alloc] init];
-                 vc.codeUrl = model.webpageUrl;
-                 vc.codeType = 2;
-                 
-                 [[self rootViewController] pushViewController:vc animated:YES];
-             }
-             else
-             {
-                 [WPShareTool shareWithModel:model appType:appType];
-             }
-         }];
+        {
+            if ([appType isEqualToString:@"二维码"])
+            {
+                WPPayCodeController *vc = [[WPPayCodeController alloc] init];
+                vc.codeUrl = model.webpageUrl;
+                vc.codeType = 2;
+
+                [[self rootViewController] pushViewController:vc animated:YES];
+            }
+            else
+            {
+                [WPShareTool shareWithModel:model appType:appType];
+            }
+        }];
         [[UIApplication sharedApplication].keyWindow addSubview:shareView];
     }
     else
@@ -398,8 +415,10 @@
 }
 
 
-+ (id)rootViewController {
++ (id)rootViewController
+{
     id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+    
     if([rootViewController isKindOfClass:[UINavigationController class]])
     {
         rootViewController = ((UINavigationController *)rootViewController).viewControllers.firstObject;
@@ -408,6 +427,7 @@
     {
         rootViewController = ((UITabBarController *)rootViewController).selectedViewController;
     }
+    
     return rootViewController;
 }
 

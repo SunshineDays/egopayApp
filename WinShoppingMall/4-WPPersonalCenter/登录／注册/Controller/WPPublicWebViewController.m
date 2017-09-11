@@ -21,17 +21,27 @@
 {
     [super viewDidLoad];
     self.webView.delegate = self;
-    if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"]) {
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.webUrl]]];
+    
+    if ([[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18888888888"]) {
+        self.webUrl = [NSString stringWithFormat:@"%@/%@", WPBaseURL, WPUserProtocolWebURL];
     }
+    __weakSelf
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:weakSelf.webUrl]]];
+        
+//         [weakSelf.webView loadHTMLString:[WPUserInfor sharedWPUserInfor].userPhone baseURL:nil];
+//        dataString = [dataString substringFromIndex:19];
+//
+//        dataString = [dataString substringToIndex:dataString.length - 3];
+    });
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"]) {
-        [self.indicatorView startAnimating];
-    }
+    [self.indicatorView startAnimating];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated

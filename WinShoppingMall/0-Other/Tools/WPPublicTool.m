@@ -81,11 +81,13 @@
 + (NSString *)imageToString:(UIImage *)image
 {
     NSData *data = UIImageJPEGRepresentation(image, 1.0f);
+    
     if (data.length > 2048 * 1024)
     {
         data = UIImageJPEGRepresentation(image, 0.08f);
     }
-    else if (data.length > 1024 * 1024)
+    
+    if (data.length > 1024 * 1024)
     {
         data = UIImageJPEGRepresentation(image, 0.11f);
     }

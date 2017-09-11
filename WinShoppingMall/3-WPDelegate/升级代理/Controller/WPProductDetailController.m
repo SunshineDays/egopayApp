@@ -122,7 +122,7 @@
 - (UILabel *)descriptionLabel
 {
     if (!_descriptionLabel) {
-        NSString * contentString = [(self.isAgency ? self.delegateModel.adesp : self.merModel.mdesp) stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
+        NSString * contentString = self.isAgency ? self.delegateModel.adesp : self.merModel.mdesp;
 
         float height = [WPPublicTool textHeightFromTextString:contentString width:kScreenWidth - 2 * WPLeftMargin miniHeight:WPRowHeight fontSize:15];
         _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(self.priceLabel.frame) + 10, kScreenWidth - 2 * WPLeftMargin, height)];

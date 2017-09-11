@@ -17,6 +17,7 @@
     self.layer.cornerRadius = 10;
     self.layer.borderColor = [UIColor lineColor].CGColor;
     self.layer.borderWidth = 1;
+    self.layer.masksToBounds = YES;
 }
 
 - (void)setModel:(WPBillModel *)model

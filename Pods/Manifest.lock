@@ -14,43 +14,51 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - IQKeyboardManager (4.0.10)
+  - Charts (3.0.2):
+    - Charts/Core (= 3.0.2)
+  - Charts/Core (3.0.2)
+  - IQKeyboardManager (4.0.13)
   - JCore (1.1.5)
   - JPush (3.0.6):
     - JCore (~> 1.1.1)
+  - Masonry (1.0.2)
   - MJExtension (3.0.13)
   - MJRefresh (3.1.12)
-  - SDCycleScrollView (1.66):
+  - OpenShare (0.0.1)
+  - SDCycleScrollView (1.73):
     - SDWebImage (~> 4.0.0)
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
   - SVProgressHUD (2.1.2)
-  - UMengSocial (5.0)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.1.0)
+  - Charts (~> 3.0.2)
   - IQKeyboardManager (~> 4.0.8)
   - JPush (~> 3.0.5)
+  - Masonry (~> 1.0.0)
   - MJExtension (~> 3.0.10)
   - MJRefresh (~> 3.1.0)
+  - OpenShare (~> 0.0.1)
   - SDCycleScrollView (~> 1.65)
   - SDWebImage (~> 4.0.0)
   - SVProgressHUD (~> 2.1.2)
-  - UMengSocial (~> 5.0)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  IQKeyboardManager: 593ee99b88381f4b9ccb22bd680f22606351bd41
+  Charts: 236d6ccdd0ce6feae151d89e829a7397381a21fd
+  IQKeyboardManager: 8eab4d8111418414619d1df8e4779ce5d0f8d7e2
   JCore: 9bd9c770c877c583d98b90a68792b8361974c231
   JPush: c41be50eb1a574a66aeb68d237f00a4ec6ec3a82
+  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
-  SDCycleScrollView: e3ade90e9b3159bec04330b208fbfd81c3f3b671
+  OpenShare: a560580dbb729d5c0c3cc1ee84cd6aa4a07e94c6
+  SDCycleScrollView: d0fd5fe40a80918371fd8939214eb3be81033d83
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
-  UMengSocial: 48b67179c492a8cf7803fbb0438b8f55432e2fc1
 
-PODFILE CHECKSUM: 9a183e7c54b778b7a72d3c93e87aa11330b6d7a3
+PODFILE CHECKSUM: 7620add19f90bb32af8de04c973023e2d29a84c5
 
 COCOAPODS: 1.3.0.beta.2

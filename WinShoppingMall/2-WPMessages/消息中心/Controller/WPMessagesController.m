@@ -27,7 +27,6 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
 @property (nonatomic, assign) NSInteger page;
 
-
 @end
 
 @implementation WPMessagesController
@@ -37,9 +36,9 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor cellColor];
+    self.view.backgroundColor = [UIColor tableViewColor];
     self.navigationItem.title = @"消息";
-    
+        
     if ([WPJudgeTool isSubAccount])
     {
         if ([[WPUserInfor sharedWPUserInfor].threeTouch isEqualToString:@"gatheringCode"])
@@ -69,10 +68,7 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 
     __weakSelf
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        weakSelf.page = 1;
-        [weakSelf getBillData];
-    }];
-    self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        
         weakSelf.page ++;
         [weakSelf getBillData];
     }];
@@ -84,9 +80,16 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    self.page = 1;
-    [self getBillData];
+
+    if ([[WPUserInfor sharedWPUserInfor].isRefresh isEqualToString:@"YES"]) {
+        self.page = 1;
+        [self getBillData];
+        [WPUserInfor sharedWPUserInfor].isRefresh = nil;
+        [[WPUserInfor sharedWPUserInfor] updateUserInfor];
+    }
+    
 }
+
 
 #pragma mark - Init
 
@@ -102,10 +105,10 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
 {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(6, WPTopY, kScreenWidth - 12, kScreenHeight - WPNavigationHeight - 49) style:UITableViewStyleGrouped];
-        _tableView.backgroundColor = [UIColor tableViewColor];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.backgroundColor = [UIColor cellColor];
+        _tableView.showsVerticalScrollIndicator = NO;
         _tableView.tableFooterView = [UIView new];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPBillNotificationCell class]) bundle:nil] forCellReuseIdentifier:WPBillNotificationCellID];
@@ -199,15 +202,26 @@ static NSString * const WPBillNotificationCellID = @"WPBillNotificationCellID";
             {
                 [weakSelf.dataArray removeAllObjects];
             }
+            
+            weakSelf.dataArray = (NSMutableArray *)[[weakSelf.dataArray reverseObjectEnumerator] allObjects];
+            
             [weakSelf.dataArray addObjectsFromArray:[WPBillModel mj_objectArrayWithKeyValuesArray:result[@"infoList"]]];
+            weakSelf.dataArray = (NSMutableArray *)[[weakSelf.dataArray reverseObjectEnumerator] allObjects];// 把获取到的数据倒序
         }
         [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"infoList"] noResultLabel:weakSelf.noResultLabel title:@"暂无账单记录"];
         
+        //cell显示到最后一行
+        //由于mainQueue是串行的，执行到这里说明上一个提交到mainQueue的task已经完成了（即tableView重绘）
+        if (weakSelf.tableView.contentSize.height > weakSelf.tableView.frame.size.height)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:weakSelf.dataArray.count - 20 * (weakSelf.page - 1) - 1];
+            [weakSelf.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+        }
+
     } failure:^(NSError *error)
     {
         [weakSelf.indicatorView stopAnimating];
         [weakSelf.tableView.mj_header endRefreshing];
-        [weakSelf.tableView.mj_footer endRefreshing];
     }];
 }
 

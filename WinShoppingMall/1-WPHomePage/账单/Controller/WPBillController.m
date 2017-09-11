@@ -12,12 +12,13 @@
 #import "WPBillModel.h"
 #import "WPBillDetailController.h"
 #import "WPSelectListPopupController.h"
-#import "WPBillTitleView.h"
+#import "WPBillDatePickerView.h"
+#import "WPBillMonthController.h"
 
 static NSString *const WPBillCellID = @"WPBillCellID";
 
 
-@interface WPBillController () <UITableViewDelegate, UITableViewDataSource>
+@interface WPBillController () <UITableViewDelegate, UITableViewDataSource, WPBillDatePickerViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -35,7 +36,7 @@ static NSString *const WPBillCellID = @"WPBillCellID";
 /**  最终的结果 */
 @property (nonatomic, strong) NSMutableArray *contentArray;
 
-/**  日期字符串 */
+/**  上一个日期(月份)字符串 */
 @property (nonatomic, copy) NSString *lastDate;
 
 
@@ -166,7 +167,7 @@ static NSString *const WPBillCellID = @"WPBillCellID";
         }
         else
         {
-            dateString = [NSString stringWithFormat:@"%ld月", month];
+            dateString = [NSString stringWithFormat:@"%ld月", (long)month];
         }
     }
     else
@@ -180,6 +181,7 @@ static NSString *const WPBillCellID = @"WPBillCellID";
     
     UIButton *headerButton = [[UIButton alloc] initWithFrame:CGRectMake(kScreenWidth - WPLeftMargin - 20, 7.5, 20, 20)];
     [headerButton setImage:[UIImage imageNamed:@"icon_fanhui_n"] forState:UIControlStateNormal];
+    [headerButton addTarget:self action:@selector(monthBillAction) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:headerButton];
     
     return headerView;
@@ -198,21 +200,23 @@ static NSString *const WPBillCellID = @"WPBillCellID";
 
 - (void)rightItemAction
 {
-    WPSelectListPopupController *vc = [[WPSelectListPopupController alloc] init];
-    vc.modalPresentationStyle = UIModalPresentationCustom;
-    vc.type = 4;
-    
-    __weakSelf
-    vc.selecteNameBlock = ^(NSString *nameStr)
-    {
-        NSString *year = [nameStr substringToIndex:4];
-        NSString *month = [nameStr substringWithRange:NSMakeRange(nameStr.length - 3, 2)];
-        weakSelf.dateString = [NSString stringWithFormat:@"%@%@", year, month];
-        [weakSelf.tableView.mj_header beginRefreshing];
-    };
-    
-    [self.navigationController presentViewController:vc animated:YES completion:nil];
+    WPBillDatePickerView *pickerView = [[WPBillDatePickerView alloc] initPickerView];
+    pickerView.pickerViewDelegate = self;
+    [[UIApplication sharedApplication].keyWindow addSubview:pickerView];
 }
+
+- (void)monthBillAction
+{
+    WPBillMonthController *vc = [[WPBillMonthController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)wp_selecteBillDataWithYear:(NSString *)year month:(NSString *)month
+{
+    self.dateString = [NSString stringWithFormat:@"%@%@", year, month];
+    [self.tableView.mj_header beginRefreshing];
+}
+
 
 #pragma mark - Data
 
@@ -236,7 +240,7 @@ static NSString *const WPBillCellID = @"WPBillCellID";
                 [weakSelf.dateArray removeAllObjects];
             }
             
-            // 网络获取的数组
+            // 请求获取的数组
             NSMutableArray *resultArray = [NSMutableArray arrayWithArray:[WPBillModel mj_objectArrayWithKeyValuesArray:result[@"tradeList"]]];
             
             for (int i = 0; i < resultArray.count; i++)
@@ -279,6 +283,7 @@ static NSString *const WPBillCellID = @"WPBillCellID";
             }
         }
         [WPHelpTool endRefreshingOnView:weakSelf.tableView array:result[@"tradeList"] noResultLabel:weakSelf.noResultLabel title:@"暂无记录"];
+        
     } failure:^(NSError *error)
     {
         [weakSelf.tableView.mj_header endRefreshing];

@@ -64,7 +64,7 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
     UILabel *moneyLabel = [[UILabel alloc] initWithFrame:CGRectMake(WPLeftMargin, CGRectGetMaxY(titleLable.frame), kScreenWidth - 2 * WPLeftMargin, 100)];
     moneyLabel.text = [NSString stringWithFormat:@"%.2f", self.model.avl_balance];
     moneyLabel.textColor = [UIColor whiteColor];
-    moneyLabel.font = [UIFont systemFontOfSize:60 weight:10];
+    moneyLabel.font = [UIFont systemFontOfSize:60 weight:3];
     [self.headerView addSubview:moneyLabel];
     
     if (self.model.depositAmt > 0) {
@@ -180,6 +180,7 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
                 {
                     WPUserRechargeController *vc = [[WPUserRechargeController alloc] init];
                     [self.navigationController pushViewController:vc animated:YES];
+                    
                     break;
                 }
                 case 1: // 提现
@@ -196,6 +197,10 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
                             [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
                         }
                     }
+                    else
+                    {
+                        [WPProgressHUD showInfoWithStatus:@"余额不足"];
+                    }
                 }
                     break;
                     
@@ -209,6 +214,8 @@ static NSString *const WPRechargeCellMoneyID = @"WPRechargeCellMoneyID";
         {
 //            WPRedPacketController *vc = [[WPRedPacketController alloc] init];
 //            [self.navigationController pushViewController:vc animated:YES];
+            [WPProgressHUD showInfoWithStatus:@"敬请期待"];
+
             break;
         }
             

@@ -8,10 +8,10 @@
 
 #import "WPShareView.h"
 #import "Header.h"
-#import <TencentOpenAPI/QQApiInterface.h>
-#import <UMengSocial/UMSocialQQHandler.h>
-#import <UMengSocial/WXApi.h>
+
 #import "UIView+WPExtension.h"
+#import "OpenShare+QQ.h"
+#import "OpenShare+Weixin.h"
 
 @interface WPShareView ()
 
@@ -62,12 +62,12 @@
         
         _titleArray = [[NSMutableArray alloc] init];
         _imageArray = [[NSMutableArray alloc] init];
-        if ([WXApi isWXAppInstalled])
+        if ([OpenShare isWeixinInstalled])
         {
             [_titleArray addObjectsFromArray:@[@"微信好友", @"微信朋友圈"]];
             [_imageArray addObjectsFromArray:@[@"share_wechat", @"share_weixin"]];
         }
-        if ([TencentOAuth iphoneQQInstalled])
+        if ([OpenShare isQQInstalled])
         {
             [_titleArray addObjectsFromArray:@[@"QQ好友", @"QQ空间"]];
             [_imageArray addObjectsFromArray:@[@"share_qq", @"share_qqzone"]];

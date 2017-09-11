@@ -59,12 +59,13 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewWillDisappear:animated];
     [[UIApplication sharedApplication].keyWindow endEditing:YES];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:WPNotificationReceiveSuccess object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:WPNotificationUserLogout object:nil];
     
 }
+
 
 - (void)receiveSucces:(NSNotification *)notification
 {
@@ -92,7 +93,7 @@
 {
     if (!_indicatorView) {
         _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        _indicatorView.center = CGPointMake(kScreenWidth / 2, kScreenHeight / 2);
+        _indicatorView.center = CGPointMake(kScreenWidth / 2, kScreenHeight / 2 - 50);
         _indicatorView.color = [UIColor darkGrayColor];
         [self.view addSubview:_indicatorView];
     }

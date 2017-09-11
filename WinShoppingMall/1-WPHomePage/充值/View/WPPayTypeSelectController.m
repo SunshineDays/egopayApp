@@ -137,8 +137,6 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         case 1:
             return self.cardArray.count;
             break;
-//            case 2:
-//                return 1;
         default:
             return 0;
             break;
@@ -162,13 +160,6 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
         cell.model = self.cardArray[indexPath.row];
         return cell;
     }
-//        else {
-//            WPRechargeCell *cell = [tableView dequeueReusableCellWithIdentifier:WPRechargeCellID];
-//            cell.bankNameLabel.text = @"添加银行卡";
-//            cell.imageView.image = [UIImage imageNamed:@"icon_yinhang_n"];
-//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//            return cell;
-//        }
     
 }
 
@@ -232,7 +223,7 @@ static NSString * const WPRechargeCellID = @"WPRechargeCellID";
 - (void)getCardData
 {
     NSDictionary *parameters = @{
-                                 @"clitype" : @"4",
+                                 @"clitype" : @"5",
                                  };
     __weakSelf
     [WPHelpTool getWithURL:WPUserBanKCardURL parameters:parameters success:^(id success)

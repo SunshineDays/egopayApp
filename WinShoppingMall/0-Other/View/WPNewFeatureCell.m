@@ -18,7 +18,7 @@
 - (void)setImages:(NSArray *)imagesArray index:(NSUInteger)index
 {
     self.imageView.image = [UIImage imageNamed:imagesArray[index]];
-    self.startButton.hidden = (index != (imagesArray.count - 1));
+    self.startButton.hidden = (index != (imagesArray.count - 2));
 }
 
 - (void)layoutSubviews
@@ -55,6 +55,10 @@
 - (void)startButtonClick:(UIButton *)button
 {
     [WPHelpTool rootViewController:[WPChooseInterface chooseRootViewController]];
+    CATransition *transition = [CATransition animation];
+    transition.type = @"pageCurl";
+    transition.duration = 1;
+    [[UIApplication sharedApplication].keyWindow.layer addAnimation:transition forKey:nil];
 }
 
 

@@ -52,8 +52,8 @@
         
         [UIView animateWithDuration:0.2f animations:^
         {
-            self.pickerView.frame = CGRectMake(0, kScreenHeight * 2 / 3 + 40, kScreenWidth, kScreenHeight / 3 - 40);
-            self.titleView.frame = CGRectMake(0, kScreenHeight * 2 / 3, kScreenWidth, 40);
+            self.pickerView.frame = CGRectMake(0, kScreenHeight * 5 / 8 + 40, kScreenWidth, kScreenHeight * 3 / 8 - 40);
+            self.titleView.frame = CGRectMake(0, kScreenHeight * 5 / 8, kScreenWidth, 40);
         }];
     }
     return self;
@@ -81,6 +81,8 @@
     if (!_titleView) {
         _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, kScreenHeight, CGRectGetWidth(self.pickerView.frame), 40)];
         _titleView.backgroundColor = [UIColor tableViewColor];
+        _titleView.layer.borderColor = [UIColor lineColor].CGColor;
+        _titleView.layer.borderWidth = WPLineHeight;
         _titleView.userInteractionEnabled = YES;
     }
     return _titleView;
@@ -92,7 +94,7 @@
         _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:17];
         [_cancelButton addTarget:self action:@selector(cancelPickerView) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
@@ -104,7 +106,7 @@
         _confirmButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.pickerView.frame) - 100, 0, 100, 40)];
         [_confirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_confirmButton setTitleColor:[UIColor themeColor] forState:UIControlStateNormal];
-        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _confirmButton.titleLabel.font = [UIFont systemFontOfSize:17];
         [_confirmButton addTarget:self action:@selector(confirmButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmButton;
@@ -126,6 +128,11 @@
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return 3;
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+    return 32;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
@@ -218,13 +225,21 @@
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
+    for (UIView *linView in pickerView.subviews)
+    {
+        if (linView.frame.size.height < 1)
+        {
+            linView.backgroundColor = [UIColor lightGrayColor];
+        }
+    }
+    
     UILabel* pickerLabel = (UILabel*)view;
     if (!pickerLabel) {
         pickerLabel = [[UILabel alloc] init];
         pickerLabel.adjustsFontSizeToFitWidth = YES;
         [pickerLabel setTextAlignment:NSTextAlignmentCenter];
         [pickerLabel setBackgroundColor:[UIColor clearColor]];
-        [pickerLabel setFont:[UIFont systemFontOfSize:15]];
+        [pickerLabel setFont:[UIFont systemFontOfSize:16]];
     }
     pickerLabel.text = [self pickerView:pickerView titleForRow:row forComponent:component];
     return pickerLabel;
@@ -236,8 +251,7 @@
     {
         [self.areaPickerViewDelegate wp_selectedResultWithProvince:[self pickerView:self.pickerView titleForRow:self.provinceRow forComponent:0]
                                                               city:[self pickerView:self.pickerView titleForRow:self.cityRow forComponent:1]
-                                                              area:[self pickerView:self.pickerView titleForRow:self.areaRow forComponent:2]
-         ];
+                                                              area:[self pickerView:self.pickerView titleForRow:self.areaRow forComponent:2]];
     }
     [self cancelPickerView];
 }

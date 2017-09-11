@@ -19,7 +19,9 @@
 
 @property (nonatomic, strong) WPCardTableViewCell *moneyCell;
 
-@property (nonatomic, strong) WPCardTableViewCell *cvvCell;
+//@property (nonatomic, strong) WPCardTableViewCell *cvvCell;
+
+@property (nonatomic, strong) WPCardTableViewCell *depositCardCell;
 
 @property (nonatomic, strong) WPButton *confirmButton;
 

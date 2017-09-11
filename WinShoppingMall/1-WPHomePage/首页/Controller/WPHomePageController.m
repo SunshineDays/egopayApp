@@ -12,7 +12,7 @@
 #import "WPQRCodeController.h"
 #import "WPRegisterController.h"
 #import "Header.h"
-#import <SDCycleScrollView.h>
+#import "SDCycleScrollView.h"
 #import "WPPayCodeController.h"
 #import "WPJpushServiceController.h"
 #import "WPMessagesCell.h"
@@ -49,6 +49,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor tableViewColor];
+    self.navigationItem.title = @"主页";
     
     //  3DTouch跳转到我的收款码
     if ([[WPUserInfor sharedWPUserInfor].threeTouch isEqualToString:@"gatheringCode"])
@@ -57,7 +58,7 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             WPMyCodeController *vc = [[WPMyCodeController alloc] init];
-//            vc.codeType = 2;
+            //            vc.codeType = 2;
             [weakSelf.navigationController pushViewController:vc animated:YES];
             [WPUserInfor sharedWPUserInfor].userInfoDict = nil;
             [WPUserInfor sharedWPUserInfor].threeTouch = nil;
@@ -76,20 +77,20 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
             [WPUserInfor sharedWPUserInfor].userInfoDict = nil;
         });
     }
-
+    
     [self headerView];
     [self getmessgaesData];
     [self getCycleScrollData];
-
-    __weakSelf
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [weakSelf getmessgaesData];
-        [weakSelf getCycleScrollData];
-        if (weakSelf.shareModel.webpageUrl.length == 0)
-        {
-            [weakSelf getShareData];
-        }
-    }];
+    
+//    __weakSelf
+//    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+//        [weakSelf getmessgaesData];
+//        [weakSelf getCycleScrollData];
+//        if (weakSelf.shareModel.webpageUrl.length == 0)
+//        {
+//            [weakSelf getShareData];
+//        }
+//    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -137,6 +138,9 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
         _tableView.delegate = self;
         _tableView.tableHeaderView = self.headerView;
         _tableView.tableFooterView = [UIView new];
+//        if (@available(iOS 11.0, *)) {
+//            _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//        }
         [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([WPMessagesCell class]) bundle:nil] forCellReuseIdentifier:WPMessagesCellID];
         [self.view addSubview:_tableView];
     }
@@ -207,8 +211,8 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
         case 3:// 扫码
         {
             [WPProgressHUD showInfoWithStatus:@"敬请期待"];
-//            WPQRCodeController *vc = [[WPQRCodeController alloc] init];
-//            [self.navigationController pushViewController:vc animated:YES];
+            //            WPQRCodeController *vc = [[WPQRCodeController alloc] init];
+            //            [self.navigationController pushViewController:vc animated:YES];
             break;
         }
         case 4:// 商户
@@ -255,17 +259,14 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
 - (void)creditCardButtonClick
 {
-    if (![[WPUserInfor sharedWPUserInfor].userPhone isEqualToString:@"18501753970"])
+    if ([WPJudgeTool isIDCardApprove])
     {
-        if ([WPJudgeTool isIDCardApprove])
-        {
-            WPUserCreditCardPayController *vc = [[WPUserCreditCardPayController alloc] init];
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-        else
-        {
-            [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
-        }
+        WPUserCreditCardPayController *vc = [[WPUserCreditCardPayController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else
+    {
+        [WPProgressHUD showInfoWithStatus:@"请您先完成实名认证"];
     }
 }
 
@@ -278,18 +279,18 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
                                  };
     __weakSelf
     [WPHelpTool getWithURL:WPCycleScrollURL parameters:parameters success:^(id success)
-    {
-        NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"])
-        {
-            weakSelf.headerView.cycleScrollView.localizationImageNamesGroup = result[@"home_banner"];
-            [weakSelf.headerView.cycleScrollView reloadInputViews];
-        }
-    } failure:^(NSError *error)
-    {
-        
-    }];
+     {
+         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
+         NSDictionary *result = success[@"result"];
+         if ([type isEqualToString:@"1"])
+         {
+             weakSelf.headerView.cycleScrollView.localizationImageNamesGroup = result[@"home_banner"];
+             [weakSelf.headerView.cycleScrollView reloadInputViews];
+         }
+     } failure:^(NSError *error)
+     {
+         
+     }];
 }
 
 - (void)getmessgaesData
@@ -300,23 +301,22 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
                                  };
     __weakSelf
     [WPHelpTool getWithURL:WPMessageURL parameters:parameters success:^(id success)
-    {
-        NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"])
-        {
-            [weakSelf.dataArray removeAllObjects];
-            [weakSelf.dataArray addObjectsFromArray:[WPMessagesModel mj_objectArrayWithKeyValuesArray:result[@"msgList"]]];
-        }
-        [weakSelf.tableView.mj_header endRefreshing];
-        [weakSelf.tableView reloadData];
-    } failure:^(NSError *error)
-    {
-        [weakSelf.indicatorView stopAnimating];
-        [weakSelf.tableView.mj_header endRefreshing];
-        [weakSelf.tableView.mj_footer endRefreshing];
-        [WPProgressHUD showInfoWithStatus:@"网络错误,请重试"];
-    }];
+     {
+         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
+         NSDictionary *result = success[@"result"];
+         if ([type isEqualToString:@"1"])
+         {
+             [weakSelf.dataArray removeAllObjects];
+             [weakSelf.dataArray addObjectsFromArray:[WPMessagesModel mj_objectArrayWithKeyValuesArray:result[@"msgList"]]];
+         }
+//         [weakSelf.tableView.mj_header endRefreshing];
+         [weakSelf.tableView reloadData];
+     } failure:^(NSError *error)
+     {
+         [weakSelf.indicatorView stopAnimating];
+//         [weakSelf.tableView.mj_header endRefreshing];
+         [WPProgressHUD showInfoWithStatus:@"网络错误,请重试"];
+     }];
 }
 
 
@@ -324,18 +324,18 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 {
     __weakSelf
     [WPHelpTool getWithURL:WPShareToAppURL parameters:nil success:^(id success)
-    {
-        NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
-        NSDictionary *result = success[@"result"];
-        if ([type isEqualToString:@"1"])
-        {
-            weakSelf.shareModel = [WPShareModel mj_objectWithKeyValues:result];
-            
-        }
-    } failure:^(NSError *error)
-    {
-    
-    }];
+     {
+         NSString *type = [NSString stringWithFormat:@"%@", success[@"type"]];
+         NSDictionary *result = success[@"result"];
+         if ([type isEqualToString:@"1"])
+         {
+             weakSelf.shareModel = [WPShareModel mj_objectWithKeyValues:result];
+             
+         }
+     } failure:^(NSError *error)
+     {
+         
+     }];
 }
 
 
@@ -347,3 +347,4 @@ static NSString * const WPMessagesCellID = @"WPMessagesCellID";
 
 
 @end
+

@@ -8,6 +8,8 @@
 
 #import "WPNewFeatureViewController.h"
 #import "WPNewFeatureCell.h"
+#import "WPHelpTool.h"
+#import "WPChooseInterface.h"
 
 @interface WPNewFeatureViewController ()
 
@@ -38,12 +40,19 @@ static NSString * const reuseIdentifier = @"WPNewFeatureCellID";
 
 - (void)setupImages
 {
-    self.imageArray = @[@"guide1", @"guide2"];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        self.imageArray = @[@"iPhone_A", @"iPhone_B", @""];
+    }
+    else
+    {
+        self.imageArray = @[@"iPad_A", @"iPad_B", @""];
+    }
 }
 
 - (void)setupCollectionView
 {
     [self.collectionView registerClass:[WPNewFeatureCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.bounces = NO;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.pagingEnabled = YES;
@@ -63,6 +72,16 @@ static NSString * const reuseIdentifier = @"WPNewFeatureCellID";
     return cell;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.x > (self.imageArray.count - 2) * kScreenWidth) {
+        [WPHelpTool rootViewController:[WPChooseInterface chooseRootViewController]];
+        CATransition *transition = [CATransition animation];
+        transition.type = @"pageCurl";
+        transition.duration = 1;
+        [[UIApplication sharedApplication].keyWindow.layer addAnimation:transition forKey:nil];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

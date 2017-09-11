@@ -103,7 +103,7 @@
         NSString *dateString = [WPPublicTool stringToDateString:[NSString stringWithFormat:@"%@", self.model.createDate ? self.model.createDate : self.model.finishDate]];
         NSString *numberString = [NSString stringWithFormat:@"%@", self.model.orderno];
         NSString *remarkString = self.model.remark ? self.model.remark : @"无";
-        
+                
         NSArray *contentArray = self.model.counterFee > 0 ? @[moneyString, poundageString, trueMoneyString, stateString, typeString, wayString, dateString, numberString, remarkString] : @[moneyString, stateString, typeString, wayString, dateString, numberString, remarkString];
         
         //  动态设置备注高度

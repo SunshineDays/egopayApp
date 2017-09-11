@@ -8,7 +8,7 @@
 
 #import "WPAgencyController.h"
  
-#import <SDCycleScrollView.h>
+#import "SDCycleScrollView.h"
 #import "Header.h"
 #import "WPTodayProfitController.h"
 #import "WPProfitBalanceController.h"
@@ -44,6 +44,7 @@ static NSString * const WPAgencyCellID = @"WPAgencyCellID";
 {
     [super viewDidLoad];
     self.navigationItem.title = @"代理";
+    self.view.backgroundColor = [UIColor tableViewColor];
     [self getCycleScrollData];
     [self.indicatorView startAnimating];
 }
